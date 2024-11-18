@@ -264,13 +264,6 @@ const form = useForm({
                                     <InputError class="mt-2" :message="form.errors.remarks" />
                                 </div>
 
-                                <!-- Disable -->
-                                <div class="mb-3">
-                                    <SelectInput label="Disable" v-model="form.disabled_at">
-                                        <option value="1">Disable</option>
-                                    </SelectInput>
-                                </div>
-
                                 <!-- Status -->
                                 <div class="mb-3">
                                     <SelectInput label="Status" v-model="form.status">

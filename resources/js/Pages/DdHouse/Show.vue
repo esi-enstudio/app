@@ -1,10 +1,19 @@
 <script setup>
 
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import {router} from "@inertiajs/vue3";
 
 const props = defineProps({
     ddHouse: Object,
 })
+
+const delHouse = (id, name) => {
+
+    if (confirm(`Are you sure to delete "${name}" house?`))
+    {
+        router.delete(route('ddHouse.destroy', id));
+    }
+}
 
 </script>
 
@@ -106,12 +115,12 @@ const props = defineProps({
 
                             <tr>
                                 <td>Last Update</td>
-                                <td>{{props.ddHouse.last_update}}</td>
+                                <td>{{props.ddHouse.updated}}</td>
                             </tr>
 
                             <tr>
                                 <td>Disabled At</td>
-                                <td>{{props.ddHouse.disabled_at}}</td>
+                                <td>{{props.ddHouse.disabled}}</td>
                             </tr>
 
                             <tr>
@@ -126,7 +135,7 @@ const props = defineProps({
                             <Link :href="route('ddHouse.edit', ddHouse.id)" class="block hover:text-green-400">Edit</Link>
 
                             <!-- Delete -->
-                            <Link class="block hover:text-red-500">Delete</Link>
+                            <button class="hover:text-red-500 hover:font-semibold" @click="delHouse(props.ddHouse.id, props.ddHouse.name)">Delete</button>
                         </div>
                     </div>
                 </div>

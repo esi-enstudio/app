@@ -75,9 +75,9 @@ class DdHouseController extends Controller
     public function show(DdHouse $ddHouse): Response|ResponseFactory
     {
         $ddHouse->created = Carbon::parse($ddHouse->created_at)->toDayDateTimeString();
-        $ddHouse->last_update = Carbon::parse($ddHouse->updated_at)->toDayDateTimeString();
+        $ddHouse->updated = Carbon::parse($ddHouse->updated_at)->toDayDateTimeString();
         $ddHouse->lifting_date = Carbon::parse($ddHouse->lifting_date)->toFormattedDayDateString();
-        $ddHouse->disabled_at = Carbon::parse($ddHouse->disabled_at)->toDayDateTimeString();
+        $ddHouse->disabled = $ddHouse->disabled_at == null ? '' : Carbon::parse($ddHouse->disabled_at)->toDayDateTimeString();
 
         return inertia('DdHouse/Show', [
             'ddHouse' => $ddHouse
@@ -95,7 +95,7 @@ class DdHouseController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, DdHouse $ddHouse)
+    public function update(Request $request, DdHouse $ddHouse): RedirectResponse
     {
         $attributes = $request->validate([
             'code'              => ['required'],
@@ -115,10 +115,14 @@ class DdHouseController extends Controller
             'disabled_at'       => ['nullable'],
         ]);
 
-        if ($request->disabled_at == 1)
+        if ($request->status == 0)
         {
             $attributes['disabled_at'] = now();
             $attributes['status'] = 0;
+        }elseif ($request->status == 1)
+        {
+            $attributes['disabled_at'] = null;
+            $attributes['status'] = 1;
         }
 
         if ($ddHouse->update($attributes))

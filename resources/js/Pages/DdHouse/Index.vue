@@ -81,7 +81,10 @@ const delHouse = (id, name) => {
                             <tbody>
                             <tr v-for="(ddHouse, i) in ddHouses.data" :key="ddHouse.id">
                                 <td>{{++i}}</td>
-                                <td>{{ddHouse.code}}</td>
+                                <td>
+                                    <i v-if="!ddHouse.status" class="fa-solid fa-ban mx-2 text-red-600"></i>
+                                    {{ddHouse.code}}
+                                </td>
                                 <td>{{ddHouse.name}}</td>
                                 <td>{{ddHouse.created}}</td>
                                 <td>{{ddHouse.updated}}</td>
