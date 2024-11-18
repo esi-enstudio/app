@@ -47,11 +47,10 @@ const showingNavigationDropdown = ref(false);
                                         <span class="inline-flex rounded-md">
                                             <button
                                                 type="button"
-                                                :class="route().current('ddHouse.*') ? 'text-red-500 hover:text-red-600 hover:font-semibold' : ''"
-                                                class="inline-flex items-center border-b-2 border-transparent border-gray-300 rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none dark:bg-gray-800 dark:text-gray-400 dark:hover:text-gray-300"
+                                                :class="route().current('ddHouse.*') ? 'inline-flex items-center px-1 pt-1 border-b-2 border-indigo-400 dark:border-green-600 text-sm font-medium leading-[3.7rem] text-gray-900 dark:text-gray-100 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out'
+                                                : 'inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-[3.7rem] text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700 focus:outline-none focus:text-gray-700 dark:focus:text-gray-300 focus:border-gray-300 dark:focus:border-gray-700 transition duration-150 ease-in-out'"
                                             >
                                                 Category
-
                                                 <svg
                                                     class="-me-0.5 ms-2 h-4 w-4"
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -69,6 +68,13 @@ const showingNavigationDropdown = ref(false);
                                         </template>
 
                                         <template #content>
+                                            <DropdownLink
+                                                :href="route('user.index')"
+                                                :active="route().current('user.*')"
+                                            >
+                                                Users
+                                            </DropdownLink>
+
                                             <DropdownLink
                                                 :href="route('ddHouse.index')"
                                                 :active="route().current('ddHouse.*')"

@@ -19,8 +19,10 @@ Route::middleware(['auth','verified'])->group(function () {
     // Dashboard
     Route::inertia('/dashboard', 'Dashboard')->name('dashboard');
 
-    // DD House
     Route::resources([
+        // Users
+        'user' => \App\Http\Controllers\UserController::class,
+        // DD House
         'ddHouse' => \App\Http\Controllers\DdHouseController::class,
     ]);
 

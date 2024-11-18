@@ -18,6 +18,8 @@ use Illuminate\Support\Str;
  * @property mixed $district
  * @property mixed $thana
  * @property mixed $email
+ * @property mixed $disabled_at
+ * @property mixed $remarks
  */
 class DdHouseResource extends JsonResource
 {
