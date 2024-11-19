@@ -11,10 +11,10 @@ const form = useForm({
     name: null,
     phone: null,
     email: null,
-    password: null,
-    password_confirmation: null,
     remarks: null,
     role: null,
+    password: null,
+    password_confirmation: null,
 })
 
 </script>
@@ -39,7 +39,7 @@ const form = useForm({
                             <Link :href="route('user.index')" class="hover:text-green-400">Back to list</Link>
                         </div>
 
-                        <form @submit.prevent="form.post(route('user.store'))">
+                        <form @submit.prevent="form.post(route('user.store'))" class="space-y-6">
                             <!-- Image Upload -->
                             <ImageUpload @image="(e) => form.avatar = e"/>
 
@@ -109,7 +109,9 @@ const form = useForm({
                                 :message="form.errors.remarks"
                             />
 
-                            <PrimaryButton :disable="form.processing">Create</PrimaryButton>
+                            <div>
+                                <PrimaryButton :disable="form.processing">Create</PrimaryButton>
+                            </div>
                         </form>
                     </div>
                 </div>
