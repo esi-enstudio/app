@@ -7,6 +7,7 @@ import {debounce} from "lodash";
 import {ref, watch} from "vue";
 import TextInput from "@/Components/TextInput.vue";
 import SessionMessage from "@/Components/SessionMessage.vue";
+import PaginationWithoutLinks from "@/Components/PaginationWithoutLinks.vue";
 
 const props = defineProps({
     users: Object,
@@ -45,7 +46,7 @@ const delUser = (id, name) => {
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
+                    <div class="p-6 text-gray-900 dark:text-gray-100 overflow-x-auto">
 
                         <SessionMessage :status="status"/>
 
@@ -64,7 +65,7 @@ const delUser = (id, name) => {
                             </div>
                         </div>
 
-                        <table class="w-full">
+                        <table class="w-full whitespace-nowrap">
                             <thead>
                             <tr>
                                 <th>SL</th>
@@ -99,6 +100,8 @@ const delUser = (id, name) => {
                         </table>
 
                         <Pagination :links="props.users"/>
+
+                        <PaginationWithoutLinks :links="props.users"/>
                     </div>
                 </div>
             </div>

@@ -24,6 +24,7 @@ use Illuminate\Notifications\Notifiable;
   * @property mixed|string $remember
   * @property mixed $remember_token
   * @property mixed $avatar
+  * @property mixed $id
   */
 class User extends Authenticatable implements MustVerifyEmail
 {

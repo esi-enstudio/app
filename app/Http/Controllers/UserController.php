@@ -9,6 +9,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -26,7 +27,8 @@ class UserController extends Controller
                 ->orWhere('phone', 'LIKE', "%{$search}%");
             })
             ->latest()
-            ->paginate(10)
+            ->paginate(5)
+            ->onEachSide(0)
             ->withQueryString()),
 
             'searchTerm' => $request->search,
@@ -107,8 +109,8 @@ class UserController extends Controller
             'avatar'    => ['nullable','file','max:1000','mimes:jpeg,jpg,png'],
             'name'      => ['required','max:150'],
             'role'      => ['required'],
-            'email'     => ['required','lowercase','max:255','unique:users,email'. $user->id],
-            'phone'     => ['required','numeric','digits:11','unique:users,phone'. $user->id],
+            'email'     => ['required','lowercase','max:255',Rule::unique('users')->ignore($user->id)],
+            'phone'     => ['required','numeric','digits:11',Rule::unique('users')->ignore($user->id)],
             'remarks'   => ['nullable'],
             'status'    => ['required'],
         ]);
@@ -135,8 +137,15 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user): RedirectResponse
     {
-        //
+        if ($user->avatar)
+        {
+            Storage::disk('public')->delete($user->avatar);
+        }
+
+        $user->delete();
+
+        return to_route('user.index')->with('msg', 'User deleted successfully.');
     }
 }
