@@ -33,37 +33,48 @@ const delUser = (id, name) => {
 
 <template>
     <Head title="Users" />
+    <SessionMessage :status="status"/>
 
     <AuthenticatedLayout>
         <template #header>
-            <div>
+            <div class="flex items-center justify-between">
                 <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
                     Users
                 </h2>
+
+                <Link :href="route('user.create')" class="block border border-green-400 px-4 py-1 rounded-lg hover:bg-green-400 hover:text-white">
+                    Add New
+                </Link>
             </div>
         </template>
 
         <div class="py-12">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <div class="mx-auto max-w-7xl sm:px-4 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
-                    <div class="p-6 text-gray-900 dark:text-gray-100 overflow-x-auto">
-
-                        <SessionMessage :status="status"/>
-
-                        <div class="flex items-center justify-between mb-3">
-                            <Link :href="route('user.create')" class="border border-green-400 px-4 py-2 rounded-lg hover:bg-green-400 hover:text-white">
-                                Add New
-                            </Link>
-
-                            <div>
-                                <TextInput
-                                    type="search"
-                                    class="mt-1 block w-full"
-                                    v-model="search"
-                                    placeholder="Type something..."
-                                />
-                            </div>
+                    <div class="md:block hidden">
+                        <div class="flex justify-end px-3 pt-4">
+                            <TextInput
+                                type="search"
+                                icon="search"
+                                v-model="search"
+                                placeholder="Type something..."
+                            />
                         </div>
+                    </div>
+
+                    <div class="md:hidden block">
+                        <div class="flex justify-end px-3 pt-4">
+                            <TextInput
+                                type="search"
+                                class="w-full"
+                                icon="search"
+                                v-model="search"
+                                placeholder="Type something..."
+                            />
+                        </div>
+                    </div>
+
+                    <div class="p-3 text-gray-900 dark:text-gray-100 overflow-x-auto">
 
                         <table class="w-full whitespace-nowrap">
                             <thead>
@@ -83,7 +94,7 @@ const delUser = (id, name) => {
                             <tr v-for="(user, i) in props.users.data" :key="user.id">
                                 <td>{{++i}}</td>
                                 <td>
-                                    <img class="w-[35px]" :src="user.avatar ? ('storage/' + user.avatar) : ('https://icons.veryicon.com/png/o/miscellaneous/user-avatar/user-avatar-male-5.png')" alt="User Avatar">
+                                    <img class="w-[24px]" :src="user.avatar ? ('storage/' + user.avatar) : ('https://icons.veryicon.com/png/o/miscellaneous/user-avatar/user-avatar-male-5.png')" alt="User Avatar">
                                 </td>
                                 <td>{{user.name}}</td>
                                 <td>{{user.email}}</td>
@@ -99,9 +110,16 @@ const delUser = (id, name) => {
                             </tbody>
                         </table>
 
-                        <Pagination :links="props.users"/>
+                    </div>
 
-                        <PaginationWithoutLinks :links="props.users"/>
+                    <div class="px-3 pb-4">
+                        <div class="lg:block hidden">
+                            <Pagination :links="props.users"/>
+                        </div>
+
+                        <div class="lg:hidden block">
+                            <PaginationWithoutLinks :links="props.users"/>
+                        </div>
                     </div>
                 </div>
             </div>

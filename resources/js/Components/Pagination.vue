@@ -15,6 +15,7 @@ defineProps({
             <span class="font-bold">{{links.meta.total}}</span>
             results
         </div>
+
         <div>
             <Component
                 :is="link.url ? 'Link' : 'span'"

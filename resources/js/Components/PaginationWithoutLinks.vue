@@ -5,7 +5,7 @@ defineProps({
 </script>
 
 <template>
-    <div v-if="links.meta.from" class="flex items-center justify-between mt-3">
+    <div v-if="links.meta.from" class="lg:flex items-center justify-between mt-3 text-center space-y-6">
         <div>
             Showing
             <span class="font-bold">{{links.meta.from}}</span>
@@ -15,9 +15,12 @@ defineProps({
             <span class="font-bold">{{links.meta.total}}</span>
             results
         </div>
-        <div>
-            <Link :href="links.links.first" class="border border-2 border-green-600 px-4 py-1 rounded-md">First</Link>
-            <Link :href="links.links.last" class="border border-2 border-green-600 px-4 py-1 rounded-md">Last</Link>
+
+        <div class="items-center gap-2 inline-flex">
+            <Link :href="links.links.first" class="border border-1 hover:bg-green-400 hover:text-white border-green-800 px-4 rounded-md">First</Link>
+            <Link :href="links.links.prev" class="border border-1 hover:bg-green-400 hover:text-white border-green-800 px-4 rounded-md">Prev</Link>
+            <Link :href="links.links.next" class="border border-1 hover:bg-green-400 hover:text-white border-green-800 px-4 rounded-md">Next</Link>
+            <Link :href="links.links.last" class="border border-1 hover:bg-green-400 hover:text-white border-green-800 px-4 rounded-md">Last</Link>
         </div>
     </div>
 </template>

@@ -20,14 +20,15 @@ defineProps({
 </script>
 
 <template>
-    <div class="mb-5">
+    <div>
         <label
+            v-if="label"
             :for="label"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
             {{label}}
         </label>
 
-        <div class="relative mt-1 rounded-md">
+        <div class="relative rounded-md">
             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                 <span class="grid place-content-center text-sm text-slate-400">
                     <i :class="`fa-solid fa-${icon}`"></i>

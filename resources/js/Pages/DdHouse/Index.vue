@@ -33,6 +33,8 @@ const delHouse = (id, name) => {
 <template>
     <Head title="DD House" />
 
+    <SessionMessage :status="status"/>
+
     <AuthenticatedLayout>
         <template #header>
             <div>
@@ -46,8 +48,6 @@ const delHouse = (id, name) => {
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                     <div class="p-6 text-gray-900 dark:text-gray-100">
-
-                        <SessionMessage :status="status"/>
 
                         <div class="flex items-center justify-between mb-3">
                             <Link :href="route('ddHouse.create')" class="border border-green-400 px-4 py-2 rounded-lg hover:bg-green-400 hover:text-white">

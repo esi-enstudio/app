@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p class="text-green-400 pb-4" v-if="status">{{ status }}</p>
+        <p v-if="status" class="text-center text-white bg-green-400">{{ status }}</p>
     </div>
 </template>
 
