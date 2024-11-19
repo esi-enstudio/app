@@ -9,11 +9,22 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-/**
+ /**
  * @method static create(array $user)
  * @method static latest()
  * @method static when()
- */
+ * @property mixed $created_at
+  * @property mixed $updated_at
+  * @property mixed $email_verified_at
+  * @property mixed $disabled_at
+  * @property mixed|string $created
+  * @property mixed|string $updated
+  * @property mixed|string $email_verified
+  * @property mixed|string $disabled
+  * @property mixed|string $remember
+  * @property mixed $remember_token
+  * @property mixed $avatar
+  */
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
@@ -54,6 +65,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return [
             'email_verified_at' => 'datetime',
+            'disabled_at' => 'datetime',
             'password' => 'hashed',
         ];
     }

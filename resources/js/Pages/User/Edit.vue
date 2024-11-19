@@ -6,15 +6,19 @@ import ImageUpload from "@/Components/ImageUpload.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import SelectInput from "@/Components/SelectInput.vue";
 
+const props = defineProps({ user: Object })
+
 const form = useForm({
     avatar: null,
-    name: null,
-    phone: null,
-    email: null,
+    name: props.user.name,
+    phone: props.user.phone,
+    email: props.user.email,
     password: null,
     password_confirmation: null,
-    remarks: null,
-    role: null,
+    remarks: props.user.remarks,
+    role: props.user.role,
+    status: props.user.status,
+    _method: "put",
 })
 
 </script>
@@ -26,7 +30,7 @@ const form = useForm({
         <template #header>
             <div>
                 <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-                    Create new user
+                    Update user
                 </h2>
             </div>
         </template>
@@ -39,9 +43,9 @@ const form = useForm({
                             <Link :href="route('user.index')" class="hover:text-green-400">Back to list</Link>
                         </div>
 
-                        <form @submit.prevent="form.post(route('user.store'))">
+                        <form @submit.prevent="form.post(route('user.update', props.user.id))">
                             <!-- Image Upload -->
-                            <ImageUpload @image="(e) => form.avatar = e"/>
+                            <ImageUpload @image="(e) => form.avatar = e" :userAvatar="props.user.avatar"/>
 
                             <!-- Full Name -->
                             <TextInput
@@ -75,6 +79,7 @@ const form = useForm({
                                 :message="form.errors.role"
                             >
                                 <option value="user">User</option>
+                                <option value="admin">Admin</option>
                                 <option value="md">Md</option>
                                 <option value="zm">Zm</option>
                                 <option value="manager">Manager</option>
@@ -84,23 +89,6 @@ const form = useForm({
                                 <option value="account">Account</option>
                             </SelectInput>
 
-                            <!-- Password -->
-                            <TextInput
-                                label="Password"
-                                icon="lock"
-                                type="password"
-                                v-model="form.password"
-                                :message="form.errors.password"
-                            />
-
-                            <!-- Confirm Password -->
-                            <TextInput
-                                label="Confirm Password"
-                                icon="lock"
-                                type="password"
-                                v-model="form.password_confirmation"
-                            />
-
                             <!-- Remarks -->
                             <TextInput
                                 label="Remarks"
@@ -109,7 +97,16 @@ const form = useForm({
                                 :message="form.errors.remarks"
                             />
 
-                            <PrimaryButton :disable="form.processing">Create</PrimaryButton>
+                            <!-- Status -->
+                            <SelectInput
+                                label="Status"
+                                icon="signal"
+                                v-model="form.status">
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
+                            </SelectInput>
+
+                            <PrimaryButton :disable="form.processing">Save Changes</PrimaryButton>
                         </form>
                     </div>
                 </div>
