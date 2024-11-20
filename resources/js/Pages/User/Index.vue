@@ -75,7 +75,6 @@ const delUser = (id, name) => {
                     </div>
 
                     <div class="p-3 text-gray-900 dark:text-gray-100 overflow-x-auto">
-
                         <table class="w-full whitespace-nowrap">
                             <thead>
                             <tr>
@@ -109,7 +108,6 @@ const delUser = (id, name) => {
                             </tr>
                             </tbody>
                         </table>
-
                     </div>
 
                     <div class="px-3 pb-4">

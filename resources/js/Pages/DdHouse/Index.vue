@@ -7,6 +7,7 @@ import {debounce} from "lodash";
 import {ref, watch} from "vue";
 import TextInput from "@/Components/TextInput.vue";
 import SessionMessage from "@/Components/SessionMessage.vue";
+import PaginationWithoutLinks from "@/Components/PaginationWithoutLinks.vue";
 
 const props = defineProps({
     ddHouses: Object,
@@ -37,36 +38,47 @@ const delHouse = (id, name) => {
 
     <AuthenticatedLayout>
         <template #header>
-            <div>
+            <div class="flex items-center justify-between">
                 <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
                     DD House
                 </h2>
+
+                <Link :href="route('ddHouse.create')" class="block border border-green-400 px-4 py-1 rounded-lg hover:bg-green-400 hover:text-white">
+                    Add New
+                </Link>
             </div>
         </template>
 
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
 
-                        <div class="flex items-center justify-between mb-3">
-                            <Link :href="route('ddHouse.create')" class="border border-green-400 px-4 py-2 rounded-lg hover:bg-green-400 hover:text-white">
-                                Add New
-                            </Link>
-
-                            <div>
-                                <TextInput
-                                    type="search"
-                                    class="mt-1 block w-full"
-                                    v-model="search"
-                                    placeholder="Type something..."
-                                />
-                            </div>
-
-<!--                            <input  v-model="search" type="search" placeholder="Type something...">-->
+                    <div class="md:block hidden">
+                        <div class="flex justify-end px-3 pt-4">
+                            <TextInput
+                                type="search"
+                                icon="search"
+                                v-model="search"
+                                placeholder="Type something..."
+                            />
                         </div>
+                    </div>
 
-                        <table class="w-full">
+                    <div class="md:hidden block">
+                        <div class="flex justify-end px-3 pt-4">
+                            <TextInput
+                                type="search"
+                                class="w-full"
+                                icon="search"
+                                v-model="search"
+                                placeholder="Type something..."
+                            />
+                        </div>
+                    </div>
+
+
+                    <div class="p-3 text-gray-900 dark:text-gray-100 overflow-x-auto">
+                        <table class="w-full whitespace-nowrap">
                             <thead>
                             <tr>
                                 <th>SL</th>
@@ -96,8 +108,16 @@ const delHouse = (id, name) => {
                             </tr>
                             </tbody>
                         </table>
+                    </div>
 
-                        <Pagination :links="props.ddHouses"/>
+                    <div class="px-3 pb-4">
+                        <div class="lg:block hidden">
+                            <Pagination :links="props.ddHouses"/>
+                        </div>
+
+                        <div class="lg:hidden block">
+                            <PaginationWithoutLinks :links="props.ddHouses"/>
+                        </div>
                     </div>
                 </div>
             </div>

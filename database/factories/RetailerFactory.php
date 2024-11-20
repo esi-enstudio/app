@@ -20,10 +20,10 @@ class RetailerFactory extends Factory
         return [
             'dd_house_id' => fake()->numberBetween(1, 3),
             'user_id' => fake()->numberBetween(1, 300),
-            'zm_id' => fake()->numberBetween(1, 3),
-            'manager_id' => fake()->numberBetween(1, 3),
-            'supervisor_id' => fake()->numberBetween(1, 3),
             'rso_id' => fake()->numberBetween(1, 25),
+            'zm_number' => fake()->e164PhoneNumber(),
+            'manager_number' => fake()->e164PhoneNumber(),
+            'supervisor_number' => fake()->e164PhoneNumber(),
             'code' => fake()->postcode(),
             'name' => fake()->name(),
             'number' => fake()->e164PhoneNumber,
