@@ -23,7 +23,6 @@ class RsoFactory extends Factory
             'zm_number' => fake()->e164PhoneNumber(),
             'manager_number' => fake()->e164PhoneNumber(),
             'supervisor_number' => fake()->e164PhoneNumber(),
-            'name' => fake()->name(),
             'number' => fake()->e164PhoneNumber,
         ];
     }

@@ -26,4 +26,13 @@ class DdHouse extends Model
         'name',
         'code',
     ];
+
+    /**
+     * Relationship with User model
+     *
+     */
+    public function rso()
+    {
+        return $this->hasMany(Rso::class);
+    }
 }

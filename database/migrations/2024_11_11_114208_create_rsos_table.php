@@ -23,7 +23,6 @@ return new class extends Migration
             $table->string('osrm_code')->nullable();
             $table->string('employee_code')->nullable();
             $table->string('code')->nullable();
-            $table->string('name');
             $table->string('number');
             $table->string('pool_number')->nullable();
             $table->string('personal_number')->nullable();
@@ -44,7 +43,7 @@ return new class extends Migration
             $table->string('salary')->nullable();
             $table->string('category')->nullable();
             $table->string('agency_name')->nullable();
-            $table->string('dob')->nullable();
+            $table->date('dob')->nullable();
             $table->string('nid')->nullable();
             $table->string('division')->nullable();
             $table->string('district')->nullable();

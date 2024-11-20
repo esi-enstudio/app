@@ -47,64 +47,66 @@ const form = useForm({
                             <!-- Image Upload -->
                             <ImageUpload @image="(e) => form.avatar = e" :userAvatar="props.user.avatar"/>
 
-                            <!-- Full Name -->
-                            <TextInput
-                                label="Full Name"
-                                icon="user-plus"
-                                v-model="form.name"
-                                :message="form.errors.name"
-                            />
+                            <div class="grid md:grid-cols-2 gap-6 mt-10 mb-5">
+                                <!-- Full Name -->
+                                <TextInput
+                                    label="Full Name"
+                                    icon="user-plus"
+                                    v-model="form.name"
+                                    :message="form.errors.name"
+                                />
 
-                            <!-- Phone Number -->
-                            <TextInput
-                                label="Phone Number"
-                                icon="phone"
-                                v-model="form.phone"
-                                :message="form.errors.phone"
-                            />
+                                <!-- Phone Number -->
+                                <TextInput
+                                    label="Phone Number"
+                                    icon="phone"
+                                    v-model="form.phone"
+                                    :message="form.errors.phone"
+                                />
 
-                            <!-- Email -->
-                            <TextInput
-                                label="Email"
-                                icon="at"
-                                v-model="form.email"
-                                :message="form.errors.email"
-                            />
+                                <!-- Email -->
+                                <TextInput
+                                    label="Email"
+                                    icon="at"
+                                    v-model="form.email"
+                                    :message="form.errors.email"
+                                />
 
-                            <!-- Role -->
-                            <SelectInput
-                                label="Role"
-                                icon="person-circle-question"
-                                v-model="form.role"
-                                :message="form.errors.role"
-                            >
-                                <option value="user">User</option>
-                                <option value="admin">Admin</option>
-                                <option value="md">Md</option>
-                                <option value="zm">Zm</option>
-                                <option value="manager">Manager</option>
-                                <option value="supervisor">Supervisor</option>
-                                <option value="rso">Rso</option>
-                                <option value="operator">Dms Operator</option>
-                                <option value="account">Account</option>
-                            </SelectInput>
+                                <!-- Role -->
+                                <SelectInput
+                                    label="Role"
+                                    icon="person-circle-question"
+                                    v-model="form.role"
+                                    :message="form.errors.role"
+                                >
+                                    <option value="user">User</option>
+                                    <option value="admin">Admin</option>
+                                    <option value="md">Md</option>
+                                    <option value="zm">Zm</option>
+                                    <option value="manager">Manager</option>
+                                    <option value="supervisor">Supervisor</option>
+                                    <option value="rso">Rso</option>
+                                    <option value="operator">Dms Operator</option>
+                                    <option value="account">Account</option>
+                                </SelectInput>
 
-                            <!-- Remarks -->
-                            <TextInput
-                                label="Remarks"
-                                icon="comments"
-                                v-model="form.remarks"
-                                :message="form.errors.remarks"
-                            />
+                                <!-- Remarks -->
+                                <TextInput
+                                    label="Remarks"
+                                    icon="comments"
+                                    v-model="form.remarks"
+                                    :message="form.errors.remarks"
+                                />
 
-                            <!-- Status -->
-                            <SelectInput
-                                label="Status"
-                                icon="signal"
-                                v-model="form.status">
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
-                            </SelectInput>
+                                <!-- Status -->
+                                <SelectInput
+                                    label="Status"
+                                    icon="signal"
+                                    v-model="form.status">
+                                    <option value="1">Active</option>
+                                    <option value="0">Inactive</option>
+                                </SelectInput>
+                            </div>
 
                             <PrimaryButton :disable="form.processing">Save Changes</PrimaryButton>
                         </form>

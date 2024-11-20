@@ -6,7 +6,10 @@ use App\Http\Resources\RsoResource;
 use App\Models\DdHouse;
 use App\Models\Rso;
 use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -36,10 +39,10 @@ class RsoController extends Controller
     {
         $hasUserId = Rso::whereNotNull('user_id')->pluck('user_id');
 
-        $users = User::where('role', 'rso')->whereNotIn('id', $hasUserId)->get();
-        $zms = User::where('role', 'zm')->get();
-        $managers = User::where('role', 'manager')->get();
-        $supervisors = User::where('role', 'supervisor')->get();
+        $users = User::where('role', 'rso')->where('status', 1)->whereNotIn('id', $hasUserId)->get();
+        $zms = User::where('role', 'zm')->where('status', 1)->get();
+        $managers = User::where('role', 'manager')->where('status', 1)->get();
+        $supervisors = User::where('role', 'supervisor')->where('status', 1)->get();
 
         return inertia('Rso/Create', [
             'ddHouses' => DdHouse::all(),
@@ -53,7 +56,7 @@ class RsoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $attr = $request->validate([
             'dd_house_id' => ['required'],
@@ -64,32 +67,122 @@ class RsoController extends Controller
             'osrm_code' => ['nullable'],
             'employee_code' => ['nullable'],
             'code' => ['nullable'],
-
+            'number' => ['required'],
+            'pool_number' => ['nullable'],
+            'bank_account_name' => ['nullable'],
+            'bank_name' => ['nullable'],
+            'bank_account_number' => ['nullable'],
+            'brunch_name' => ['nullable'],
+            'routing_number' => ['nullable'],
+            'religion' => ['nullable'],
+            'education' => ['nullable'],
+            'gender' => ['nullable'],
+            'present_address' => ['nullable'],
+            'permanent_address' => ['nullable'],
+            'father_name' => ['nullable'],
+            'mother_name' => ['nullable'],
+            'market_type' => ['nullable'],
+            'salary' => ['nullable'],
+            'category' => ['nullable'],
+            'agency_name' => ['nullable'],
+            'dob' => ['nullable'],
+            'nid' => ['nullable'],
+            'division' => ['nullable'],
+            'district' => ['nullable'],
+            'thana' => ['nullable'],
+            'sr_no' => ['nullable'],
+            'designation' => ['nullable'],
+            'joining_date' => ['nullable'],
+            'remarks' => ['nullable'],
         ]);
+
+        Rso::create($attr);
+
+        return to_route('rso.index')->with('msg', 'New rso created successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Rso $rso)
+    public function show(Rso $rso): Response|ResponseFactory
     {
-        //
+        $rso->created = Carbon::parse($rso->created_at)->toDayDateTimeString();
+        $rso->updated = Carbon::parse($rso->updated_at)->toDayDateTimeString();
+        $rso->dateOfBirth = Carbon::parse($rso->dob)->toFormattedDayDateString();
+        $rso->join = $rso->joining_date == null ? 'N/A' : Carbon::parse($rso->joining_date)->toDayDateTimeString();
+        $rso->resign = $rso->resign_date == null ? 'N/A' : Carbon::parse($rso->resign_date)->toDayDateTimeString();
+
+        return inertia('Rso/Show', ['rso' => $rso]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Rso $rso)
+    public function edit(Rso $rso): Response
     {
-        //
+        $users = User::where('role', 'rso')->where('status', 1)->get();
+        $zms = User::where('role', 'zm')->where('status', 1)->get();
+        $managers = User::where('role', 'manager')->where('status', 1)->get();
+        $supervisors = User::where('role', 'supervisor')->where('status', 1)->get();
+
+        return Inertia::render('Rso/Edit', [
+            'ddHouses' => DdHouse::all(),
+            'users' => $users,
+            'zms' => $zms,
+            'managers' => $managers,
+            'supervisors' => $supervisors,
+            'rso' => $rso,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Rso $rso)
+    public function update(Request $request, Rso $rso): RedirectResponse
     {
-        //
+        $attr = $request->validate([
+            'dd_house_id' => ['required'],
+            'user_id' => ['required'],
+            'zm_number' => ['required'],
+            'manager_number' => ['required'],
+            'supervisor_number' => ['required'],
+            'osrm_code' => ['nullable'],
+            'employee_code' => ['nullable'],
+            'code' => ['nullable'],
+            'number' => ['required'],
+            'pool_number' => ['nullable'],
+            'bank_account_name' => ['nullable'],
+            'bank_name' => ['nullable'],
+            'bank_account_number' => ['nullable'],
+            'brunch_name' => ['nullable'],
+            'routing_number' => ['nullable'],
+            'religion' => ['nullable'],
+            'education' => ['nullable'],
+            'gender' => ['nullable'],
+            'present_address' => ['nullable'],
+            'permanent_address' => ['nullable'],
+            'father_name' => ['nullable'],
+            'mother_name' => ['nullable'],
+            'market_type' => ['nullable'],
+            'salary' => ['nullable'],
+            'category' => ['nullable'],
+            'agency_name' => ['nullable'],
+            'dob' => ['nullable'],
+            'nid' => ['nullable'],
+            'division' => ['nullable'],
+            'district' => ['nullable'],
+            'thana' => ['nullable'],
+            'sr_no' => ['nullable'],
+            'designation' => ['nullable'],
+            'joining_date' => ['nullable'],
+            'resign_date' => ['nullable'],
+            'remarks' => ['nullable'],
+            'status' => ['nullable'],
+        ]);
+
+        $rso->update($attr);
+
+        return to_route('rso.index')->with('msg', 'Rso updated successfully.');
     }
 
     /**

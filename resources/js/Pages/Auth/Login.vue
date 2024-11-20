@@ -36,7 +36,7 @@ const submit = () => {
 
         <SessionMessage :status="status"/>
 
-        <form @submit.prevent="submit">
+        <form @submit.prevent="submit" class="space-y-6">
             <TextInput
                 label="Login ID"
                 icon="user"

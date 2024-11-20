@@ -28,6 +28,7 @@ use Illuminate\Notifications\Notifiable;
   * @property mixed $remember_token
   * @property mixed $avatar
   * @property mixed $id
+  * @property mixed|string $update
   */
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -80,46 +81,6 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Relationship with Zm model
-     *
-     * @return HasOne
-     */
-    public function zm()
-    {
-        return $this->hasOne(Zm::class);
-    }
-
-    /**
-     * Relationship with Md model
-     *
-     * @return HasOne
-     */
-    public function md(): HasOne
-    {
-        return $this->hasOne(Md::class);
-    }
-
-    /**
-     * Relationship with Manager model
-     *
-     * @return HasOne
-     */
-    public function manager(): HasOne
-    {
-        return $this->hasOne(Manager::class);
-    }
-
-    /**
-     * Relationship with Supervisor model
-     *
-     * @return HasOne
-     */
-    public function supervisor(): HasOne
-    {
-        return $this->hasOne(Supervisor::class);
-    }
-
-    /**
      * Relationship with Rso model
      *
      * @return HasOne
@@ -137,35 +98,5 @@ class User extends Authenticatable implements MustVerifyEmail
     public function retailer(): HasOne
     {
         return $this->hasOne(Retailer::class);
-    }
-
-    /**
-     * Relationship with Bp model
-     *
-     * @return HasOne
-     */
-    public function bp(): HasOne
-    {
-        return $this->hasOne(Bp::class);
-    }
-
-    /**
-     * Relationship with Account model
-     *
-     * @return HasOne
-     */
-    public function account(): HasOne
-    {
-        return $this->hasOne(Account::class);
-    }
-
-    /**
-     * Relationship with DmsOperator model
-     *
-     * @return HasOne
-     */
-    public function dmsOperator(): HasOne
-    {
-        return $this->hasOne(DmsOperator::class);
     }
 }
