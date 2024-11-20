@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+ use App\Traits\Searchable;
  use Database\Factories\UserFactory;
  use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,7 +14,9 @@ use Illuminate\Notifications\Notifiable;
  * @method static create(array $user)
  * @method static latest()
  * @method static when()
- * @property mixed $created_at
+  * @method static search(mixed $search)
+  * @method static where(string $string, string $string1)
+  * @property mixed $created_at
   * @property mixed $updated_at
   * @property mixed $email_verified_at
   * @property mixed $disabled_at
@@ -28,8 +31,7 @@ use Illuminate\Notifications\Notifiable;
   */
 class User extends Authenticatable implements MustVerifyEmail
 {
-    /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, Searchable;
 
     /**
      * The attributes that are mass assignable.
@@ -45,6 +47,12 @@ class User extends Authenticatable implements MustVerifyEmail
         'role',
         'status',
         'remarks',
+    ];
+
+    protected array $searchable = [
+        'name',
+        'phone',
+        'email'
     ];
 
     /**

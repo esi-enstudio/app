@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Searchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static latest()
  * @method static create(array $attributes)
  * @method static when(mixed $search, \Closure $param)
+ * @method static search(mixed $search)
  * @property mixed $created_at
  * @property mixed $updated_at
  * @property mixed $lifting_date
@@ -16,7 +18,12 @@ use Illuminate\Database\Eloquent\Model;
  */
 class DdHouse extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable;
 
     protected $guarded = [];
+
+    protected array $searchable = [
+        'name',
+        'code',
+    ];
 }

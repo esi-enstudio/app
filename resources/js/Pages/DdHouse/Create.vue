@@ -45,7 +45,7 @@ const form = useForm({
                             <Link :href="route('ddHouse.index')" class="hover:text-green-400">Back to list</Link>
                         </div>
 
-                        <form class="grid lg:grid-cols-2 gap-6" @submit.prevent="form.post(route('ddHouse.store'))">
+                        <form class="grid md:grid-cols-2 gap-6" @submit.prevent="form.post(route('ddHouse.store'))">
 
                             <!-- DD Code -->
                             <div class="mb-3">

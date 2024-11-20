@@ -10,7 +10,7 @@ import SessionMessage from "@/Components/SessionMessage.vue";
 import PaginationWithoutLinks from "@/Components/PaginationWithoutLinks.vue";
 
 const props = defineProps({
-    users: Object,
+    rsos: Object,
     searchTerm: String,
     status: String,
 })
@@ -18,31 +18,31 @@ const props = defineProps({
 const search = ref(props.searchTerm)
 
 watch(search, debounce(
-    (query) => router.get('/user', { search: query }, { preserveState:true }),
+    (query) => router.get('/rso', { search: query }, { preserveState:true }),
     500
 ))
 
-const delUser = (id, name) => {
+const delRso = (id, name) => {
 
-    if (confirm(`Are you sure to delete "${name}" user?`))
+    if (confirm(`Are you sure to delete "${name}"?`))
     {
-        router.delete(route('user.destroy', id));
+        router.delete(route('rso.destroy', id));
     }
 }
 </script>
 
 <template>
-    <Head title="Users" />
+    <Head title="Rso" />
     <SessionMessage :status="status"/>
 
     <AuthenticatedLayout>
         <template #header>
             <div class="flex items-center justify-between">
                 <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-                    Users
+                    Rso
                 </h2>
 
-                <Link :href="route('user.create')" class="block border border-green-400 px-4 py-1 rounded-lg hover:bg-green-400 hover:text-white">
+                <Link :href="route('rso.create')" class="block border border-green-400 px-4 py-1 rounded-lg hover:bg-green-400 hover:text-white">
                     Add New
                 </Link>
             </div>
@@ -81,33 +81,34 @@ const delUser = (id, name) => {
                                 <th>SL</th>
                                 <th>Avatar</th>
                                 <th>Name</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>Role</th>
+                                <th>Code</th>
+                                <th>Ac Number</th>
+                                <th>Pool Number</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
 
                             <tbody>
-                            <tr v-for="(user, i) in props.users.data" :key="user.id">
+
+                            <tr v-for="(rso, i) in props.rsos.data" :key="rso.id">
                                 <td>{{++i}}</td>
                                 <td>
-                                    <img class="w-[24px]" :src="user.avatar ? ('storage/' + user.avatar) : ('https://icons.veryicon.com/png/o/miscellaneous/user-avatar/user-avatar-male-5.png')" alt="User Avatar">
+                                    <img class="w-[24px]" :src="rso.user.avatar ? ('storage/' + rso.user.avatar) : ('https://icons.veryicon.com/png/o/miscellaneous/user-avatar/user-avatar-male-5.png')" alt="User Avatar">
                                 </td>
-                                <td>{{user.name}}</td>
-                                <td>{{user.email}}</td>
-                                <td>{{user.phone}}</td>
-                                <td>{{user.role}}</td>
-                                <td>{{user.status}}</td>
+                                <td>{{rso.user.name}}</td>
+                                <td>{{rso.code}}</td>
+                                <td>{{rso.number}}</td>
+                                <td>{{rso.pool_number}}</td>
+                                <td>{{rso.status}}</td>
                                 <td class="text-center space-x-2">
-                                    <Link :href="route('user.show', user.id)" class="hover:text-green-400">Show</Link>
-                                    <Link :href="route('user.edit', user.id)" class="hover:text-green-400">Edit</Link>
-                                    <button class="hover:text-red-500" @click="delUser(user.id, user.name)">Delete</button>
+                                    <Link :href="route('rso.show', rso.id)" class="hover:text-green-400">Show</Link>
+                                    <Link :href="route('rso.edit', rso.id)" class="hover:text-green-400">Edit</Link>
+                                    <button class="hover:text-red-500" @click="delRso(rso.id, rso.name)">Delete</button>
                                 </td>
                             </tr>
 
-                            <tr v-if="props.users.data.length < 1">
+                            <tr v-if="props.rsos.data.length < 1">
                                 <td colspan="8">No data found.</td>
                             </tr>
                             </tbody>
@@ -116,11 +117,11 @@ const delUser = (id, name) => {
 
                     <div class="px-3 pb-4">
                         <div class="lg:block hidden">
-                            <Pagination :links="props.users"/>
+                            <Pagination :links="props.rsos"/>
                         </div>
 
                         <div class="lg:hidden block">
-                            <PaginationWithoutLinks :links="props.users"/>
+                            <PaginationWithoutLinks :links="props.rsos"/>
                         </div>
                     </div>
                 </div>
