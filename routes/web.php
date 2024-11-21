@@ -26,6 +26,8 @@ Route::middleware(['auth','verified'])->group(function () {
         'ddHouse' => \App\Http\Controllers\DdHouseController::class,
         // Rso
         'rso' => \App\Http\Controllers\RsoController::class,
+        // Retailer
+        'retailer' => \App\Http\Controllers\RetailerController::class,
     ]);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

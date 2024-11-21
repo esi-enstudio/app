@@ -188,8 +188,9 @@ class RsoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Rso $rso)
+    public function destroy(Rso $rso): RedirectResponse
     {
-        //
+        $rso->delete();
+        return to_route('rso.index')->with('msg', 'Rso deleted successfully.');
     }
 }

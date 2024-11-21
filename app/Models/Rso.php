@@ -6,6 +6,7 @@ use App\Traits\Searchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @method static when(mixed $search, \Closure $param)
@@ -46,5 +47,15 @@ class Rso extends Model
     public function ddHouse(): BelongsTo
     {
         return $this->belongsTo(DdHouse::class);
+    }
+
+    /**
+     * Relationship with User model
+     *
+     * @return HasMany
+     */
+    public function retailer(): HasMany
+    {
+        return $this->hasMany(Retailer::class);
     }
 }

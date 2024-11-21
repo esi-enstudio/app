@@ -94,7 +94,7 @@ const delRso = (id, name) => {
                             <tr v-for="(rso, i) in props.rsos.data" :key="rso.id">
                                 <td>{{++i}}</td>
                                 <td>
-                                    <img class="w-[24px]" :src="rso.user.avatar ? ('storage/' + rso.user.avatar) : ('https://icons.veryicon.com/png/o/miscellaneous/user-avatar/user-avatar-male-5.png')" alt="User Avatar">
+                                    <img class="w-[24px]" :src="rso.user.avatar ? ('storage/' + rso.user.avatar) : ('https://icons.veryicon.com/png/o/miscellaneous/user-avatar/user-avatar-male-5.png')" alt="Rso Avatar">
                                 </td>
                                 <td>{{rso.user.name}}</td>
                                 <td>{{rso.code}}</td>
@@ -104,7 +104,7 @@ const delRso = (id, name) => {
                                 <td class="text-center space-x-2">
                                     <Link :href="route('rso.show', rso.id)" class="hover:text-green-400">Show</Link>
                                     <Link :href="route('rso.edit', rso.id)" class="hover:text-green-400">Edit</Link>
-                                    <button class="hover:text-red-500" @click="delRso(rso.id, rso.name)">Delete</button>
+                                    <button class="hover:text-red-500" @click="delRso(rso.id, rso.user.name)">Delete</button>
                                 </td>
                             </tr>
 

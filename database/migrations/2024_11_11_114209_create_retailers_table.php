@@ -32,13 +32,16 @@ return new class extends Migration
             $table->string('category')->nullable();
             $table->string('owner_name')->nullable();
             $table->string('owner_number')->nullable();
+            $table->string('father_name')->nullable();
+            $table->string('mother_name')->nullable();
             $table->string('division')->nullable();
             $table->string('district')->nullable();
             $table->string('thana')->nullable();
             $table->string('address')->nullable();
+            $table->date('dob')->nullable();
+            $table->string('nid')->nullable();
             $table->string('lat')->nullable();
             $table->string('long')->nullable();
-            $table->boolean('status')->default(false);
             $table->longText('description')->nullable();
             $table->string('remarks')->nullable();
             $table->timestamp('disabled_at')->nullable();
