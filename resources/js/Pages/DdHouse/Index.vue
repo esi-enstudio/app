@@ -106,13 +106,17 @@ const delHouse = (id, name) => {
                                     <button class="hover:text-red-500" @click="delHouse(ddHouse.id, ddHouse.name)">Delete</button>
                                 </td>
                             </tr>
+
+                            <tr v-if="props.ddHouses.data.length < 1">
+                                <td colspan="6">No data found.</td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
 
                     <div class="px-3 pb-4">
                         <div class="lg:block hidden">
-                            <Pagination :links="props.ddHouses"/>
+                            <Pagination :links="props.ddHouses.meta"/>
                         </div>
 
                         <div class="lg:hidden block">

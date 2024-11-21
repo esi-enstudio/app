@@ -77,7 +77,13 @@ const form = useForm({
                         <form @submit.prevent="form.post(route('rso.store'))" class="grid md:grid-cols-2 gap-6">
 
                             <!-- House -->
-                            <SelectInput label="DD House" icon="house" v-model="form.dd_house_id">
+                            <SelectInput
+                                label="DD House"
+                                icon="house"
+                                v-model="form.dd_house_id"
+                                :message="form.errors.dd_house_id"
+                                :important="true"
+                            >
                                 <option
                                     v-for="ddHouse in ddHouses"
                                     :key="ddHouse.id"
@@ -92,7 +98,13 @@ const form = useForm({
                             </SelectInput>
 
                             <!-- User -->
-                            <SelectInput label="User" icon="user" v-model="form.user_id">
+                            <SelectInput
+                                label="User"
+                                icon="user"
+                                v-model="form.user_id"
+                                :important="true"
+                                :message="form.errors.user_id"
+                            >
                                 <option
                                     v-for="user in users"
                                     :key="user.id"
@@ -107,7 +119,13 @@ const form = useForm({
                             </SelectInput>
 
                             <!-- ZM Number -->
-                            <SelectInput label="ZM Number" icon="user" v-model="form.zm_number">
+                            <SelectInput
+                                label="ZM Number"
+                                icon="user"
+                                v-model="form.zm_number"
+                                :important="true"
+                                :message="form.errors.zm_number"
+                            >
                                 <option
                                     v-for="zm in zms"
                                     :key="zm.id"
@@ -122,7 +140,13 @@ const form = useForm({
                             </SelectInput>
 
                             <!-- Manager Number -->
-                            <SelectInput label="Manager Number" icon="user" v-model="form.manager_number">
+                            <SelectInput
+                                label="Manager Number"
+                                icon="user"
+                                :important="true"
+                                v-model="form.manager_number"
+                                :message="form.errors.manager_number"
+                            >
                                 <option
                                     v-for="manager in managers"
                                     :key="manager.id"
@@ -137,7 +161,13 @@ const form = useForm({
                             </SelectInput>
 
                             <!-- Supervisor Number -->
-                            <SelectInput label="Supervisor Number" icon="user" v-model="form.supervisor_number">
+                            <SelectInput
+                                label="Supervisor Number"
+                                icon="user"
+                                :important="true"
+                                v-model="form.supervisor_number"
+                                :message="form.errors.supervisor_number"
+                            >
                                 <option
                                     v-for="supervisor in supervisors"
                                     :key="supervisor.id"
@@ -179,6 +209,7 @@ const form = useForm({
                             <TextInput
                                 label="AC Number"
                                 icon="phone"
+                                :important="true"
                                 v-model="form.number"
                                 :message="form.errors.number"
                             />

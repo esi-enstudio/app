@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static create(array $attributes)
  * @method static when(mixed $search, \Closure $param)
  * @method static search(mixed $search)
+ * @method static insert()
  * @property mixed $created_at
  * @property mixed $updated_at
  * @property mixed $lifting_date

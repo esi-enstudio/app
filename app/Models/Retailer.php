@@ -9,13 +9,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @method static search($search)
+ * @method static insert()
  */
 class Retailer extends Model
 {
     use HasFactory, Searchable;
 
     protected $guarded = [];
-    protected $with = ['user','rso','ddHouse'];
+    protected $with = ['rso.user','ddHouse'];
 
     protected array $searchable = [
         'code',
@@ -25,6 +26,7 @@ class Retailer extends Model
         'user.phone',
         'ddHouse.code',
         'ddHouse.name',
+//        'rso.user.name',
     ];
 
     /**

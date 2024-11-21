@@ -117,7 +117,7 @@ const delRso = (id, name) => {
 
                     <div class="px-3 pb-4">
                         <div class="lg:block hidden">
-                            <Pagination :links="props.rsos"/>
+                            <Pagination :links="props.rsos.meta"/>
                         </div>
 
                         <div class="lg:hidden block">

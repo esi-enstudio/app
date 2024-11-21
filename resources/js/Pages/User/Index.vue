@@ -116,7 +116,7 @@ const delUser = (id, name) => {
 
                     <div class="px-3 pb-4">
                         <div class="lg:block hidden">
-                            <Pagination :links="props.users"/>
+                            <Pagination :links="props.users.meta"/>
                         </div>
 
                         <div class="lg:hidden block">

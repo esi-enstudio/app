@@ -17,10 +17,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-         User::factory(292)->create();
-         DdHouse::factory(3)->create();
-         Rso::factory(25)->create();
-         Retailer::factory(250)->create();
+//         User::factory(280)->create();
+//         DdHouse::factory(3)->create();
+//         Rso::factory(25)->create();
+//         Retailer::factory(250)->create();
+
+        $this->call(DdHouseSeeder::class);
+        $this->call(UserSeeder::class);
+//        $this->call(RsoSeeder::class);
+//        $this->call(RetailerSeeder::class);
 
 
         User::factory()->create([

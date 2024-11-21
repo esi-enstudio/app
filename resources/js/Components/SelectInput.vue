@@ -8,6 +8,7 @@ defineProps({
     label: String,
     icon: String,
     message: String,
+    important: Boolean,
 });
 </script>
 
@@ -16,7 +17,7 @@ defineProps({
         <label
             :for="label"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-            {{label}}
+            {{label}} <span v-if="important" class="text-red-500">*</span>
         </label>
 
         <div class="relative mt-1 rounded-md">

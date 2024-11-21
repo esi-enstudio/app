@@ -30,9 +30,9 @@ class RetailerController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): Response|ResponseFactory
     {
-        //
+        return inertia('Retailer/Create');
     }
 
     /**

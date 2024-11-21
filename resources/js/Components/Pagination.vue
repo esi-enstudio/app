@@ -1,25 +1,28 @@
 <script setup>
-defineProps({
-    links: Array,
+const props = defineProps({
+    links: {
+        type: Object,
+        required: true,
+    },
 })
 </script>
 
 <template>
-    <div v-if="links.meta.from" class="flex items-center justify-between mt-3">
+    <div v-if="props.links.from" class="flex items-center justify-between mt-3">
         <div>
             Showing
-            <span class="font-bold">{{links.meta.from}}</span>
+            <span class="font-bold">{{props.links.from}}</span>
             to
-            <span class="font-bold">{{links.meta.to}}</span>
+            <span class="font-bold">{{props.links.to}}</span>
             of
-            <span class="font-bold">{{links.meta.total}}</span>
+            <span class="font-bold">{{props.links.total}}</span>
             results
         </div>
 
         <div>
             <Component
                 :is="link.url ? 'Link' : 'span'"
-                v-for="link in links.meta.links"
+                v-for="link in props.links.links"
                 :href="link.url"
                 v-html="link.label"
                 class="px-2 border border-green-400 rounded-md mx-1 hover:bg-green-400 hover:text-white"

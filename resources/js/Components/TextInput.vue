@@ -6,6 +6,7 @@ const model = defineModel({
 
 defineProps({
     label: String,
+    important: Boolean,
     icon: String,
     placeholder: {
         type: String,
@@ -25,7 +26,7 @@ defineProps({
             v-if="label"
             :for="label"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-            {{label}}
+            {{label}} <span v-if="important" class="text-red-500">*</span>
         </label>
 
         <div class="relative rounded-md">

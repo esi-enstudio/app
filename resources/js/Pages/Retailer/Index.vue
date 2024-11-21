@@ -111,7 +111,7 @@ const delRetailer = (id, name) => {
                                         <div>
                                             <div class="flex items-start">
                                                 <p>{{retailer.name}} <span v-if="retailer.code">({{retailer.code}})</span></p>
-                                                <Verified v-if="retailer.enabled" color="green"/>
+                                                <Verified v-if="retailer.enabled"/>
                                             </div>
                                             <p class="text-sm text-slate-400">{{retailer.number}}</p>
                                         </div>
@@ -124,7 +124,7 @@ const delRetailer = (id, name) => {
                                             </div>
 
                                             <div>
-                                            <span class="bg-gray-100 text-gray-800 text-xs font-medium rounded-full dark:bg-gray-700 dark:text-gray-300">
+                                            <span class="text-gray-800 text-xs font-medium dark:text-gray-300">
                                                 {{retailer.user.name}}
                                             </span>
                                             </div>
@@ -155,7 +155,7 @@ const delRetailer = (id, name) => {
 
                     <div class="px-3 pb-4">
                         <div class="lg:block hidden">
-                            <Pagination :links="props.retailers"/>
+                            <Pagination :links="props.retailers.meta"/>
                         </div>
 
                         <div class="lg:hidden block">

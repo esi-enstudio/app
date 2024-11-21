@@ -108,7 +108,7 @@ class RsoController extends Controller
     {
         $rso->created = Carbon::parse($rso->created_at)->toDayDateTimeString();
         $rso->updated = Carbon::parse($rso->updated_at)->toDayDateTimeString();
-        $rso->dateOfBirth = Carbon::parse($rso->dob)->toFormattedDayDateString();
+        $rso->dateOfBirth = $rso->dob == null ? 'N/A' : Carbon::parse($rso->dob)->toFormattedDayDateString();
         $rso->join = $rso->joining_date == null ? 'N/A' : Carbon::parse($rso->joining_date)->toDayDateTimeString();
         $rso->resign = $rso->resign_date == null ? 'N/A' : Carbon::parse($rso->resign_date)->toDayDateTimeString();
 

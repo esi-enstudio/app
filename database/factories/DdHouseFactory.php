@@ -2,10 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\DdHouse;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\DdHouse>
+ * @extends Factory<DdHouse>
  */
 class DdHouseFactory extends Factory
 {
@@ -17,8 +18,8 @@ class DdHouseFactory extends Factory
     public function definition(): array
     {
         return [
-            'code' => fake()->postcode(),
-            'name' => fake()->name(),
+            'code' => fake()->unique()->randomElement(['MYMVAI01','MYMVAI02','MYMVAI03']),
+            'name' => fake()->unique()->randomElement(['Patwary','Modina','Sumaya']),
         ];
     }
 }

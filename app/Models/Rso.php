@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static search(mixed $search)
  * @method static whereNotNull(string $string)
  * @method static create( array $attr )
+ * @method static insert( array[] $array )
  */
 class Rso extends Model
 {
