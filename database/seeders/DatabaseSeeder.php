@@ -24,8 +24,8 @@ class DatabaseSeeder extends Seeder
 
         $this->call(DdHouseSeeder::class);
         $this->call(UserSeeder::class);
-//        $this->call(RsoSeeder::class);
-//        $this->call(RetailerSeeder::class);
+        $this->call(RsoSeeder::class);
+        $this->call(RetailerSeeder::class);
 
 
         User::factory()->create([

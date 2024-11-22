@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(DdHouse::class);
             $table->foreignIdFor(User::class, '');
-            $table->string('zm_number');
-            $table->string('manager_number');
-            $table->string('supervisor_number');
+            $table->foreignIdFor(User::class, 'zm');
+            $table->foreignIdFor(User::class, 'manager');
+            $table->foreignIdFor(User::class, 'supervisor');
             $table->string('osrm_code')->nullable();
             $table->string('employee_code')->nullable();
             $table->string('code')->nullable();

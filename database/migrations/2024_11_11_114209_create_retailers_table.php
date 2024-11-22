@@ -19,9 +19,9 @@ return new class extends Migration
             $table->foreignIdFor(DdHouse::class);
             $table->foreignIdFor(User::class);
             $table->foreignIdFor(Rso::class);
-            $table->string('zm_number');
-            $table->string('manager_number');
-            $table->string('supervisor_number');
+            $table->foreignIdFor(User::class, 'zm');
+            $table->foreignIdFor(User::class, 'manager');
+            $table->foreignIdFor(User::class, 'supervisor');
             $table->string('code');
             $table->string('name');
             $table->string('number');
@@ -30,8 +30,6 @@ return new class extends Migration
             $table->string('sso')->nullable();
             $table->string('service_point')->nullable();
             $table->string('category')->nullable();
-            $table->string('owner_name')->nullable();
-            $table->string('owner_number')->nullable();
             $table->string('father_name')->nullable();
             $table->string('mother_name')->nullable();
             $table->string('division')->nullable();
@@ -44,6 +42,7 @@ return new class extends Migration
             $table->string('long')->nullable();
             $table->longText('description')->nullable();
             $table->string('remarks')->nullable();
+            $table->boolean('status')->default(1);
             $table->timestamp('disabled_at')->nullable();
             $table->timestamps();
         });

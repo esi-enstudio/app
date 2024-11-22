@@ -4,28 +4,28 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {router} from "@inertiajs/vue3";
 
 const props = defineProps({
-    rso: Object,
+    retailer: Object,
 })
 
-const delRso = (id, name) => {
+const delRetailer = (id, name) => {
 
-    if (confirm(`Are you sure to delete "${name}" rso?`))
+    if (confirm(`Are you sure to delete "${name}"?`))
     {
-        router.delete(route('rso.destroy', id));
+        router.delete(route('retailer.destroy', id));
     }
 }
 
 </script>
 
 <template>
-    <Head title="RS0 Details" />
+    <Head title="Retailer Details" />
 
     <AuthenticatedLayout>
         <template #header>
             <div>
                 <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
                     <span class="text-2xl italic">
-                        {{ props.rso.user.name}}
+                        {{ props.retailer.name}}
                     </span> Details...
                 </h2>
             </div>
@@ -37,234 +37,220 @@ const delRso = (id, name) => {
                     <div class="p-6 text-gray-900 dark:text-gray-100">
 
                         <div class="mb-4 text-right">
-                            <Link :href="route('rso.index')" class="hover:text-green-400">Back to list</Link>
+                            <Link :href="route('retailer.index')" class="hover:text-green-400">Back to list</Link>
                         </div>
-{{console.log(props.rso)}}
+
                         <table>
                             <tr>
                                 <td colspan="2">
                                     <img
-                                        :src="props.rso.user.avatar
-                                        ? `/storage/${props.rso.user.avatar}`
+                                        :src="props.retailer.user.avatar
+                                        ? `/storage/${props.retailer.user.avatar}`
                                         : `https://icons.veryicon.com/png/o/miscellaneous/user-avatar/user-avatar-male-5.png`"
-                                        alt="Rso Avatar">
+                                        alt="Retailer Avatar">
                                 </td>
                             </tr>
 
                             <tr>
                                 <td>ID</td>
-                                <td>{{props.rso.id}}</td>
+                                <td>{{props.retailer.id}}</td>
                             </tr>
 
                             <tr>
                                 <td>Cluster</td>
-                                <td>{{props.rso.dd_house.cluster ?? 'N/A'}}</td>
+                                <td>{{props.retailer.dd_house.cluster ?? 'N/A'}}</td>
                             </tr>
 
                             <tr>
                                 <td>Region</td>
-                                <td>{{props.rso.dd_house.region ?? 'N/A'}}</td>
+                                <td>{{props.retailer.dd_house.region ?? 'N/A'}}</td>
                             </tr>
 
                             <tr>
                                 <td>DD House</td>
-                                <td>{{props.rso.dd_house.code}} - {{props.rso.dd_house.name}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Name</td>
-                                <td>{{props.rso.user.name}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Bank Account Name</td>
-                                <td>{{props.rso.bank_account_name}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Ac Number</td>
-                                <td>{{props.rso.number}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Pool Number</td>
-                                <td>{{props.rso.pool_number}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Personal Number</td>
-                                <td>{{props.rso.user.phone}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>OSRM Code</td>
-                                <td>{{props.rso.osrm_code}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Employee Code</td>
-                                <td>{{props.rso.employee_code}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>RS0 Code</td>
-                                <td>{{props.rso.code}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Bank Name</td>
-                                <td>{{props.rso.bank_name}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Account Number</td>
-                                <td>{{props.rso.bank_account_number}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Brunch Name</td>
-                                <td>{{props.rso.brunch_name}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Routing Number</td>
-                                <td>{{props.rso.routing_number}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Religion</td>
-                                <td>{{props.rso.religion}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Education</td>
-                                <td>{{props.rso.education}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Blood Group</td>
-                                <td>{{props.rso.blood_group ?? 'N/A'}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Gender</td>
-                                <td>{{props.rso.gender}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Present Address</td>
-                                <td>{{props.rso.present_address}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Permanent Address</td>
-                                <td>{{props.rso.present_address}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Father Name</td>
-                                <td>{{props.rso.father_name}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Mother Name</td>
-                                <td>{{props.rso.mother_name}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Market Type</td>
-                                <td>{{props.rso.market_type}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Salary</td>
-                                <td>{{props.rso.salary}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Category</td>
-                                <td>{{props.rso.category}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Date Of Birth</td>
-                                <td>{{props.rso.dateOfBirth}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>NID</td>
-                                <td>{{props.rso.nid}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Thana</td>
-                                <td>{{props.rso.thana}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>District</td>
-                                <td>{{props.rso.district}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Division</td>
-                                <td>{{props.rso.division}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>SR No</td>
-                                <td>{{props.rso.sr_no}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Designation</td>
-                                <td>{{props.rso.designation}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Joining Date</td>
-                                <td>{{props.rso.join}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Resign Date</td>
-                                <td>{{props.rso.resign}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Remarks</td>
-                                <td>{{props.rso.remarks}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Status</td>
-                                <td
-                                    :class="props.rso.status === 1
-                                    ? 'text-green-600 font-semibold'
-                                    : 'text-red-600 font-semibold'"
-                                >
-                                    {{props.rso.status === 1 ? 'Active' : 'Inactive'}}
+                                <td>
+                                    {{
+                                        props.retailer.dd_house.code
+                                        +' - '+
+                                        props.retailer.dd_house.name
+                                    }}
                                 </td>
                             </tr>
 
                             <tr>
+                                <td>Retailer Name</td>
+                                <td>
+                                    {{
+                                        props.retailer.name
+                                        +' - '+
+                                        props.retailer.code
+                                        +' - '+
+                                        props.retailer.number
+                                    }}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Owner Name</td>
+                                <td>{{
+                                        props.retailer.user.name
+                                        +' - '+
+                                        props.retailer.user.phone
+                                    }}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Type</td>
+                                <td>{{ props.retailer.type }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>Enabled</td>
+                                <td>{{ props.retailer.enabled ? 'Yes' : 'No' }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>SSO</td>
+                                <td>{{ props.retailer.sso ? 'Yes' : 'No' }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>Service Point</td>
+                                <td>{{ props.retailer.service_point ?? 'N/A' }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>Category</td>
+                                <td>{{ props.retailer.category ?? 'N/A' }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>Father Name</td>
+                                <td>{{ props.retailer.father_name ?? 'N/A' }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>Mother Name</td>
+                                <td>{{ props.retailer.mother_name ?? 'N/A' }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>Division</td>
+                                <td>{{ props.retailer.division ?? 'N/A' }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>District</td>
+                                <td>{{ props.retailer.district ?? 'N/A' }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>Thana</td>
+                                <td>{{ props.retailer.thana ?? 'N/A' }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>Address</td>
+                                <td>{{ props.retailer.address ?? 'N/A' }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>Date Of Birth</td>
+                                <td>{{ props.retailer.dob ?? 'N/A' }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>NID</td>
+                                <td>{{ props.retailer.nid ?? 'N/A' }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>Latitude</td>
+                                <td>{{ props.retailer.lat }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>Longitude</td>
+                                <td>{{ props.retailer.long }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>Rso Name</td>
+                                <td>
+                                    {{
+                                        props.retailer.rso.user.name
+                                        +' - '+
+                                        props.retailer.rso.number
+                                    }}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Zm</td>
+                                <td>
+                                    {{
+                                        props.retailer.zm.name
+                                        +' - '+
+                                        props.retailer.zm.phone
+                                    }}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Manager</td>
+                                <td>
+                                    {{
+                                        props.retailer.manager.name
+                                        +' - '+
+                                        props.retailer.manager.phone
+                                    }}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Supervisor</td>
+                                <td>
+                                    {{
+                                        props.retailer.supervisor.name
+                                        +' - '+
+                                        props.retailer.supervisor.phone
+                                    }}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Description</td>
+                                <td>{{ props.retailer.description }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>Remarks</td>
+                                <td>{{ props.retailer.remarks }}</td>
+                            </tr>
+
+                            <tr>
                                 <td>Created</td>
-                                <td>{{props.rso.created}}</td>
+                                <td>{{props.retailer.created}}</td>
                             </tr>
 
                             <tr>
                                 <td>Updated</td>
-                                <td>{{props.rso.updated}}</td>
+                                <td>{{props.retailer.updated}}</td>
                             </tr>
 
+                            <tr>
+                                <td>Disabled</td>
+                                <td>{{props.retailer.disabled}}</td>
+                            </tr>
                         </table>
 
                         <div class="flex items-center justify-between mt-4">
                             <!-- Edit -->
-                            <Link :href="route('rso.edit', props.rso.id)" class="block hover:text-green-400">Edit</Link>
+                            <Link :href="route('retailer.edit', props.retailer.id)" class="block hover:text-green-400">Edit</Link>
 
                             <!-- Delete -->
-                            <button class="hover:text-red-500 hover:font-semibold" @click="delRso(props.rso.id, props.rso.user.name)">Delete</button>
+                            <button class="hover:text-red-500 hover:font-semibold" @click="delRetailer(props.retailer.id, props.retailer.user.name)">Delete</button>
                         </div>
                     </div>
                 </div>

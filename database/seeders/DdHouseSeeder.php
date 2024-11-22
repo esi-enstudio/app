@@ -14,9 +14,9 @@ class DdHouseSeeder extends Seeder
     public function run(): void
     {
         DdHouse::insert([
-            ['code' => 'MYMVAI01', 'name' => 'Patwary Telecom', 'cluster' => 'East', 'region' => 'Brahmanbaria'],
-            ['code' => 'MYMVAI02', 'name' => 'Modina Store', 'cluster' => 'North East', 'region' => 'Mymensingh'],
-            ['code' => 'MYMVAI03', 'name' => 'Sumaya Enterprise', 'cluster' => 'East', 'region' => 'Brahmanbaria'],
+            ['code' => 'MYMVAI01', 'name' => 'Patwary Telecom', 'cluster' => 'East', 'region' => 'Brahmanbaria', 'status' => 1],
+            ['code' => 'MYMVAI02', 'name' => 'Modina Store', 'cluster' => 'North East', 'region' => 'Mymensingh', 'status' => 1],
+            ['code' => 'MYMVAI03', 'name' => 'Sumaya Enterprise', 'cluster' => 'East', 'region' => 'Brahmanbaria', 'status' => 1],
         ]);
     }
 }

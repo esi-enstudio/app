@@ -71,9 +71,9 @@ class DdHouseController extends Controller
      */
     public function show(DdHouse $ddHouse): Response|ResponseFactory
     {
-        $ddHouse->created = Carbon::parse($ddHouse->created_at)->toDayDateTimeString();
-        $ddHouse->updated = Carbon::parse($ddHouse->updated_at)->toDayDateTimeString();
         $ddHouse->lifting_date = Carbon::parse($ddHouse->lifting_date)->toFormattedDayDateString();
+        $ddHouse->created = $ddHouse->created_at == null ? '' : Carbon::parse($ddHouse->created_at)->toDayDateTimeString();
+        $ddHouse->updated = $ddHouse->updated_at == null ? '' : Carbon::parse($ddHouse->updated_at)->toDayDateTimeString();
         $ddHouse->disabled = $ddHouse->disabled_at == null ? '' : Carbon::parse($ddHouse->disabled_at)->toDayDateTimeString();
 
         return inertia('DdHouse/Show', [

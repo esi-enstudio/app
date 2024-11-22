@@ -96,7 +96,7 @@ const delRetailer = (id, name) => {
 
                                 <!-- Avatar -->
                                 <td>
-                                    <img class="w-[24px]" :src="retailer.user.avatar ? ('storage/' + retailer.user.avatar) : ('https://icons.veryicon.com/png/o/miscellaneous/user-avatar/user-avatar-male-5.png')" alt="Retailer Avatar">
+                                    <img class="w-[40px]" :src="retailer.user.avatar ? ('storage/' + retailer.user.avatar) : ('https://icons.veryicon.com/png/o/miscellaneous/user-avatar/user-avatar-male-5.png')" alt="Retailer Avatar">
                                 </td>
 
                                 <!-- House -->
@@ -118,7 +118,7 @@ const delRetailer = (id, name) => {
 
                                         <div class="flex flex-col justify-between items-end">
                                             <div class="flex items-start justify-between gap-1 text-xs">
-                                                <span v-if="retailer.sso === 'Y'" class="text-purple-500 font-medium dark:text-purple-500">
+                                                <span v-if="retailer.sso === '1'" class="text-purple-500 font-medium dark:text-yellow-400">
                                                     SSO
                                                 </span>
                                             </div>

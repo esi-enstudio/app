@@ -15,8 +15,9 @@ use Illuminate\Notifications\Notifiable;
  * @method static latest()
  * @method static when()
   * @method static search(mixed $search)
-  * @method static where(string $string, string $string1)
+  * @method static where()
   * @method static insert()
+  * @method static firstWhere()
   * @property mixed $created_at
   * @property mixed $updated_at
   * @property mixed $email_verified_at

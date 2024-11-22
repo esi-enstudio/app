@@ -39,7 +39,7 @@ const delRso = (id, name) => {
                         <div class="mb-4 text-right">
                             <Link :href="route('rso.index')" class="hover:text-green-400">Back to list</Link>
                         </div>
-{{console.log(props.rso)}}
+
                         <table>
                             <tr>
                                 <td colspan="2">

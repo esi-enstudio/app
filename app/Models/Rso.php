@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static whereNotNull(string $string)
  * @method static create( array $attr )
  * @method static insert( array[] $array )
+ * @method static where()
+ * @method static firstWhere()
  */
 class Rso extends Model
 {

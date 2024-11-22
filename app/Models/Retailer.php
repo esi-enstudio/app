@@ -10,13 +10,22 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @method static search($search)
  * @method static insert()
+ * @method static whereNotNull( string $string )
+ * @method static create( array $attributes )
+ * @property mixed $zm
+ * @property mixed $manager
+ * @property mixed $supervisor
+ * @property mixed $created_at
+ * @property mixed $updated_at
+ * @property mixed $disabled_at
+ * @property mixed $id
  */
 class Retailer extends Model
 {
     use HasFactory, Searchable;
 
     protected $guarded = [];
-    protected $with = ['rso.user','ddHouse'];
+    protected $with = ['rso','ddHouse','user'];
 
     protected array $searchable = [
         'code',
@@ -26,7 +35,8 @@ class Retailer extends Model
         'user.phone',
         'ddHouse.code',
         'ddHouse.name',
-//        'rso.user.name',
+        'rso.number',
+        'rso.user.name',
     ];
 
     /**
