@@ -23,7 +23,7 @@ watch(search, debounce(
     500
 ))
 
-const delRetailer = (id, name) => {
+const delReplaceRecord = (id, name) => {
 
     if (confirm(`Are you sure to delete "${name}"?`))
     {
@@ -111,7 +111,7 @@ const delRetailer = (id, name) => {
                                 <td class="text-center space-x-2">
                                     <Link :href="route('itopReplace.show', itopReplace.id)" class="hover:text-green-400">Show</Link>
                                     <Link :href="route('itopReplace.edit', itopReplace.id)" class="hover:text-green-400">Edit</Link>
-                                    <button class="hover:text-red-500" @click="delRetailer(itopReplace.id, itopReplace.number)">Delete</button>
+                                    <button class="hover:text-red-500" @click="delReplaceRecord(itopReplace.id, itopReplace.number)">Delete</button>
                                 </td>
                             </tr>
 

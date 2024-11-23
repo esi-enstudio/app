@@ -10,13 +10,23 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @method static search(mixed $search)
  * @method static create(array $attributes)
+ * @method static firstWhere( string $string, mixed $dd_house_id )
+ * @property mixed $dd_house_id
+ * @property mixed $manager
+ * @property mixed $rso_id
+ * @property mixed $user_id
+ * @property mixed $supervisor
+ * @property mixed $zm
+ * @property mixed $user
+ * @property mixed $status
+ * @property mixed $number
  */
 class ItopReplace extends Model
 {
     use HasFactory, Searchable;
 
     protected $guarded = [];
-
+    protected $with = ['ddHouse','user','rso','retailer'];
 
     protected array $searchable = [
         'retailer.number',

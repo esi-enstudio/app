@@ -6,7 +6,7 @@ import {router} from "@inertiajs/vue3";
 const props = defineProps({
     retailer: Object,
 })
-console.log(props.retailer)
+
 const delRetailer = (id, name) => {
 
     if (confirm(`Are you sure to delete "${name}"?`))

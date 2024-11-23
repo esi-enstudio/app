@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ItopReplaceResource;
+use App\Models\DdHouse;
 use App\Models\ItopReplace;
-use App\Http\Requests\StoreItopReplaceRequest;
-use App\Http\Requests\UpdateItopReplaceRequest;
 use App\Models\Retailer;
+use App\Models\Rso;
+use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 use Inertia\ResponseFactory;
@@ -42,7 +46,7 @@ class ItopReplaceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $attributes = $request->validate([
             'number'        => ['required','numeric','digits:11'],
@@ -58,7 +62,7 @@ class ItopReplaceController extends Controller
         $attributes['supervisor'] = Retailer::firstWhere('number', $request->number)->supervisor;
         $attributes['manager'] = Retailer::firstWhere('number', $request->number)->manager;
         $attributes['zm'] = Retailer::firstWhere('number', $request->number)->zm;
-        $attributes['user_id'] = Retailer::firstWhere('number', $request->number)->user_id;
+        $attributes['user_id'] = Auth::id();
         $attributes['dd_house_id'] = Retailer::firstWhere('number', $request->number)->dd_house_id;
 
         ItopReplace::create($attributes);
@@ -69,9 +73,27 @@ class ItopReplaceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ItopReplace $itopReplace)
+    public function show(Request $request, ItopReplace $itopReplace): Response
     {
-        //
+        $itopReplace->user->role = Str::title($itopReplace->user->role);
+        $itopReplace->status = Str::title($itopReplace->status);
+
+        $itopReplace->zm = User::firstWhere('id', $itopReplace->zm);
+        $itopReplace->manager = User::firstWhere('id', $itopReplace->manager);
+        $itopReplace->supervisor = User::firstWhere('id', $itopReplace->supervisor);
+
+        return Inertia::render('Service/ItopReplace/Show', [
+            'itopReplace' => $itopReplace,
+            'replaceHistory' => ItopReplaceResource::collection(ItopReplace::search($request->search)
+                ->where('number', $itopReplace->number)
+                ->latest()
+                ->paginate(5)
+                ->onEachSide(0)
+                ->withQueryString()),
+
+            'searchTerm' => $request->search,
+            'status' => session('msg'),
+        ]);
     }
 
     /**

@@ -2,255 +2,165 @@
 
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {router} from "@inertiajs/vue3";
+import TextInput from "@/Components/TextInput.vue";
+import Pagination from "@/Components/Pagination.vue";
+import PaginationWithoutLinks from "@/Components/PaginationWithoutLinks.vue";
 
 const props = defineProps({
-    retailer: Object,
+    itopReplace: Object,
+    replaceHistory: Object,
 })
-console.log(props.retailer)
-const delRetailer = (id, name) => {
+
+const delReplaceRecord = (id, name) => {
 
     if (confirm(`Are you sure to delete "${name}"?`))
     {
-        router.delete(route('retailer.destroy', id));
+        router.delete(route('itopReplace.destroy', id));
     }
 }
 
 </script>
 
 <template>
-    <Head title="Retailer Details" />
+    <Head title="Itop Replace Details" />
 
     <AuthenticatedLayout>
         <template #header>
             <div>
                 <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-                    <span class="text-2xl italic">
-                        {{ props.retailer.name}}
-                    </span> Details...
+                    Replace Details...
                 </h2>
             </div>
         </template>
-
+{{console.log(props.itopReplace)}}
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                     <div class="p-6 text-gray-900 dark:text-gray-100">
 
                         <div class="mb-4 text-right">
-                            <Link :href="route('retailer.index')" class="hover:text-green-400">Back to list</Link>
+                            <Link :href="route('itopReplace.index')" class="hover:text-green-400">Back to list</Link>
                         </div>
 
-                        <table>
-                            <tr>
-                                <td colspan="2">
-                                    <img
-                                        :src="props.retailer.user.avatar
-                                        ? `/storage/${props.retailer.user.avatar}`
-                                        : `https://icons.veryicon.com/png/o/miscellaneous/user-avatar/user-avatar-male-5.png`"
-                                        alt="Retailer Avatar">
-                                </td>
-                            </tr>
+                        <div>
+                            <div>
+                                <p>টিটু ভাই ০১৯১৫২৭০১০১ নাম্বারটি ২০ নভেম্বর ২০২৪ তারিখে এমিল ভাইয়ের কাছে রিপ্লেস করার জন্য দেয়। এমিল ভাই ২১ নভেম্বর ২০২৪ তারিখে রিপ্লেসের জন্য মেইল পাঠায়। ২১ নভেম্বর ২০২৪ তারিখে সিমটি রিপ্লেস হয়।  রিপ্লেসে দেওয়ার সময় উক্ত সিমে ৫১৪২ টাকা ব্যালেন্স ছিল। সিমটি পাটোয়ারী টেলিকম এর ছিল। সিমটি এখন পর্যন্ত ৩ বার রিপ্লেস হয়েছে।</p>
+                                &nbsp;
+                                <p>রিপ্লেস করার কারণঃ </p>
+                                <p>বিস্তারিতঃ </p>
+                                <p>বর্তমান অবস্থাঃ </p>
+<!--                                <p>DD House: {{props.itopReplace.dd_house.name}}</p>-->
+<!--                                <p>From: {{props.itopReplace.remarks}}</p>-->
+<!--                                <p>For: {{props.itopReplace.rso.user.name+' - '+props.itopReplace.rso.number}}</p>-->
+<!--                                <p>Retailer: {{props.itopReplace.retailer.code+' - '+props.itopReplace.retailer.user.name}}</p>-->
+<!--                                <p>Description: {{props.itopReplace.retailer.description}}</p>-->
+<!--                                <p>-->
+<!--                                    Status:-->
+<!--                                    <span :class="{-->
+<!--                                    'text-yellow-500' : props.itopReplace.status === 'Pending',-->
+<!--                                    'text-pink-500' : props.itopReplace.status === 'Processing',-->
+<!--                                    'text-green-500' : props.itopReplace.status === 'Complete',}"-->
+<!--                                >-->
+<!--                                    {{props.itopReplace.status}}-->
+<!--                                    </span>-->
+<!--                                </p>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                            <tr>
-                                <td>ID</td>
-                                <td>{{props.retailer.id}}</td>
-                            </tr>
+        <div class="pb-5">
+            <div class="mx-auto max-w-7xl sm:px-4 lg:px-8">
+                <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
+                    <div class="md:block hidden">
+                        <div class="flex justify-end px-3 pt-4">
+                            <TextInput
+                                type="search"
+                                icon="search"
+                                v-model="search"
+                                placeholder="Type something..."
+                            />
+                        </div>
+                    </div>
 
-                            <tr>
-                                <td>Cluster</td>
-                                <td>{{props.retailer.dd_house.cluster ?? 'N/A'}}</td>
-                            </tr>
+                    <div class="md:hidden block">
+                        <div class="flex justify-end px-3 pt-4">
+                            <TextInput
+                                type="search"
+                                class="w-full"
+                                icon="search"
+                                v-model="search"
+                                placeholder="Type something..."
+                            />
+                        </div>
+                    </div>
 
+                    <div class="p-3 text-gray-900 dark:text-gray-100 overflow-x-auto">
+                        <table class="w-full whitespace-nowrap">
+                            <thead>
                             <tr>
-                                <td>Region</td>
-                                <td>{{props.retailer.dd_house.region ?? 'N/A'}}</td>
+                                <th>SL</th>
+                                <th>Itop Number</th>
+                                <th>Balance</th>
+                                <th>Reason</th>
+                                <th>Requested From/By</th>
+                                <th>Status</th>
                             </tr>
+                            </thead>
 
-                            <tr>
-                                <td>DD House</td>
+                            <tbody>
+
+                            <tr class="font-semibold" v-for="(history, i) in props.replaceHistory.data" :key="history.id">
+                                <!-- SL -->
+                                <td>{{++i}}</td>
+
+                                <!-- Itop Number -->
                                 <td>
-                                    {{
-                                        props.retailer.dd_house.code
-                                        +' - '+
-                                        props.retailer.dd_house.name
-                                    }}
+                                    {{history.retailer.number}}
+                                    <p class="text-sm text-slate-400">{{history.sim_serial}}</p>
+                                </td>
+
+                                <!-- Balance -->
+                                <td class="text-center">
+                                    {{history.balance}}
+                                </td>
+
+                                <!-- Reason -->
+                                <td class="text-center">
+                                    {{history.reason}}
+                                </td>
+
+                                <!-- Requested From -->
+                                <td class="text-center">
+                                    {{history.remarks}} <i v-if="history.user.name" class="text-sky-500 fa-solid fa-arrow-right-long"></i> {{history.user.name}}
+                                </td>
+
+                                <!-- Status -->
+                                <td class="text-center">
+                                    <span v-if="history.status === 'Pending'" class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">{{history.status}}</span>
+
+                                    <span v-else-if="history.status === 'Processing'"  class="bg-pink-100 text-pink-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-pink-900 dark:text-pink-300">{{history.status}}</span>
+
+                                    <span v-else class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">{{history.status}}</span>
                                 </td>
                             </tr>
 
-                            <tr>
-                                <td>Retailer Name</td>
-                                <td>
-                                    {{
-                                        props.retailer.name
-                                        +' - '+
-                                        props.retailer.code
-                                        +' - '+
-                                        props.retailer.number
-                                    }}
-                                </td>
+                            <tr v-if="props.replaceHistory.data.length < 1">
+                                <td colspan="8">No data found.</td>
                             </tr>
-
-                            <tr>
-                                <td>Owner Name</td>
-                                <td>{{
-                                        props.retailer.user.name
-                                        +' - '+
-                                        props.retailer.user.phone
-                                    }}
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>Type</td>
-                                <td>{{ props.retailer.type }}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Enabled</td>
-                                <td>{{ props.retailer.enabled ? 'Yes' : 'No' }}</td>
-                            </tr>
-
-                            <tr>
-                                <td>SSO</td>
-                                <td>{{ props.retailer.sso ? 'Yes' : 'No' }}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Service Point</td>
-                                <td>{{ props.retailer.service_point ?? 'N/A' }}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Category</td>
-                                <td>{{ props.retailer.category ?? 'N/A' }}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Father Name</td>
-                                <td>{{ props.retailer.father_name ?? 'N/A' }}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Mother Name</td>
-                                <td>{{ props.retailer.mother_name ?? 'N/A' }}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Division</td>
-                                <td>{{ props.retailer.division ?? 'N/A' }}</td>
-                            </tr>
-
-                            <tr>
-                                <td>District</td>
-                                <td>{{ props.retailer.district ?? 'N/A' }}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Thana</td>
-                                <td>{{ props.retailer.thana ?? 'N/A' }}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Address</td>
-                                <td>{{ props.retailer.address ?? 'N/A' }}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Date Of Birth</td>
-                                <td>{{ props.retailer.dob ?? 'N/A' }}</td>
-                            </tr>
-
-                            <tr>
-                                <td>NID</td>
-                                <td>{{ props.retailer.nid ?? 'N/A' }}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Latitude</td>
-                                <td>{{ props.retailer.lat }}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Longitude</td>
-                                <td>{{ props.retailer.long }}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Rso Name</td>
-                                <td>
-                                    {{
-                                        props.retailer.rso.user.name
-                                        +' - '+
-                                        props.retailer.rso.number
-                                    }}
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>Zm</td>
-                                <td>
-                                    {{
-                                        props.retailer.zm.name
-                                        +' - '+
-                                        props.retailer.zm.phone
-                                    }}
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>Manager</td>
-                                <td>
-                                    {{
-                                        props.retailer.manager.name
-                                        +' - '+
-                                        props.retailer.manager.phone
-                                    }}
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>Supervisor</td>
-                                <td>
-                                    {{
-                                        props.retailer.supervisor.name
-                                        +' - '+
-                                        props.retailer.supervisor.phone
-                                    }}
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>Description</td>
-                                <td>{{ props.retailer.description }}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Remarks</td>
-                                <td>{{ props.retailer.remarks }}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Created</td>
-                                <td>{{props.retailer.created}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Updated</td>
-                                <td>{{props.retailer.updated}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Disabled</td>
-                                <td>{{props.retailer.disabled}}</td>
-                            </tr>
+                            </tbody>
                         </table>
+                    </div>
 
-                        <div class="flex items-center justify-between mt-4">
-                            <!-- Edit -->
-                            <Link :href="route('retailer.edit', props.retailer.id)" class="block hover:text-green-400">Edit</Link>
+                    <div class="px-3 pb-4">
+                        <div class="lg:block hidden">
+                            <Pagination :links="props.replaceHistory.meta"/>
+                        </div>
 
-                            <!-- Delete -->
-                            <button class="hover:text-red-500 hover:font-semibold" @click="delRetailer(props.retailer.id, props.retailer.name)">Delete</button>
+                        <div class="lg:hidden block">
+                            <PaginationWithoutLinks :links="props.replaceHistory"/>
                         </div>
                     </div>
                 </div>

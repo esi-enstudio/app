@@ -31,7 +31,8 @@ return new class extends Migration
             $table->string('status')->default('pending');
             $table->string('remarks')->nullable();
             $table->string('description')->nullable();
-            $table->timestamp('request_at')->nullable();
+            $table->timestamp('completed_at')->nullable();
+            $table->timestamp('requested_at')->nullable();
             $table->timestamps();
         });
     }
