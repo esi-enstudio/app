@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static insert()
  * @method static whereNotNull( string $string )
  * @method static create( array $attributes )
+ * @method static firstWhere()
  * @property mixed $zm
  * @property mixed $manager
  * @property mixed $supervisor

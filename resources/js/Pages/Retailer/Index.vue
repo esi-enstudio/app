@@ -118,7 +118,7 @@ const delRetailer = (id, name) => {
 
                                         <div class="flex flex-col justify-between items-end">
                                             <div class="flex items-start justify-between gap-1 text-xs">
-                                                <span v-if="retailer.sso === 1" class="text-purple-500 font-medium dark:text-yellow-400">
+                                                <span v-if="retailer.sso === 1" class="text-yellow-400 font-semibold dark:text-yellow-400">
                                                     SSO
                                                 </span>
                                             </div>

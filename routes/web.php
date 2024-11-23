@@ -28,6 +28,9 @@ Route::middleware(['auth','verified'])->group(function () {
         'rso' => \App\Http\Controllers\RsoController::class,
         // Retailer
         'retailer' => \App\Http\Controllers\RetailerController::class,
+
+        // Itop Replace
+        'itopReplace' => \App\Http\Controllers\ItopReplaceController::class,
     ]);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
