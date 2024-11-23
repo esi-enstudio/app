@@ -26,8 +26,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('number');
             $table->string('type')->nullable();
-            $table->string('enabled')->nullable();
-            $table->string('sso')->nullable();
+            $table->boolean('enabled')->default(1);
+            $table->boolean('sso')->default(0);
             $table->string('service_point')->nullable();
             $table->string('category')->nullable();
             $table->string('father_name')->nullable();
@@ -42,7 +42,6 @@ return new class extends Migration
             $table->string('long')->nullable();
             $table->longText('description')->nullable();
             $table->string('remarks')->nullable();
-            $table->boolean('status')->default(1);
             $table->timestamp('disabled_at')->nullable();
             $table->timestamps();
         });

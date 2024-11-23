@@ -13,8 +13,6 @@ const form = useForm({
     name: props.user.name,
     phone: props.user.phone,
     email: props.user.email,
-    password: null,
-    password_confirmation: null,
     remarks: props.user.remarks,
     role: props.user.role,
     status: props.user.status,
@@ -86,7 +84,7 @@ const form = useForm({
                                     <option value="manager">Manager</option>
                                     <option value="supervisor">Supervisor</option>
                                     <option value="rso">Rso</option>
-                                    <option value="operator">Dms Operator</option>
+                                    <option value="retailer">Retailer</option>
                                     <option value="account">Account</option>
                                 </SelectInput>
 

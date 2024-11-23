@@ -118,7 +118,7 @@ const delRetailer = (id, name) => {
 
                                         <div class="flex flex-col justify-between items-end">
                                             <div class="flex items-start justify-between gap-1 text-xs">
-                                                <span v-if="retailer.sso === '1'" class="text-purple-500 font-medium dark:text-yellow-400">
+                                                <span v-if="retailer.sso === 1" class="text-purple-500 font-medium dark:text-yellow-400">
                                                     SSO
                                                 </span>
                                             </div>
@@ -142,7 +142,7 @@ const delRetailer = (id, name) => {
                                 <td class="text-center space-x-2">
                                     <Link :href="route('retailer.show', retailer.id)" class="hover:text-green-400">Show</Link>
                                     <Link :href="route('retailer.edit', retailer.id)" class="hover:text-green-400">Edit</Link>
-                                    <button class="hover:text-red-500" @click="delRetailer(retailer.id, retailer.user.name)">Delete</button>
+                                    <button class="hover:text-red-500" @click="delRetailer(retailer.id, retailer.name)">Delete</button>
                                 </td>
                             </tr>
 

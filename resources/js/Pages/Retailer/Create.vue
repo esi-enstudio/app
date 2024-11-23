@@ -26,7 +26,6 @@ const form = useForm({
     name: null,
     number: null,
     type: null,
-    enabled: null,
     sso: null,
     service_point: null,
     category: null,
@@ -115,7 +114,6 @@ const form = useForm({
                                     v-model="form.rso_id"
                                     :message="form.errors.rso_id"
                                 >
-                                    {{console.log(rsos)}}
                                     <option
                                         v-for="rso in rsos"
                                         :key="rso.id"
@@ -139,7 +137,7 @@ const form = useForm({
                                     <option
                                         v-for="zm in zms"
                                         :key="zm.id"
-                                        :value="zm.phone"
+                                        :value="zm.id"
                                     >
                                         {{zm.name}}
                                     </option>
@@ -159,7 +157,7 @@ const form = useForm({
                                     <option
                                         v-for="manager in managers"
                                         :key="manager.id"
-                                        :value="manager.phone"
+                                        :value="manager.id"
                                     >
                                         {{manager.name}}
                                     </option>
@@ -179,7 +177,7 @@ const form = useForm({
                                     <option
                                         v-for="supervisor in supervisors"
                                         :key="supervisor.id"
-                                        :value="supervisor.phone"
+                                        :value="supervisor.id"
                                     >
                                         {{supervisor.name}}
                                     </option>
@@ -220,17 +218,6 @@ const form = useForm({
                                     v-model="form.type"
                                     :message="form.errors.type"
                                 />
-
-                                <!-- Enabled -->
-                                <SelectInput
-                                    label="Enabled"
-                                    icon="check"
-                                    v-model="form.enabled"
-                                    :message="form.errors.enabled"
-                                >
-                                    <option value="1">Enabled</option>
-                                    <option value="0">Disabled</option>
-                                </SelectInput>
 
                                 <!-- SSO -->
                                 <SelectInput
@@ -346,20 +333,20 @@ const form = useForm({
                                     :message="form.errors.long"
                                 />
 
-                                <!-- Description -->
-                                <TextArea
-                                    label="Description"
-                                    icon="paragraph"
-                                    v-model="form.description"
-                                    :message="form.errors.description"
-                                />
-
                                 <!-- Remarks -->
                                 <TextInput
                                     label="Remarks"
                                     icon="comments"
                                     v-model="form.remarks"
                                     :message="form.errors.remarks"
+                                />
+
+                                <!-- Description -->
+                                <TextArea
+                                    label="Description"
+                                    icon="paragraph"
+                                    v-model="form.description"
+                                    :message="form.errors.description"
                                 />
                             </div>
 

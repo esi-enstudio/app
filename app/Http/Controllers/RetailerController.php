@@ -10,6 +10,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Inertia\Response;
 use Inertia\ResponseFactory;
@@ -40,10 +41,26 @@ class RetailerController extends Controller
     {
         $hasUserId = Retailer::whereNotNull('user_id')->pluck('user_id');
 
-        $users = User::where('role', 'retailer')->where('status', 1)->whereNotIn('id', $hasUserId)->get();
-        $zms = User::where('role', 'zm')->where('status', 1)->get();
-        $managers = User::where('role', 'manager')->where('status', 1)->get();
-        $supervisors = User::where('role', 'supervisor')->where('status', 1)->get();
+        $users = User::where([
+            ['role', 'retailer'],
+            ['status', 1],
+        ])->whereNotIn('id', $hasUserId)->get();
+
+        $zms = User::where([
+            ['role', 'zm'],
+            ['status', 1],
+        ])->get();
+
+        $managers = User::where([
+            ['role', 'manager'],
+            ['status', 1],
+        ])->get();
+
+        $supervisors = User::where([
+            ['role', 'supervisor'],
+            ['status', 1],
+        ])->get();
+
         $rsos = Rso::where('status', 1)->get();
 
         return inertia('Retailer/Create', [
@@ -72,7 +89,6 @@ class RetailerController extends Controller
             'name' => ['required'],
             'number' => ['required','unique:retailers,number'],
             'type' => ['nullable'],
-            'enabled' => ['nullable'],
             'sso' => ['nullable'],
             'service_point' => ['nullable'],
             'category' => ['nullable'],
@@ -100,6 +116,9 @@ class RetailerController extends Controller
      */
     public function show(Retailer $retailer): Response|ResponseFactory
     {
+        $retailer->service_point = Str::upper($retailer->service_point);
+        $retailer->dob = Carbon::parse($retailer->dob)->toFormattedDayDateString();
+
         $retailer->zm = User::firstWhere('id', $retailer->zm);
         $retailer->manager = User::firstWhere('id', $retailer->manager);
         $retailer->supervisor = User::firstWhere('id', $retailer->supervisor);
@@ -182,17 +201,16 @@ class RetailerController extends Controller
             'long' => ['nullable'],
             'description' => ['nullable'],
             'remarks' => ['nullable'],
-            'status' => ['required'],
         ]);
 
-        if ($request->status == 0)
+        if ($request->enabled == 0)
         {
             $attributes['disabled_at'] = now();
-            $attributes['status'] = 0;
-        }elseif ($request->status == 1)
+            $attributes['enabled'] = 0;
+        }elseif ($request->enabled == 1)
         {
             $attributes['disabled_at'] = null;
-            $attributes['status'] = 1;
+            $attributes['enabled'] = 1;
         }
 
         $retailer->update($attributes);
@@ -203,8 +221,9 @@ class RetailerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Retailer $retailer)
+    public function destroy(Retailer $retailer): RedirectResponse
     {
-        //
+        $retailer->delete();
+        return to_route('retailer.index')->with('msg', 'Retailer deleted successfully.');
     }
 }

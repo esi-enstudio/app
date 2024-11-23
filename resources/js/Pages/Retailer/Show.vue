@@ -6,7 +6,7 @@ import {router} from "@inertiajs/vue3";
 const props = defineProps({
     retailer: Object,
 })
-
+console.log(props.retailer)
 const delRetailer = (id, name) => {
 
     if (confirm(`Are you sure to delete "${name}"?`))
@@ -250,7 +250,7 @@ const delRetailer = (id, name) => {
                             <Link :href="route('retailer.edit', props.retailer.id)" class="block hover:text-green-400">Edit</Link>
 
                             <!-- Delete -->
-                            <button class="hover:text-red-500 hover:font-semibold" @click="delRetailer(props.retailer.id, props.retailer.user.name)">Delete</button>
+                            <button class="hover:text-red-500 hover:font-semibold" @click="delRetailer(props.retailer.id, props.retailer.name)">Delete</button>
                         </div>
                     </div>
                 </div>

@@ -43,7 +43,6 @@ const form = useForm({
     long: props.retailer.long,
     description: props.retailer.description,
     remarks: props.retailer.remarks,
-    status: props.retailer.status,
 })
 
 </script>
@@ -76,6 +75,7 @@ const form = useForm({
                                     icon="house"
                                     v-model="form.dd_house_id"
                                     :message="form.errors.dd_house_id"
+                                    :disabled="true"
                                 >
                                     <option
                                         :value="props.house.id"
@@ -90,6 +90,7 @@ const form = useForm({
                                     icon="user"
                                     v-model="form.user_id"
                                     :message="form.errors.user_id"
+                                    :disabled="true"
                                 >
                                     <option
                                         :value="props.user.id"
@@ -104,6 +105,7 @@ const form = useForm({
                                     icon="user"
                                     v-model="form.rso_id"
                                     :message="form.errors.rso_id"
+                                    :disabled="true"
                                 >
                                     <option :value="props.rso.id">
                                         {{props.rso.number}} - {{props.rso.user.name}}
@@ -116,6 +118,7 @@ const form = useForm({
                                     icon="user"
                                     v-model="form.zm"
                                     :message="form.errors.zm"
+                                    :disabled="true"
                                 >
                                     <option :value="props.zm.id">
                                         {{props.zm.name}}
@@ -128,6 +131,7 @@ const form = useForm({
                                     icon="user"
                                     v-model="form.manager"
                                     :message="form.errors.manager"
+                                    :disabled="true"
                                 >
                                     <option :value="props.manager.id">
                                         {{props.manager.name}}
@@ -140,6 +144,7 @@ const form = useForm({
                                     icon="user"
                                     v-model="form.supervisor"
                                     :message="form.errors.supervisor"
+                                    :disabled="true"
                                 >
                                     <option :value="props.supervisor.id">
                                         {{props.supervisor.name}}
@@ -152,6 +157,7 @@ const form = useForm({
                                     icon="code-merge"
                                     v-model="form.code"
                                     :message="form.errors.code"
+                                    :disabled="true"
                                 />
 
                                 <!-- Retailer Name -->
@@ -168,6 +174,7 @@ const form = useForm({
                                     icon="phone"
                                     v-model="form.number"
                                     :message="form.errors.number"
+                                    :disabled="true"
                                 />
 
                                 <!-- Type -->
@@ -310,15 +317,6 @@ const form = useForm({
                                     v-model="form.remarks"
                                     :message="form.errors.remarks"
                                 />
-
-                                <!-- Status -->
-                                <SelectInput
-                                    label="Status"
-                                    icon="signal"
-                                    v-model="form.status">
-                                    <option value="1">Active</option>
-                                    <option value="0">Inactive</option>
-                                </SelectInput>
 
                                 <!-- Description -->
                                 <TextArea
