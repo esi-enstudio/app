@@ -172,7 +172,7 @@ class RetailerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Retailer $retailer)
+    public function update(Request $request, Retailer $retailer): RedirectResponse
     {
         $attributes = $request->validate([
             'dd_house_id' => ['required'],

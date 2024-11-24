@@ -31,6 +31,9 @@ Route::middleware(['auth','verified'])->group(function () {
 
         // Itop Replace
         'itopReplace' => \App\Http\Controllers\ItopReplaceController::class,
+
+        // Commission
+        'commission' => \App\Http\Controllers\CommissionController::class,
     ]);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

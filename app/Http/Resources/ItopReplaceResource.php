@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Str;
@@ -19,6 +20,7 @@ use Illuminate\Support\Str;
  * @property mixed $status
  * @property mixed $remarks
  * @property mixed $description
+ * @property mixed $supervisor
  */
 class ItopReplaceResource extends JsonResource
 {
@@ -35,6 +37,7 @@ class ItopReplaceResource extends JsonResource
             'rso'           => new RsoResource($this->rso),
             'retailer'      => new RetailerResource($this->retailer),
             'id'            => $this->id,
+            'supervisor'    => User::firstWhere('id', $this->supervisor),
             'sim_serial'    => $this->sim_serial,
             'balance'       => $this->balance,
             'number'        => $this->number,

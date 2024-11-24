@@ -36,10 +36,14 @@ const delReplaceRecord = (id, name) => {
 
     <AuthenticatedLayout>
         <template #header>
-            <div>
+            <div class="flex items-center justify-between">
                 <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
                     Replace Details...
                 </h2>
+
+                <div>
+                    <Link :href="route('itopReplace.index')" class="hover:text-green-400">Back to list</Link>
+                </div>
             </div>
         </template>
 
@@ -74,9 +78,13 @@ const delReplaceRecord = (id, name) => {
                             <thead>
                             <tr>
                                 <th>SL</th>
+                                <th>House</th>
                                 <th>Itop Number</th>
+                                <th>Rso</th>
+                                <th>Supervisor</th>
                                 <th>Balance</th>
                                 <th>Reason</th>
+                                <th>Description</th>
                                 <th>Requested From/By</th>
                                 <th>Status</th>
                             </tr>
@@ -88,10 +96,28 @@ const delReplaceRecord = (id, name) => {
                                 <!-- SL -->
                                 <td>{{++i}}</td>
 
+                                <!-- House -->
+                                <td>
+                                    {{history.house.name}}
+                                    <p class="text-sm text-slate-400">{{history.house.code}}</p>
+                                </td>
+
                                 <!-- Itop Number -->
                                 <td>
                                     {{history.number}}
                                     <p class="text-sm text-slate-400">{{history.sim_serial}}</p>
+                                </td>
+
+                                <!-- Rso -->
+                                <td>
+                                    {{history.rso.user.name}}
+                                    <p class="text-sm text-slate-400">{{history.rso.number}}</p>
+                                </td>
+
+                                <!-- Supervisor -->
+                                <td>
+                                    {{history.supervisor.name}}
+                                    <p class="text-sm text-slate-400">{{history.supervisor.phone}}</p>
                                 </td>
 
                                 <!-- Balance -->
@@ -102,6 +128,11 @@ const delReplaceRecord = (id, name) => {
                                 <!-- Reason -->
                                 <td class="text-center">
                                     {{history.reason}}
+                                </td>
+
+                                <!-- Description -->
+                                <td class="text-center">
+                                    {{history.description}}
                                 </td>
 
                                 <!-- Requested From -->
@@ -143,10 +174,6 @@ const delReplaceRecord = (id, name) => {
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                     <div class="p-6 text-gray-900 dark:text-gray-100">
-
-                        <div class="mb-4 text-right">
-                            <Link :href="route('itopReplace.index')" class="hover:text-green-400">Back to list</Link>
-                        </div>
 
                         <div class="space-y-5">
                             <p>
@@ -212,6 +239,8 @@ const delReplaceRecord = (id, name) => {
                                     {{props.itopReplace.status}}
                                     </span>
                             </p>
+
+                            <p>বর্ণনাঃ <span>{{props.itopReplace.description ?? 'N/A'}}</span></p>
                         </div>
                     </div>
                 </div>

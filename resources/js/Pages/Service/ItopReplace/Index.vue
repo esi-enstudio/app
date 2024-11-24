@@ -23,9 +23,9 @@ watch(search, debounce(
     500
 ))
 
-const delReplaceRecord = (id, name) => {
+const delReplaceRecord = (id, number) => {
 
-    if (confirm(`Are you sure to delete "${name}"?`))
+    if (confirm(`Are you sure to delete "${number}"?`))
     {
         router.delete(route('itopReplace.destroy', id));
     }
