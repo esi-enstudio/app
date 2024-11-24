@@ -6,6 +6,20 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Str;
 
+/**
+ * @property mixed $ddHouse
+ * @property mixed $user
+ * @property mixed $rso
+ * @property mixed $retailer
+ * @property mixed $id
+ * @property mixed $sim_serial
+ * @property mixed $balance
+ * @property mixed $number
+ * @property mixed $reason
+ * @property mixed $status
+ * @property mixed $remarks
+ * @property mixed $description
+ */
 class ItopReplaceResource extends JsonResource
 {
     /**
@@ -23,6 +37,7 @@ class ItopReplaceResource extends JsonResource
             'id'            => $this->id,
             'sim_serial'    => $this->sim_serial,
             'balance'       => $this->balance,
+            'number'        => $this->number,
             'reason'        => $this->reason,
             'status'        => Str::title($this->status),
             'remarks'       => Str::title($this->remarks),

@@ -80,7 +80,9 @@ const delReplaceRecord = (id, name) => {
                             <thead>
                             <tr>
                                 <th>SL</th>
+                                <th>House</th>
                                 <th>Itop Number</th>
+                                <th>Rso</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -92,10 +94,22 @@ const delReplaceRecord = (id, name) => {
                                 <!-- SL -->
                                 <td>{{++i}}</td>
 
+                                <!-- House -->
+                                <td>
+                                    {{itopReplace.house.name}}
+                                    <p class="text-sm text-slate-400">{{itopReplace.house.code}}</p>
+                                </td>
+
                                 <!-- Itop Number -->
                                 <td>
-                                    {{itopReplace.retailer.number}}
+                                    {{itopReplace.number}}
                                     <p class="text-sm text-slate-400">{{itopReplace.sim_serial}}</p>
+                                </td>
+
+                                <!-- Rso -->
+                                <td>
+                                    {{itopReplace.rso.user.name}}
+                                    <p class="text-sm text-slate-400">{{itopReplace.rso.number}}</p>
                                 </td>
 
                                 <!-- Status -->

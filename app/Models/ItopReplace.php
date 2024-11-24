@@ -36,7 +36,10 @@ class ItopReplace extends Model
     protected $with = ['ddHouse','user','rso','retailer'];
 
     protected array $searchable = [
-        'retailer.number',
+        'number',
+        'sim_serial',
+        'remarks',
+        'user.name',
     ];
 
     public function user(): BelongsTo

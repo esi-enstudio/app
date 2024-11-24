@@ -44,93 +44,6 @@ const delReplaceRecord = (id, name) => {
         </template>
 
         <div class="py-12">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
-
-                        <div class="mb-4 text-right">
-                            <Link :href="route('itopReplace.index')" class="hover:text-green-400">Back to list</Link>
-                        </div>
-
-                        <div>
-                            <div>
-                                <p>
-                                    <span class="font-semibold text-blue-400">{{props.itopReplace.remarks}},</span>
-                                    &nbsp;
-                                    <span class="font-semibold text-green-400">{{props.itopReplace.number}}</span>
-                                    &nbsp;
-                                    নাম্বারটি
-                                    &nbsp;
-                                    <span class="font-semibold text-sky-400">{{props.itopReplace.created}}</span>
-                                    &nbsp;
-                                    তারিখে
-                                    &nbsp;
-                                    <span class="font-semibold text-pink-400">{{props.itopReplace.user.name ?? 'N/A'}}</span>
-                                    &nbsp;
-                                    ভাইয়ের কাছে রিপ্লেস করার জন্য দেয়।
-                                </p>
-                                <p>
-                                    <span class="font-semibold text-pink-400">{{props.itopReplace.user.name ?? 'N/A'}}</span>
-                                    &nbsp;
-                                    ভাই
-                                    &nbsp;
-                                    <span class="font-semibold text-sky-400">{{props.itopReplace.requested}}</span>
-                                    &nbsp;
-                                    তারিখে রিপ্লেসের জন্য মেইল পাঠায়।
-                                </p>
-                                <p>
-                                    <span class="font-semibold text-sky-400">{{props.itopReplace.completed}}</span>
-                                    &nbsp;
-                                    তারিখে সিমটি রিপ্লেস হয়।
-                                </p>
-                                <p>
-                                    রিপ্লেসে দেওয়ার সময় উক্ত সিমে
-                                    &nbsp;
-                                    <span class="font-semibold text-indigo-400">{{props.itopReplace.balance ?? 'N/A'}}</span>
-                                    &nbsp;
-                                    টাকা ব্যালেন্স ছিল।
-                                </p>
-                                <p>
-                                    সিমটি
-                                    &nbsp;
-                                    <span class="font-semibold text-yellow-500">{{props.itopReplace.dd_house.name ?? 'N/A'}}</span>
-                                    &nbsp;
-                                    এর ছিল।
-                                </p>
-                                <p>
-                                    এটি এখন পর্যন্ত
-                                    &nbsp;
-                                    <span class="font-semibold text-red-500">{{props.replaceHistory.data.length ?? 'N/A'}}</span>
-                                    &nbsp;
-                                    বার রিপ্লেস হয়েছে।
-                                </p>
-                                &nbsp;
-                                <p>রিপ্লেস করার কারণঃ <span class="font-semibold text-slate-500">{{props.itopReplace.reason ?? 'N/A'}}</span></p>
-
-                                <p>বর্তমান অবস্থাঃ <span class="font-semibold text-slate-500">{{props.itopReplace.status ?? 'N/A'}}</span></p>
-<!--                                <p>DD House: {{props.itopReplace.dd_house.name}}</p>-->
-<!--                                <p>From: {{props.itopReplace.remarks}}</p>-->
-<!--                                <p>For: {{props.itopReplace.rso.user.name+' - '+props.itopReplace.rso.number}}</p>-->
-<!--                                <p>Retailer: {{props.itopReplace.retailer.code+' - '+props.itopReplace.retailer.user.name}}</p>-->
-<!--                                <p>Description: {{props.itopReplace.retailer.description}}</p>-->
-<!--                                <p>-->
-<!--                                    Status:-->
-<!--                                    <span :class="{-->
-<!--                                    'text-yellow-500' : props.itopReplace.status === 'Pending',-->
-<!--                                    'text-pink-500' : props.itopReplace.status === 'Processing',-->
-<!--                                    'text-green-500' : props.itopReplace.status === 'Complete',}"-->
-<!--                                >-->
-<!--                                    {{props.itopReplace.status}}-->
-<!--                                    </span>-->
-<!--                                </p>-->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="pb-5">
             <div class="mx-auto max-w-7xl sm:px-4 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                     <div class="md:block hidden">
@@ -177,7 +90,7 @@ const delReplaceRecord = (id, name) => {
 
                                 <!-- Itop Number -->
                                 <td>
-                                    {{history.retailer.number}}
+                                    {{history.number}}
                                     <p class="text-sm text-slate-400">{{history.sim_serial}}</p>
                                 </td>
 
@@ -225,6 +138,86 @@ const delReplaceRecord = (id, name) => {
                 </div>
             </div>
         </div>
+
+        <div class="pb-5">
+            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
+                    <div class="p-6 text-gray-900 dark:text-gray-100">
+
+                        <div class="mb-4 text-right">
+                            <Link :href="route('itopReplace.index')" class="hover:text-green-400">Back to list</Link>
+                        </div>
+
+                        <div class="space-y-5">
+                            <p>
+                                <span class="font-semibold text-blue-400">{{props.itopReplace.remarks}},</span>
+                                &nbsp;
+                                <span class="font-semibold text-green-400">{{props.itopReplace.number}}</span>
+                                &nbsp;
+                                নাম্বারটি
+                                &nbsp;
+                                <span class="font-semibold text-sky-400">{{props.itopReplace.created}}</span>
+                                &nbsp;
+                                তারিখে
+                                &nbsp;
+                                <span class="font-semibold text-pink-400">{{props.itopReplace.user.name ?? 'N/A'}}</span>
+                                &nbsp;
+                                ভাইয়ের কাছে রিপ্লেস করার জন্য দেয়।
+                            </p>
+                            <p>
+                                <span class="font-semibold text-pink-400">{{props.itopReplace.user.name ?? 'N/A'}}</span>
+                                &nbsp;
+                                ভাই
+                                &nbsp;
+                                <span class="font-semibold text-sky-400">{{props.itopReplace.requested}}</span>
+                                &nbsp;
+                                তারিখে রিপ্লেসের জন্য মেইল পাঠায়।
+                            </p>
+                            <p>
+                                <span class="font-semibold text-sky-400">{{props.itopReplace.completed}}</span>
+                                &nbsp;
+                                তারিখে সিমটি রিপ্লেস হয়।
+                            </p>
+                            <p>
+                                রিপ্লেসে দেওয়ার সময় উক্ত সিমে
+                                &nbsp;
+                                <span class="font-semibold text-indigo-400">{{props.itopReplace.balance ?? 'N/A'}}</span>
+                                &nbsp;
+                                টাকা ব্যালেন্স ছিল।
+                            </p>
+                            <p>
+                                সিমটি
+                                &nbsp;
+                                <span class="font-semibold text-yellow-500">{{props.itopReplace.dd_house.name ?? 'N/A'}}</span>
+                                &nbsp;
+                                এর ছিল।
+                            </p>
+                            <p>
+                                এটি এখন পর্যন্ত
+                                &nbsp;
+                                <span class="font-semibold text-red-500">{{props.replaceHistory.meta.total ?? 'N/A'}}</span>
+                                &nbsp;
+                                বার রিপ্লেস হয়েছে।
+                            </p>
+                            &nbsp;
+                            <p>রিপ্লেস করার কারণঃ <span class="font-semibold text-slate-500">{{props.itopReplace.reason ?? 'N/A'}}</span></p>
+
+                            <p>
+                                বর্তমান অবস্থাঃ
+                                <span :class="{
+                                    'text-yellow-500' : props.itopReplace.status === 'Pending',
+                                    'text-pink-500' : props.itopReplace.status === 'Processing',
+                                    'text-green-500' : props.itopReplace.status === 'Complete',}"
+                                >
+                                    {{props.itopReplace.status}}
+                                    </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </AuthenticatedLayout>
 </template>
 
