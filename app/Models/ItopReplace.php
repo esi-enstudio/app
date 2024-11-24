@@ -20,6 +20,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property mixed $user
  * @property mixed $status
  * @property mixed $number
+ * @property mixed $remarks
+ * @property mixed|string $requested
+ * @property mixed $requested_at
+ * @property mixed $created_at
+ * @property mixed|string $created
+ * @property mixed $completed_at
+ * @property mixed|string $completed
  */
 class ItopReplace extends Model
 {

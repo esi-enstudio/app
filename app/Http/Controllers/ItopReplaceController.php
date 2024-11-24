@@ -8,6 +8,7 @@ use App\Models\ItopReplace;
 use App\Models\Retailer;
 use App\Models\Rso;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -77,6 +78,10 @@ class ItopReplaceController extends Controller
     {
         $itopReplace->user->role = Str::title($itopReplace->user->role);
         $itopReplace->status = Str::title($itopReplace->status);
+        $itopReplace->remarks = Str::title($itopReplace->remarks);
+        $itopReplace->created = $itopReplace->created_at ? Carbon::parse($itopReplace->created_at)->toDayDateTimeString() : 'N/A';
+        $itopReplace->requested = $itopReplace->requested_at ? Carbon::parse($itopReplace->requested_at)->toDayDateTimeString() : 'N/A';
+        $itopReplace->completed = $itopReplace->completed_at ? Carbon::parse($itopReplace->completed_at)->toDayDateTimeString() : 'N/A';
 
         $itopReplace->zm = User::firstWhere('id', $itopReplace->zm);
         $itopReplace->manager = User::firstWhere('id', $itopReplace->manager);

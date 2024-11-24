@@ -25,7 +25,7 @@ class ItopReplaceResource extends JsonResource
             'balance'       => $this->balance,
             'reason'        => $this->reason,
             'status'        => Str::title($this->status),
-            'remarks'       => $this->remarks,
+            'remarks'       => Str::title($this->remarks),
             'description'   => $this->description,
         ];
     }

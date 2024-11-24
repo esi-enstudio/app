@@ -109,7 +109,7 @@ const delReplaceRecord = (id, name) => {
 
                                 <!-- Action -->
                                 <td class="text-center space-x-2">
-                                    <Link :href="route('itopReplace.show', itopReplace.id)" class="hover:text-green-400">Show</Link>
+                                    <Link :href="route('itopReplace.show', itopReplace.id)" class="hover:text-green-400">Details</Link>
                                     <Link :href="route('itopReplace.edit', itopReplace.id)" class="hover:text-green-400">Edit</Link>
                                     <button class="hover:text-red-500" @click="delReplaceRecord(itopReplace.id, itopReplace.number)">Delete</button>
                                 </td>

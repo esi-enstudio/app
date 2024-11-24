@@ -5,11 +5,21 @@ import {router} from "@inertiajs/vue3";
 import TextInput from "@/Components/TextInput.vue";
 import Pagination from "@/Components/Pagination.vue";
 import PaginationWithoutLinks from "@/Components/PaginationWithoutLinks.vue";
+import {ref, watch} from "vue";
+import {debounce} from "lodash";
 
 const props = defineProps({
     itopReplace: Object,
     replaceHistory: Object,
+    searchTerm: String,
 })
+
+const search = ref(props.searchTerm)
+
+watch(search, debounce(
+    (query) => router.get('/itopReplace/'+props.itopReplace.id, { search: query }, { preserveState:true }),
+    500
+))
 
 const delReplaceRecord = (id, name) => {
 
@@ -32,7 +42,7 @@ const delReplaceRecord = (id, name) => {
                 </h2>
             </div>
         </template>
-{{console.log(props.itopReplace)}}
+
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
@@ -44,11 +54,60 @@ const delReplaceRecord = (id, name) => {
 
                         <div>
                             <div>
-                                <p>টিটু ভাই ০১৯১৫২৭০১০১ নাম্বারটি ২০ নভেম্বর ২০২৪ তারিখে এমিল ভাইয়ের কাছে রিপ্লেস করার জন্য দেয়। এমিল ভাই ২১ নভেম্বর ২০২৪ তারিখে রিপ্লেসের জন্য মেইল পাঠায়। ২১ নভেম্বর ২০২৪ তারিখে সিমটি রিপ্লেস হয়।  রিপ্লেসে দেওয়ার সময় উক্ত সিমে ৫১৪২ টাকা ব্যালেন্স ছিল। সিমটি পাটোয়ারী টেলিকম এর ছিল। সিমটি এখন পর্যন্ত ৩ বার রিপ্লেস হয়েছে।</p>
+                                <p>
+                                    <span class="font-semibold text-blue-400">{{props.itopReplace.remarks}},</span>
+                                    &nbsp;
+                                    <span class="font-semibold text-green-400">{{props.itopReplace.number}}</span>
+                                    &nbsp;
+                                    নাম্বারটি
+                                    &nbsp;
+                                    <span class="font-semibold text-sky-400">{{props.itopReplace.created}}</span>
+                                    &nbsp;
+                                    তারিখে
+                                    &nbsp;
+                                    <span class="font-semibold text-pink-400">{{props.itopReplace.user.name ?? 'N/A'}}</span>
+                                    &nbsp;
+                                    ভাইয়ের কাছে রিপ্লেস করার জন্য দেয়।
+                                </p>
+                                <p>
+                                    <span class="font-semibold text-pink-400">{{props.itopReplace.user.name ?? 'N/A'}}</span>
+                                    &nbsp;
+                                    ভাই
+                                    &nbsp;
+                                    <span class="font-semibold text-sky-400">{{props.itopReplace.requested}}</span>
+                                    &nbsp;
+                                    তারিখে রিপ্লেসের জন্য মেইল পাঠায়।
+                                </p>
+                                <p>
+                                    <span class="font-semibold text-sky-400">{{props.itopReplace.completed}}</span>
+                                    &nbsp;
+                                    তারিখে সিমটি রিপ্লেস হয়।
+                                </p>
+                                <p>
+                                    রিপ্লেসে দেওয়ার সময় উক্ত সিমে
+                                    &nbsp;
+                                    <span class="font-semibold text-indigo-400">{{props.itopReplace.balance ?? 'N/A'}}</span>
+                                    &nbsp;
+                                    টাকা ব্যালেন্স ছিল।
+                                </p>
+                                <p>
+                                    সিমটি
+                                    &nbsp;
+                                    <span class="font-semibold text-yellow-500">{{props.itopReplace.dd_house.name ?? 'N/A'}}</span>
+                                    &nbsp;
+                                    এর ছিল।
+                                </p>
+                                <p>
+                                    এটি এখন পর্যন্ত
+                                    &nbsp;
+                                    <span class="font-semibold text-red-500">{{props.replaceHistory.data.length ?? 'N/A'}}</span>
+                                    &nbsp;
+                                    বার রিপ্লেস হয়েছে।
+                                </p>
                                 &nbsp;
-                                <p>রিপ্লেস করার কারণঃ </p>
-                                <p>বিস্তারিতঃ </p>
-                                <p>বর্তমান অবস্থাঃ </p>
+                                <p>রিপ্লেস করার কারণঃ <span class="font-semibold text-slate-500">{{props.itopReplace.reason ?? 'N/A'}}</span></p>
+
+                                <p>বর্তমান অবস্থাঃ <span class="font-semibold text-slate-500">{{props.itopReplace.status ?? 'N/A'}}</span></p>
 <!--                                <p>DD House: {{props.itopReplace.dd_house.name}}</p>-->
 <!--                                <p>From: {{props.itopReplace.remarks}}</p>-->
 <!--                                <p>For: {{props.itopReplace.rso.user.name+' - '+props.itopReplace.rso.number}}</p>-->
