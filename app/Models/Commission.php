@@ -4,9 +4,49 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @method static search( mixed $search )
+ */
 class Commission extends Model
 {
-    /** @use HasFactory<\Database\Factories\CommissionFactory> */
     use HasFactory;
+
+    protected $guarded = [];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function ddHouse(): BelongsTo
+    {
+        return $this->belongsTo(DdHouse::class);
+    }
+
+    public function zm(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'zm');
+    }
+
+    public function manager(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'manager');
+    }
+
+    public function supervisor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'supervisor');
+    }
+
+    public function rso(): BelongsTo
+    {
+        return $this->belongsTo(Rso::class);
+    }
+
+    public function retailer(): BelongsTo
+    {
+        return $this->belongsTo(Retailer::class);
+    }
 }

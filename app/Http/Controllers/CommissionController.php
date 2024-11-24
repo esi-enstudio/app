@@ -2,18 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CommissionResource;
 use App\Models\Commission;
 use App\Http\Requests\StoreCommissionRequest;
 use App\Http\Requests\UpdateCommissionRequest;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class CommissionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request): Response
     {
-        //
+        return Inertia::render('Service/Commission/Index', [
+            'commissions' => CommissionResource::collection(Commission::search($request->search)
+                ->latest()
+                ->paginate(5)
+                ->onEachSide(0)
+                ->withQueryString()),
+
+            'searchTerm' => $request->search,
+            'status' => session('msg'),
+        ]);
     }
 
     /**
