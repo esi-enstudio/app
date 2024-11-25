@@ -6,13 +6,15 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import SelectInput from "@/Components/SelectInput.vue";
 import TextArea from "@/Components/TextArea.vue";
 import SessionMessage from "@/Components/SessionMessage.vue";
-import {computed, watch} from "vue";
+import {computed, ref, watch} from "vue";
 import axios from "axios";
 
 const props = defineProps({
     houses: Object,
     status: String,
 })
+
+let rsos = ref({})
 
 const form = useForm({
     dd_house_id: null,
@@ -58,9 +60,9 @@ watch(() => form.dd_house_id, (id) => {
     getRso(id)
 })
 
-const getRso = (houseId) => {
-    axios.get('/api/rsos?dd_house_id=' + houseId).then((response) => {
-        console.log(response.data)
+const getRso = (id) => {
+    axios.get('/api/rsos?id='+id).then((response) => {
+        rsos.value = response.data
     })
 }
 
@@ -164,7 +166,7 @@ const submit = () => {
                                     v-model="form.rso"
                                     :message="form.errors.rso"
                                 >
-                                    <option value="rso">Rso</option>
+                                    <option v-for="rso in rsos" :key="rso.id" value="rso">{{rso.code}}</option>
                                 </SelectInput>
 
                                 <!-- Retailer -->

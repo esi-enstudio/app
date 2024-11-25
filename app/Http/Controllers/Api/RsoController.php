@@ -10,14 +10,10 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class RsoController extends Controller
 {
-    public function __invoke(Request $request): AnonymousResourceCollection
+    public function __invoke(Request $request)
     {
-        $request->validate([
-            'dd_house_id' => ['required', 'exists:ddHouses,id']
-        ]);
+        $rsos =  Rso::where('dd_house_id', $request->id)->get();
 
-        $rsos = Rso::where('dd_house_id', $request->dd_house_id)->get();
-
-        return RsoResource::collection($rsos);
+        return response()->json(RsoResource::collection($rsos));
     }
 }
