@@ -5,9 +5,12 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import SelectInput from "@/Components/SelectInput.vue";
 import TextArea from "@/Components/TextArea.vue";
+import SessionMessage from "@/Components/SessionMessage.vue";
+import {ref} from "vue";
 
 const props = defineProps({
     houses: Object,
+    status: String,
     // users: Object,
     // zms: Object,
     // managers: Object,
@@ -27,10 +30,17 @@ const form = useForm({
     remarks: null,
 })
 
+const submit = () => {
+    form.post(route('commission.store'), {
+        onSuccess: () => form.reset()
+    })
+}
+
 </script>
 
 <template>
     <Head title="Add New"/>
+    <SessionMessage :status="props.status"/>
 
     <AuthenticatedLayout>
         <template #header>
@@ -50,7 +60,7 @@ const form = useForm({
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                     <div class="p-6 text-gray-900 dark:text-gray-100">
 
-                        <form @submit.prevent="form.post(route('commission.store'))">
+                        <form @submit.prevent="submit">
                             <div class="grid md:grid-cols-2 gap-6">
 
                                 <!-- House -->

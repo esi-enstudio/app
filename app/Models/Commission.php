@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @method static search( mixed $search )
+ * @method static create( array $attributes )
  */
 class Commission extends Model
 {

@@ -18,19 +18,19 @@ return new class extends Migration
         Schema::create('commissions', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor( DdHouse::class);
-            $table->foreignIdFor( User::class, 'zm');
-            $table->foreignIdFor( User::class, 'manager');
-            $table->foreignIdFor( User::class, 'supervisor');
-            $table->foreignIdFor( Rso::class);
-            $table->foreignIdFor( Retailer::class);
+            $table->foreignIdFor( User::class, 'zm')->nullable();
+            $table->foreignIdFor( User::class, 'manager')->nullable();
+            $table->foreignIdFor( User::class, 'supervisor')->nullable();
+            $table->foreignIdFor( Rso::class)->nullable();
+            $table->foreignIdFor( Retailer::class)->nullable();
             $table->string('for');
             $table->string('type');
             $table->string('name');
             $table->date('month');
             $table->string('amount');
             $table->date('receive_date');
-            $table->string('description');
-            $table->string('remarks');
+            $table->string('description')->nullable();
+            $table->string('remarks')->nullable();
             $table->string('status')->default('pending');
             $table->timestamps();
         });

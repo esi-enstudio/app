@@ -38,6 +38,7 @@ class CommissionController extends Controller
     {
         return Inertia::render('Service/Commission/Create', [
             'houses' => DdHouse::all(['id', 'name', 'code']),
+            'status' => session('msg'),
         ]);
     }
 
@@ -46,7 +47,21 @@ class CommissionController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
+        $attributes = $request->validate([
+            'dd_house_id' => ['required'],
+            'for' => ['required'],
+            'type' => ['required'],
+            'name' => ['required'],
+            'month' => ['required'],
+            'amount' => ['required'],
+            'receive_date' => ['required'],
+            'description' => ['nullable'],
+            'remarks' => ['nullable'],
+        ]);
+
+        Commission::create($attributes);
+
+        return to_route('commission.create')->with('msg', 'Commission added successfully.');
     }
 
     /**
