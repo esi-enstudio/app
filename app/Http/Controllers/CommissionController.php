@@ -6,9 +6,11 @@ use App\Http\Resources\CommissionResource;
 use App\Models\Commission;
 use App\Http\Requests\StoreCommissionRequest;
 use App\Http\Requests\UpdateCommissionRequest;
+use App\Models\DdHouse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Termwind\Components\Dd;
 
 class CommissionController extends Controller
 {
@@ -32,17 +34,19 @@ class CommissionController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): Response
     {
-        //
+        return Inertia::render('Service/Commission/Create', [
+            'houses' => DdHouse::all(['id', 'name', 'code']),
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCommissionRequest $request)
+    public function store(Request $request)
     {
-        //
+        dd($request);
     }
 
     /**

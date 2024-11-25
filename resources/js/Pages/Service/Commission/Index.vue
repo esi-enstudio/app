@@ -81,16 +81,20 @@ const delCommission = (id, name) => {
                             <tr>
                                 <th>SL</th>
                                 <th>House</th>
-                                <th>Itop Number</th>
-                                <th>Rso</th>
+                                <th>For</th>
+                                <th>Type</th>
+                                <th>Name</th>
+                                <th>Month</th>
+                                <th>Amount</th>
+                                <th>Date</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
 
                             <tbody>
-
-                            <tr class="font-semibold" v-for="(itopReplace, i) in props.itopReplaces.data" :key="itopReplace.id">
+{{console.log(commissions)}}
+                            <tr class="font-semibold" v-for="(commission, i) in props.commissions.data" :key="commission.id">
                                 <!-- SL -->
                                 <td>{{++i}}</td>
 
@@ -129,8 +133,8 @@ const delCommission = (id, name) => {
                                 </td>
                             </tr>
 
-                            <tr v-if="props.itopReplaces.data.length < 1">
-                                <td colspan="8">No data found.</td>
+                            <tr v-if="props.commissions.data.length < 1">
+                                <td colspan="10">No data found.</td>
                             </tr>
                             </tbody>
                         </table>
@@ -138,11 +142,11 @@ const delCommission = (id, name) => {
 
                     <div class="px-3 pb-4">
                         <div class="lg:block hidden">
-                            <Pagination :links="props.itopReplaces.meta"/>
+                            <Pagination :links="props.commissions.meta"/>
                         </div>
 
                         <div class="lg:hidden block">
-                            <PaginationWithoutLinks :links="props.itopReplaces"/>
+                            <PaginationWithoutLinks :links="props.commissions"/>
                         </div>
                     </div>
                 </div>

@@ -26,9 +26,9 @@ return new class extends Migration
             $table->string('for');
             $table->string('type');
             $table->string('name');
-            $table->string('month');
+            $table->date('month');
             $table->string('amount');
-            $table->date('date');
+            $table->date('receive_date');
             $table->string('description');
             $table->string('remarks');
             $table->string('status')->default('pending');
