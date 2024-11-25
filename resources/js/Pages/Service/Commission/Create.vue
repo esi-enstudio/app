@@ -6,21 +6,21 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import SelectInput from "@/Components/SelectInput.vue";
 import TextArea from "@/Components/TextArea.vue";
 import SessionMessage from "@/Components/SessionMessage.vue";
-import {ref} from "vue";
+import {computed, watch} from "vue";
+import axios from "axios";
 
 const props = defineProps({
     houses: Object,
     status: String,
-    // users: Object,
-    // zms: Object,
-    // managers: Object,
-    // supervisors: Object,
-    // rsos: Object,
 })
 
 const form = useForm({
     dd_house_id: null,
     for: null,
+    manager: null,
+    supervisor: null,
+    rso: null,
+    retailer: null,
     type: null,
     name: null,
     month: null,
@@ -29,6 +29,41 @@ const form = useForm({
     description: null,
     remarks: null,
 })
+
+const showManagerField = computed(() => form.for === "manager");
+const showSupervisorField = computed(() => form.for === "supervisor");
+const showRsoField = computed(() => form.for === "rso");
+const showRetailerField = computed(() => form.for === "retailer");
+
+// Handle parent field changes
+const handleForChange = () => {
+    if (form.for !== "manager") {
+        form.manager = ""; // Reset child field if it's hidden
+    }
+
+    if(form.for !== "supervisor") {
+        form.supervisor = ""; // Reset child field if it's hidden
+    }
+
+    if(form.for !== "rso") {
+        form.rso = ""; // Reset child field if it's hidden
+    }
+
+    if(form.for !== "retailer") {
+        form.retailer = ""; // Reset child field if it's hidden
+    }
+};
+
+watch(() => form.dd_house_id, (id) => {
+    getRso(id)
+})
+
+const getRso = (houseId) => {
+    axios.get('/api/rsos?dd_house_id=' + houseId).then((response) => {
+        console.log(response.data)
+    })
+}
+
 
 const submit = () => {
     form.post(route('commission.store'), {
@@ -88,6 +123,7 @@ const submit = () => {
                                     label="Commission For"
                                     icon="people-arrows"
                                     v-model="form.for"
+                                    @change="handleForChange"
                                     :message="form.errors.for"
                                 >
                                     <option value="dd">DD House</option>
@@ -96,6 +132,52 @@ const submit = () => {
                                     <option value="rso">Rso</option>
                                     <option value="retailer">Retailer</option>
                                 </SelectInput>
+
+                                <!-- Conditional Rendering -->
+                                <!-- Manager -->
+                                <SelectInput
+                                    v-if="showManagerField"
+                                    label="Manager"
+                                    icon="people-arrows"
+                                    v-model="form.manager"
+                                    :message="form.errors.manager"
+                                >
+                                    <option value="manager">Manager</option>
+                                </SelectInput>
+
+                                <!-- Supervisor -->
+                                <SelectInput
+                                    v-if="showSupervisorField"
+                                    label="Supervisor"
+                                    icon="people-arrows"
+                                    v-model="form.supervisor"
+                                    :message="form.errors.supervisor"
+                                >
+                                    <option value="supervisor">Supervisor</option>
+                                </SelectInput>
+
+                                <!-- Rso -->
+                                <SelectInput
+                                    v-if="showRsoField"
+                                    label="Rso"
+                                    icon="people-arrows"
+                                    v-model="form.rso"
+                                    :message="form.errors.rso"
+                                >
+                                    <option value="rso">Rso</option>
+                                </SelectInput>
+
+                                <!-- Retailer -->
+                                <SelectInput
+                                    v-if="showRetailerField"
+                                    label="Retailer"
+                                    icon="people-arrows"
+                                    v-model="form.retailer"
+                                    :message="form.errors.retailer"
+                                >
+                                    <option value="retailer">Retailer</option>
+                                </SelectInput>
+                                <!-- Conditional Rendering End-->
 
                                 <!-- Type -->
                                 <SelectInput

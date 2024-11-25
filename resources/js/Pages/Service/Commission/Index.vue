@@ -99,38 +99,38 @@ const delCommission = (id, name) => {
                                 <td>{{++i}}</td>
 
                                 <!-- House -->
-                                <td>
-                                    {{itopReplace.house.name}}
-                                    <p class="text-sm text-slate-400">{{itopReplace.house.code}}</p>
-                                </td>
+<!--                                <td>-->
+<!--                                    {{itopReplace.house.name}}-->
+<!--                                    <p class="text-sm text-slate-400">{{itopReplace.house.code}}</p>-->
+<!--                                </td>-->
 
                                 <!-- Itop Number -->
-                                <td>
-                                    {{itopReplace.number}}
-                                    <p class="text-sm text-slate-400">{{itopReplace.sim_serial}}</p>
-                                </td>
+<!--                                <td>-->
+<!--                                    {{itopReplace.number}}-->
+<!--                                    <p class="text-sm text-slate-400">{{itopReplace.sim_serial}}</p>-->
+<!--                                </td>-->
 
                                 <!-- Rso -->
-                                <td>
-                                    {{itopReplace.rso.user.name}}
-                                    <p class="text-sm text-slate-400">{{itopReplace.rso.number}}</p>
-                                </td>
+<!--                                <td>-->
+<!--                                    {{itopReplace.rso.user.name}}-->
+<!--                                    <p class="text-sm text-slate-400">{{itopReplace.rso.number}}</p>-->
+<!--                                </td>-->
 
                                 <!-- Status -->
-                                <td class="text-center">
-                                    <span v-if="itopReplace.status === 'Pending'" class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">{{itopReplace.status}}</span>
+<!--                                <td class="text-center">-->
+<!--                                    <span v-if="itopReplace.status === 'Pending'" class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">{{itopReplace.status}}</span>-->
 
-                                    <span v-else-if="itopReplace.status === 'Processing'"  class="bg-pink-100 text-pink-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-pink-900 dark:text-pink-300">{{itopReplace.status}}</span>
+<!--                                    <span v-else-if="itopReplace.status === 'Processing'"  class="bg-pink-100 text-pink-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-pink-900 dark:text-pink-300">{{itopReplace.status}}</span>-->
 
-                                    <span v-else class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">{{itopReplace.status}}</span>
-                                </td>
+<!--                                    <span v-else class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">{{itopReplace.status}}</span>-->
+<!--                                </td>-->
 
                                 <!-- Action -->
-                                <td class="text-center space-x-2">
-                                    <Link :href="route('itopReplace.show', itopReplace.id)" class="hover:text-green-400">Details</Link>
-                                    <Link :href="route('itopReplace.edit', itopReplace.id)" class="hover:text-green-400">Edit</Link>
-                                    <button class="hover:text-red-500" @click="delCommission(itopReplace.id, itopReplace.number)">Delete</button>
-                                </td>
+<!--                                <td class="text-center space-x-2">-->
+<!--                                    <Link :href="route('itopReplace.show', itopReplace.id)" class="hover:text-green-400">Details</Link>-->
+<!--                                    <Link :href="route('itopReplace.edit', itopReplace.id)" class="hover:text-green-400">Edit</Link>-->
+<!--                                    <button class="hover:text-red-500" @click="delCommission(itopReplace.id, itopReplace.number)">Delete</button>-->
+<!--                                </td>-->
                             </tr>
 
                             <tr v-if="props.commissions.data.length < 1">

@@ -16,6 +16,7 @@ class Commission extends Model
     use HasFactory, Searchable;
 
     protected $guarded = [];
+    protected $with = ['ddHouse','user','rso','retailer'];
     protected array $searchable = [
         'for'
     ];
