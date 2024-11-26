@@ -15,14 +15,16 @@ const props = defineProps({
 })
 
 let rsos = ref({})
+let retailers = ref({})
+let supervisors = ref({})
 
 const form = useForm({
     dd_house_id: null,
     for: null,
     manager: null,
     supervisor: null,
-    rso: null,
-    retailer: null,
+    rso_id: null,
+    retailer_id: null,
     type: null,
     name: null,
     month: null,
@@ -56,16 +58,23 @@ const handleForChange = () => {
     }
 };
 
+// Get data for selected house
 watch(() => form.dd_house_id, (id) => {
-    getRso(id)
-})
+    // Get Supervisor for selected house
+    axios.get(route('api.supervisors', id)).then((response) => {
+        supervisors.value = response.data
+    })
 
-const getRso = (id) => {
-    axios.get('/api/rsos?id='+id).then((response) => {
+    // Get Rso for selected house
+    axios.get(route('api.rsos', id)).then((response) => {
         rsos.value = response.data
     })
-}
 
+    // Get Retailer for selected house
+    axios.get(route('api.retailers', id)).then((response) => {
+        retailers.value = response.data
+    })
+})
 
 const submit = () => {
     form.post(route('commission.store'), {
@@ -155,7 +164,9 @@ const submit = () => {
                                     v-model="form.supervisor"
                                     :message="form.errors.supervisor"
                                 >
-                                    <option value="supervisor">Supervisor</option>
+                                    <option v-for="supervisor in supervisors" :key="supervisor.id" :value="supervisor.id">
+                                        {{supervisor.phone +' - '+ supervisor.name}}
+                                    </option>
                                 </SelectInput>
 
                                 <!-- Rso -->
@@ -163,10 +174,12 @@ const submit = () => {
                                     v-if="showRsoField"
                                     label="Rso"
                                     icon="people-arrows"
-                                    v-model="form.rso"
-                                    :message="form.errors.rso"
+                                    v-model="form.rso_id"
+                                    :message="form.errors.rso_id"
                                 >
-                                    <option v-for="rso in rsos" :key="rso.id" value="rso">{{rso.code}}</option>
+                                    <option v-for="rso in rsos" :key="rso.id" :value="rso.id">
+                                        {{rso.user.phone +' - '+ rso.user.name}}
+                                    </option>
                                 </SelectInput>
 
                                 <!-- Retailer -->
@@ -174,10 +187,12 @@ const submit = () => {
                                     v-if="showRetailerField"
                                     label="Retailer"
                                     icon="people-arrows"
-                                    v-model="form.retailer"
-                                    :message="form.errors.retailer"
+                                    v-model="form.retailer_id"
+                                    :message="form.errors.retailer_id"
                                 >
-                                    <option value="retailer">Retailer</option>
+                                    <option v-for="retailer in retailers" :key="retailer.id" :value="retailer.id">
+                                        {{retailer.code +' - '+ retailer.number}}
+                                    </option>
                                 </SelectInput>
                                 <!-- Conditional Rendering End-->
 

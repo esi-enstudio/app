@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static whereNotNull( string $string )
  * @method static create( array $attributes )
  * @method static firstWhere()
+ * @method static where()
  * @property mixed $zm
  * @property mixed $manager
  * @property mixed $supervisor

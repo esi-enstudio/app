@@ -7,6 +7,7 @@ use App\Models\Commission;
 use App\Http\Requests\StoreCommissionRequest;
 use App\Http\Requests\UpdateCommissionRequest;
 use App\Models\DdHouse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -45,19 +46,24 @@ class CommissionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $attributes = $request->validate([
-            'dd_house_id' => ['required'],
-            'for' => ['required'],
-            'type' => ['required'],
-            'name' => ['required'],
-            'month' => ['required'],
-            'amount' => ['required'],
-            'receive_date' => ['required'],
-            'description' => ['nullable'],
-            'remarks' => ['nullable'],
+            'dd_house_id'   => ['required'],
+            'manager'       => ['nullable'],
+            'supervisor'    => ['nullable'],
+            'rso_id'        => ['nullable'],
+            'retailer_id'   => ['nullable'],
+            'for'           => ['required'],
+            'type'          => ['required'],
+            'name'          => ['required'],
+            'month'         => ['required'],
+            'amount'        => ['required'],
+            'receive_date'  => ['required'],
+            'description'   => ['nullable'],
+            'remarks'       => ['nullable'],
         ]);
+//        dd($attributes);
 
         Commission::create($attributes);
 
