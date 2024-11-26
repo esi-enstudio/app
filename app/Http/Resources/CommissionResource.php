@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Str;
@@ -23,6 +24,7 @@ use Illuminate\Support\Str;
  * @property mixed $description
  * @property mixed $remarks
  * @property mixed $status
+ * @property mixed $receive_date
  */
 class CommissionResource extends JsonResource
 {
@@ -40,12 +42,12 @@ class CommissionResource extends JsonResource
             'retailer'      => new RetailerResource($this->retailer),
             'supervisor'    => User::firstWhere('id', $this->supervisor),
             'id'            => $this->id,
-            'for'           => $this->for,
-            'type'          => $this->type,
+            'for'           => Str::title($this->for),
+            'type'          => Str::title($this->type),
             'name'          => $this->name,
-            'month'         => $this->month,
+            'month'         => Carbon::parse($this->month)->format('M Y'),
             'amount'        => $this->amount,
-            'date'          => $this->date,
+            'receive_date'  => Carbon::parse($this->receive_date)->toFormattedDayDateString(),
             'description'   => $this->description,
             'remarks'       => Str::title($this->remarks),
             'status'        => Str::title($this->status),

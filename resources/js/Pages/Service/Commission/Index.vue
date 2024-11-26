@@ -81,12 +81,10 @@ const delCommission = (id, name) => {
                             <tr>
                                 <th>SL</th>
                                 <th>House</th>
-                                <th>For</th>
-                                <th>Type</th>
-                                <th>Name</th>
-                                <th>Month</th>
-                                <th>Amount</th>
-                                <th>Date</th>
+                                <th>For/Type</th>
+                                <th>Name/Month</th>
+                                <th>Net Amount</th>
+                                <th>Receive Date</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -99,38 +97,45 @@ const delCommission = (id, name) => {
                                 <td>{{++i}}</td>
 
                                 <!-- House -->
-<!--                                <td>-->
-<!--                                    {{itopReplace.house.name}}-->
-<!--                                    <p class="text-sm text-slate-400">{{itopReplace.house.code}}</p>-->
-<!--                                </td>-->
+                                <td>
+                                    {{commission.house.name}}
+                                    <p class="text-sm text-slate-400">{{commission.house.code}}</p>
+                                </td>
 
-                                <!-- Itop Number -->
-<!--                                <td>-->
-<!--                                    {{itopReplace.number}}-->
-<!--                                    <p class="text-sm text-slate-400">{{itopReplace.sim_serial}}</p>-->
-<!--                                </td>-->
+                                <!-- Commission For -->
+                                <td>
+                                    {{commission.for}}
+                                    <p class="text-sm text-slate-400">{{commission.type}}</p>
+                                </td>
 
-                                <!-- Rso -->
-<!--                                <td>-->
-<!--                                    {{itopReplace.rso.user.name}}-->
-<!--                                    <p class="text-sm text-slate-400">{{itopReplace.rso.number}}</p>-->
-<!--                                </td>-->
+                                <!-- Commission Name -->
+                                <td>
+                                    {{commission.name}}
+                                    <p class="text-sm text-slate-400">{{commission.month}}</p>
+                                </td>
+
+                                <!-- Net Amount -->
+                                <td>
+                                    {{commission.amount}}
+                                </td>
+
+                                <!-- Receive Date -->
+                                <td>
+                                    {{commission.receive_date}}
+                                </td>
 
                                 <!-- Status -->
-<!--                                <td class="text-center">-->
-<!--                                    <span v-if="itopReplace.status === 'Pending'" class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">{{itopReplace.status}}</span>-->
+                                <td class="text-center">
+                                    <span v-if="commission.status === 'Pending'" class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">{{commission.status}}</span>
 
-<!--                                    <span v-else-if="itopReplace.status === 'Processing'"  class="bg-pink-100 text-pink-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-pink-900 dark:text-pink-300">{{itopReplace.status}}</span>-->
-
-<!--                                    <span v-else class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">{{itopReplace.status}}</span>-->
-<!--                                </td>-->
+                                    <span v-else class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">{{commission.status}}</span>
+                                </td>
 
                                 <!-- Action -->
-<!--                                <td class="text-center space-x-2">-->
-<!--                                    <Link :href="route('itopReplace.show', itopReplace.id)" class="hover:text-green-400">Details</Link>-->
-<!--                                    <Link :href="route('itopReplace.edit', itopReplace.id)" class="hover:text-green-400">Edit</Link>-->
-<!--                                    <button class="hover:text-red-500" @click="delCommission(itopReplace.id, itopReplace.number)">Delete</button>-->
-<!--                                </td>-->
+                                <td class="text-center space-x-2">
+                                    <Link :href="route('commission.edit', commission.id)" class="hover:text-green-400">Edit</Link>
+                                    <button class="hover:text-red-500" @click="delCommission(commission.id, commission.name)">Delete</button>
+                                </td>
                             </tr>
 
                             <tr v-if="props.commissions.data.length < 1">

@@ -63,7 +63,6 @@ class CommissionController extends Controller
             'description'   => ['nullable'],
             'remarks'       => ['nullable'],
         ]);
-//        dd($attributes);
 
         Commission::create($attributes);
 

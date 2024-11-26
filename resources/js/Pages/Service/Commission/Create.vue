@@ -14,9 +14,9 @@ const props = defineProps({
     status: String,
 })
 
+let supervisors = ref({})
 let rsos = ref({})
 let retailers = ref({})
-let supervisors = ref({})
 
 const form = useForm({
     dd_house_id: null,
@@ -50,28 +50,28 @@ const handleForChange = () => {
     }
 
     if(form.for !== "rso") {
-        form.rso = ""; // Reset child field if it's hidden
+        form.rso_id = ""; // Reset child field if it's hidden
     }
 
     if(form.for !== "retailer") {
-        form.retailer = ""; // Reset child field if it's hidden
+        form.retailer_id = ""; // Reset child field if it's hidden
     }
 };
 
 // Get data for selected house
 watch(() => form.dd_house_id, (id) => {
     // Get Supervisor for selected house
-    axios.get(route('api.supervisors', id)).then((response) => {
+    axios.get('/api/supervisors?id=' + id).then((response) => {
         supervisors.value = response.data
     })
 
     // Get Rso for selected house
-    axios.get(route('api.rsos', id)).then((response) => {
+    axios.get('/api/rsos?id=' + id).then((response) => {
         rsos.value = response.data
     })
 
     // Get Retailer for selected house
-    axios.get(route('api.retailers', id)).then((response) => {
+    axios.get('/api/retailers?id=' + id).then((response) => {
         retailers.value = response.data
     })
 })

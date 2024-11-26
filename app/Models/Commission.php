@@ -18,7 +18,12 @@ class Commission extends Model
     protected $guarded = [];
     protected $with = ['ddHouse','user','rso','retailer'];
     protected array $searchable = [
-        'for'
+        'for',
+        'name',
+        'type',
+        'amount',
+        'ddHouse.name',
+        'ddHouse.code',
     ];
 
     public function user(): BelongsTo
