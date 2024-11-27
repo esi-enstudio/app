@@ -1,6 +1,6 @@
 <script setup>
 
-import {router} from "@inertiajs/vue3";
+import {router, useForm} from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import Pagination from "@/Components/Pagination.vue";
 import {debounce} from "lodash";
@@ -9,11 +9,22 @@ import TextInput from "@/Components/TextInput.vue";
 import SessionMessage from "@/Components/SessionMessage.vue";
 import PaginationWithoutLinks from "@/Components/PaginationWithoutLinks.vue";
 import Verified from "@/Components/Verified.vue";
+import SelectInput from "@/Components/SelectInput.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
 
 const props = defineProps({
     commissions: Object,
+    houses: Object,
     searchTerm: String,
     status: String,
+})
+
+const form = useForm({
+    house: null,
+    for: null,
+    type: null,
+    month: null,
+    receive_date: null,
 })
 
 const search = ref(props.searchTerm)
@@ -49,7 +60,88 @@ const delCommission = (id, name) => {
             </div>
         </template>
 
-        <div class="py-12">
+        <div class="py-5">
+            <div class="mx-auto max-w-7xl sm:px-4 lg:px-8">
+                <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
+                    <div class="p-3 text-gray-900 dark:text-gray-100 overflow-x-auto">
+                        <form @submit.prevent="form.post(route('commission.filter'))">
+                            <div class="grid lg:grid-cols-5 gap-6 mb-5">
+                                <!-- House -->
+                                <SelectInput
+                                    label="House"
+                                    icon="house"
+                                    v-model="form.house"
+                                >
+                                    <option
+                                        v-for="house in houses"
+                                        :key="house.id"
+                                        :value="house.id"
+                                    >
+                                        {{house.code}} - {{house.name}}
+                                    </option>
+
+                                    <option v-if="props.houses.length < 1">
+                                        No House found
+                                    </option>
+                                </SelectInput>
+                                <!-- For -->
+                                <SelectInput
+                                    label="Commission For"
+                                    icon="people-arrows"
+                                    v-model="form.for"
+                                >
+                                    <option value="DD">DD House</option>
+                                    <option value="Manager">Manager</option>
+                                    <option value="Supervisor">Supervisor</option>
+                                    <option value="Rso">Rso</option>
+                                    <option value="Retailer">Retailer</option>
+                                </SelectInput>
+                                <!-- Type -->
+                                <SelectInput
+                                    label="Commission Type"
+                                    icon="font-awesome"
+                                    v-model="form.type"
+                                >
+                                    <option value="regional_budget">Regional Budget</option>
+                                    <option value="shera_partner">Shera Partner</option>
+                                    <option value="ga">GA</option>
+                                    <option value="roi_support">ROI Support</option>
+                                    <option value="sc_lifting">SC Lifting</option>
+                                    <option value="weekly_activation">Weekly Activation</option>
+                                    <option value="deno">Deno</option>
+                                    <option value="accelerate">Accelerate</option>
+                                    <option value="bundle_booster">Bundle Booster</option>
+                                    <option value="recharge_data_voice_mix">Recharge, Data, Voice, Mix</option>
+                                    <option value="bsp_rent">BSP Rent</option>
+                                    <option value="my_bl_referral">My BL Referral</option>
+                                    <option value="other">Other</option>
+                                </SelectInput>
+                                <!-- Month -->
+                                <TextInput
+                                    label="Month"
+                                    icon="calendar"
+                                    type="month"
+                                    v-model="form.month"
+                                />
+                                <!-- Receive Date -->
+                                <TextInput
+                                    label="Receive Date"
+                                    icon="calendar"
+                                    type="date"
+                                    v-model="form.receive_date"
+                                />
+                            </div>
+
+                            <div class="text-right">
+                                <PrimaryButton :disable="form.processing">Apply Filter</PrimaryButton>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="py-5">
             <div class="mx-auto max-w-7xl sm:px-4 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                     <div class="md:block hidden">

@@ -30,7 +30,7 @@ return new class extends Migration
             $table->date('receive_date');
             $table->string('description')->nullable();
             $table->string('remarks')->nullable();
-            $table->string('status')->default('pending');
+            $table->string('status')->default('Pending');
             $table->timestamps();
         });
     }

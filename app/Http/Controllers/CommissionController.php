@@ -30,6 +30,7 @@ class CommissionController extends Controller
                 ->onEachSide(0)
                 ->withQueryString()),
 
+            'houses' => DdHouse::all(['id','code','name']),
             'searchTerm' => $request->search,
             'status' => session('msg'),
         ]);
@@ -98,16 +99,49 @@ class CommissionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Commission $commission)
+    public function update(Request $request, Commission $commission): RedirectResponse
     {
-        dd($request);
+        $attributes = $request->validate([
+            'dd_house_id' => ['required'],
+            'for' => ['required'],
+            'type' => ['required'],
+            'name' => ['required','max:255'],
+            'month' => ['required'],
+            'amount' => ['required'],
+            'receive_date' => ['required','date'],
+            'description' => ['nullable','max:255'],
+            'remarks' => ['nullable','max:255'],
+            'status' => ['required'],
+        ]);
+
+        $commission->update($attributes);
+
+        return to_route('commission.index')->with('msg', 'Commission updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Commission $commission)
+    public function destroy(Commission $commission): RedirectResponse
     {
-        //
+        $commission->delete();
+
+        return to_route('commission.index')->with('msg', 'Commission deleted successfully.');
+    }
+
+    /**
+     * Display the filtered resource.
+     */
+    public function filter(Request $request)
+    {
+        $commission = Commission::where([
+            ['dd_house_id', $request->house ?? ''],
+            ['for', $request->for ?? ''],
+            ['type', $request->type ?? ''],
+            ['month', $request->month ?? ''],
+            ['receive_date', $request->receive_date ?? ''],
+        ])->get();
+        dd($commission);
+        return Inertia::render('Service/Commission/Filter', ['result' => $request]);
     }
 }

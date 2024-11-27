@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +20,9 @@ Route::middleware(['auth','verified'])->group(function () {
     // Dashboard
     Route::inertia('/dashboard', 'Dashboard')->name('dashboard');
 
+    // Filter Commission
+    Route::post('/commission/filter', [ CommissionController::class, 'filter'])->name('commission.filter');
+
     Route::resources([
         // Users
         'user' => \App\Http\Controllers\UserController::class,
@@ -33,7 +37,7 @@ Route::middleware(['auth','verified'])->group(function () {
         'itopReplace' => \App\Http\Controllers\ItopReplaceController::class,
 
         // Commission
-        'commission' => \App\Http\Controllers\CommissionController::class,
+        'commission' => CommissionController::class,
     ]);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -14,6 +14,7 @@ const props = defineProps({
     status: String,
 })
 
+let managers = ref({})
 let supervisors = ref({})
 let rsos = ref({})
 let retailers = ref({})
@@ -34,32 +35,38 @@ const form = useForm({
     remarks: null,
 })
 
-const showManagerField = computed(() => form.for === "manager");
-const showSupervisorField = computed(() => form.for === "supervisor");
-const showRsoField = computed(() => form.for === "rso");
-const showRetailerField = computed(() => form.for === "retailer");
+const showManagerField = computed(() => form.for === "Manager");
+const showSupervisorField = computed(() => form.for === "Supervisor");
+const showRsoField = computed(() => form.for === "Rso");
+const showRetailerField = computed(() => form.for === "Retailer");
 
 // Handle parent field changes
 const handleForChange = () => {
-    if (form.for !== "manager") {
+    if (form.for !== "Manager") {
         form.manager = ""; // Reset child field if it's hidden
     }
 
-    if(form.for !== "supervisor") {
+    if(form.for !== "Supervisor") {
         form.supervisor = ""; // Reset child field if it's hidden
     }
 
-    if(form.for !== "rso") {
+    if(form.for !== "Rso") {
         form.rso_id = ""; // Reset child field if it's hidden
     }
 
-    if(form.for !== "retailer") {
+    if(form.for !== "Retailer") {
         form.retailer_id = ""; // Reset child field if it's hidden
     }
 };
 
 // Get data for selected house
 watch(() => form.dd_house_id, (id) => {
+
+    // Get Manager for selected house
+    axios.get('/api/managers?id=' + id).then((response) => {
+        managers.value = response.data
+    })
+
     // Get Supervisor for selected house
     axios.get('/api/supervisors?id=' + id).then((response) => {
         supervisors.value = response.data
@@ -153,7 +160,9 @@ const submit = () => {
                                     v-model="form.manager"
                                     :message="form.errors.manager"
                                 >
-                                    <option value="Manager">Manager</option>
+                                    <option v-for="manager in managers" :key="manager.id" :value="manager.id">
+                                        {{manager.phone +' - '+ manager.name}}
+                                    </option>
                                 </SelectInput>
 
                                 <!-- Supervisor -->

@@ -14,7 +14,6 @@ const props = defineProps({
     houses: Object,
 })
 
-console.log(props.commission)
 const form = useForm({
     dd_house_id: props.commission.dd_house.id,
     for: props.commission.for,
@@ -25,6 +24,7 @@ const form = useForm({
     receive_date: props.commission.receive_date,
     description: props.commission.description,
     remarks: props.commission.remarks,
+    status: props.commission.status,
 })
 
 </script>
@@ -60,7 +60,8 @@ const form = useForm({
                                 <span v-if="props.commission.for === 'Rso'">({{props.commission.rso.user.name}})</span>
                                 <span v-if="props.commission.for === 'Retailer'">({{props.commission.retailer.user.name}})</span>
                             </p>
-                            <input type="hidden" value="{{props.commission.dd_house.id}}">
+                            <input v-model="form.dd_house_id" type="hidden" value="{{props.commission.dd_house.id}}">
+                            <input v-model="form.for" type="hidden" value="{{props.commission.for}}">
                         </div>
 
                         <form @submit.prevent="form.put(route('commission.update', props.commission.id))">
@@ -128,6 +129,15 @@ const form = useForm({
                                     v-model="form.remarks"
                                     :message="form.errors.remarks"
                                 />
+
+                                <!-- Status -->
+                                <SelectInput
+                                    label="Status"
+                                    icon="signal"
+                                    v-model="form.status">
+                                    <option value="Complete">Complete</option>
+                                    <option value="Pending">Pending</option>
+                                </SelectInput>
 
                                 <!-- Description -->
                                 <TextArea
