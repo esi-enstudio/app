@@ -39,10 +39,25 @@ class RsoController extends Controller
     {
         $hasUserId = Rso::whereNotNull('user_id')->pluck('user_id');
 
-        $users = User::where('role', 'rso')->where('status', 1)->whereNotIn('id', $hasUserId)->get();
-        $zms = User::where('role', 'zm')->where('status', 1)->get();
-        $managers = User::where('role', 'manager')->where('status', 1)->get();
-        $supervisors = User::where('role', 'supervisor')->where('status', 1)->get();
+        $users = User::where([
+            ['role', 'rso'],
+            ['status', 1]
+        ])->whereNotIn('id', $hasUserId)->get();
+
+        $zms = User::where([
+            ['role', 'zm'],
+            ['status', 1],
+        ])->get();
+
+        $managers = User::where([
+            ['role', 'manager'],
+            ['status', 1],
+        ])->get();
+
+        $supervisors = User::where([
+            ['role', 'supervisor'],
+            ['status', 1],
+        ])->get();
 
         return inertia('Rso/Create', [
             'ddHouses' => DdHouse::all(),
@@ -120,10 +135,25 @@ class RsoController extends Controller
      */
     public function edit(Rso $rso): Response
     {
-        $users = User::where('role', 'rso')->where('status', 1)->get();
-        $zms = User::where('role', 'zm')->where('status', 1)->get();
-        $managers = User::where('role', 'manager')->where('status', 1)->get();
-        $supervisors = User::where('role', 'supervisor')->where('status', 1)->get();
+        $users = User::where([
+            ['role', 'rso'],
+            ['status', 1]
+        ])->get();
+
+        $zms = User::where([
+            ['role', 'zm'],
+            ['status', 1],
+        ])->get();
+
+        $managers = User::where([
+            ['role', 'manager'],
+            ['status', 1],
+        ])->get();
+
+        $supervisors = User::where([
+            ['role', 'supervisor'],
+            ['status', 1],
+        ])->get();
 
         return Inertia::render('Rso/Edit', [
             'ddHouses' => DdHouse::all(),

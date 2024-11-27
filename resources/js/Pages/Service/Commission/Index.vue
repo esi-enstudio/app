@@ -91,7 +91,7 @@ const delCommission = (id, name) => {
                             </thead>
 
                             <tbody>
-{{console.log(commissions)}}
+
                             <tr class="font-semibold" v-for="(commission, i) in props.commissions.data" :key="commission.id">
                                 <!-- SL -->
                                 <td>{{++i}}</td>

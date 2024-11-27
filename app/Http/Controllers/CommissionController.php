@@ -7,6 +7,8 @@ use App\Models\Commission;
 use App\Http\Requests\StoreCommissionRequest;
 use App\Http\Requests\UpdateCommissionRequest;
 use App\Models\DdHouse;
+use App\Models\Rso;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -82,7 +84,14 @@ class CommissionController extends Controller
      */
     public function edit(Commission $commission)
     {
-        //
+        $commission->manager = User::firstWhere('id', $commission->manager);
+        $commission->supervisor = User::firstWhere('id', $commission->supervisor);
+        $commission->rso = Rso::firstWhere('id', $commission->rso_id);
+
+        return Inertia::render('Service/Commission/Edit', [
+            'commission' => $commission,
+            'houses' => DdHouse::all(['id', 'name', 'code']),
+        ]);
     }
 
     /**

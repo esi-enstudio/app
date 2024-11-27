@@ -5,35 +5,99 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import SelectInput from "@/Components/SelectInput.vue";
 import TextArea from "@/Components/TextArea.vue";
+import SessionMessage from "@/Components/SessionMessage.vue";
+import {computed, ref, watch} from "vue";
+import axios from "axios";
 
 const props = defineProps({
-    itopReplace: Object,
+    commission: Object,
+    houses: Object,
 })
 
+let supervisors = ref({})
+let rsos = ref({})
+let retailers = ref({})
+
+console.log(props.commission)
 const form = useForm({
-    number: props.itopReplace.number,
-    sim_serial: props.itopReplace.sim_serial,
-    balance: props.itopReplace.balance,
-    reason: props.itopReplace.reason,
-    remarks: props.itopReplace.remarks,
-    description: props.itopReplace.description,
-    status: props.itopReplace.status,
+    dd_house_id: props.commission.dd_house.id,
+    for: props.commission.for,
+    manager: props.commission.manager,
+    supervisor: props.commission.supervisor,
+    rso_id: props.commission.rso.id,
+    retailer_id: props.commission.retailer.id ?? null,
+    type: props.commission.type,
+    name: props.commission.name,
+    month: props.commission.month,
+    amount: props.commission.amount,
+    receive_date: props.commission.receive_date,
+    description: props.commission.description,
+    remarks: props.commission.remarks,
 })
+
+const showManagerField = computed(() => form.for === "manager");
+const showSupervisorField = computed(() => form.for === "supervisor");
+const showRsoField = computed(() => form.for === "rso");
+const showRetailerField = computed(() => form.for === "retailer");
+
+// Handle parent field changes
+const handleForChange = () => {
+    if (form.for !== "manager") {
+        form.manager = ""; // Reset child field if it's hidden
+    }
+
+    if(form.for !== "supervisor") {
+        form.supervisor = ""; // Reset child field if it's hidden
+    }
+
+    if(form.for !== "rso") {
+        form.rso_id = ""; // Reset child field if it's hidden
+    }
+
+    if(form.for !== "retailer") {
+        form.retailer_id = ""; // Reset child field if it's hidden
+    }
+};
+
+// Get data for selected house
+watch(() => form.dd_house_id, (id) => {
+    // Get Supervisor for selected house
+    axios.get('/api/supervisors?id=' + id).then((response) => {
+        supervisors.value = response.data
+    })
+
+    // Get Rso for selected house
+    axios.get('/api/rsos?id=' + id).then((response) => {
+        rsos.value = response.data
+    })
+
+    // Get Retailer for selected house
+    axios.get('/api/retailers?id=' + id).then((response) => {
+        retailers.value = response.data
+    })
+})
+
+const submit = (id) => {
+    form.post(route('commission.update', id), {
+        onSuccess: () => form.reset()
+    })
+}
 
 </script>
 
 <template>
-    <Head title="Update replace"/>
+    <Head title="Add New"/>
+    <SessionMessage :status="props.status"/>
 
     <AuthenticatedLayout>
         <template #header>
             <div class="flex items-center justify-between">
                 <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-                    Update Replace
+                    Add new commission
                 </h2>
 
                 <div>
-                    <Link :href="route('itopReplace.index')" class="hover:text-green-400">Back to list</Link>
+                    <Link :href="route('commission.index')" class="hover:text-green-400">Back to list</Link>
                 </div>
             </div>
         </template>
@@ -43,39 +107,150 @@ const form = useForm({
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                     <div class="p-6 text-gray-900 dark:text-gray-100">
 
-                        <form @submit.prevent="form.put(route('itopReplace.update', props.itopReplace.id))">
+                        <form @submit.prevent="submit(props.commission.id)">
                             <div class="grid md:grid-cols-2 gap-6">
 
-                                <!-- Itop Number -->
+                                <!-- House -->
+                                <SelectInput
+                                    label="House"
+                                    icon="house"
+                                    v-model="form.dd_house_id"
+                                    :message="form.errors.dd_house_id"
+                                >
+                                    <option
+                                        v-for="house in houses"
+                                        :key="house.id"
+                                        :value="house.id"
+                                    >
+                                        {{house.code}} - {{house.name}}
+                                    </option>
+
+                                    <option v-if="props.houses.length < 1">
+                                        No House found
+                                    </option>
+                                </SelectInput>
+
+                                <!-- For -->
+                                <SelectInput
+                                    label="Commission For"
+                                    icon="people-arrows"
+                                    v-model="form.for"
+                                    @change="handleForChange"
+                                    :message="form.errors.for"
+                                >
+                                    <option value="dd">DD House</option>
+                                    <option value="manager">Manager</option>
+                                    <option value="supervisor">Supervisor</option>
+                                    <option value="rso">Rso</option>
+                                    <option value="retailer">Retailer</option>
+                                </SelectInput>
+
+                                <!-- Conditional Rendering -->
+                                <!-- Manager -->
+                                <SelectInput
+                                    v-if="showManagerField"
+                                    label="Manager"
+                                    icon="people-arrows"
+                                    v-model="form.manager"
+                                    :message="form.errors.manager"
+                                >
+                                    <option value="manager">Manager</option>
+                                </SelectInput>
+
+                                <!-- Supervisor -->
+                                <SelectInput
+                                    v-if="showSupervisorField"
+                                    label="Supervisor"
+                                    icon="people-arrows"
+                                    v-model="form.supervisor"
+                                    :message="form.errors.supervisor"
+                                >
+                                    <option v-for="supervisor in supervisors" :key="supervisor.id" :value="supervisor.id">
+                                        {{supervisor.phone +' - '+ supervisor.name}}
+                                    </option>
+                                </SelectInput>
+
+                                <!-- Rso -->
+                                <SelectInput
+                                    v-if="showRsoField"
+                                    label="Rso"
+                                    icon="people-arrows"
+                                    v-model="form.rso_id"
+                                    :message="form.errors.rso_id"
+                                >
+                                    <option v-for="rso in rsos" :key="rso.id" :value="rso.id">
+                                        {{rso.user.phone +' - '+ rso.user.name}}
+                                    </option>
+                                </SelectInput>
+
+                                <!-- Retailer -->
+                                <SelectInput
+                                    v-if="showRetailerField"
+                                    label="Retailer"
+                                    icon="people-arrows"
+                                    v-model="form.retailer_id"
+                                    :message="form.errors.retailer_id"
+                                >
+                                    <option v-for="retailer in retailers" :key="retailer.id" :value="retailer.id">
+                                        {{retailer.code +' - '+ retailer.number}}
+                                    </option>
+                                </SelectInput>
+                                <!-- Conditional Rendering End-->
+
+                                <!-- Type -->
+                                <SelectInput
+                                    label="Commission Type"
+                                    icon="font-awesome"
+                                    v-model="form.type"
+                                    :message="form.errors.type"
+                                >
+                                    <option value="regional_budget">Regional Budget</option>
+                                    <option value="shera_partner">Shera Partner</option>
+                                    <option value="ga">GA</option>
+                                    <option value="roi_support">ROI Support</option>
+                                    <option value="sc_lifting">SC Lifting</option>
+                                    <option value="weekly_activation">Weekly Activation</option>
+                                    <option value="deno">Deno</option>
+                                    <option value="accelerate">Accelerate</option>
+                                    <option value="bundle_booster">Bundle Booster</option>
+                                    <option value="recharge_data_voice_mix">Recharge, Data, Voice, Mix</option>
+                                    <option value="bsp_rent">BSP Rent</option>
+                                    <option value="my_bl_referral">My BL Referral</option>
+                                    <option value="other">Other</option>
+                                </SelectInput>
+
+                                <!-- Commission Name -->
                                 <TextInput
-                                    label="Itop Number"
-                                    icon="phone"
-                                    v-model="form.number"
-                                    :message="form.errors.number"
+                                    label="Commission Name"
+                                    icon="paragraph"
+                                    v-model="form.name"
+                                    :message="form.errors.name"
                                 />
 
-                                <!-- Serial Number -->
+                                <!-- Month -->
                                 <TextInput
-                                    label="Serial Number"
-                                    icon="typo3"
-                                    v-model="form.sim_serial"
-                                    :message="form.errors.sim_serial"
+                                    label="Month"
+                                    icon="calendar"
+                                    type="month"
+                                    v-model="form.month"
+                                    :message="form.errors.month"
                                 />
 
-                                <!-- Balance -->
+                                <!-- Net Amount -->
                                 <TextInput
-                                    label="Balance"
+                                    label="Net Amount"
                                     icon="bangladeshi-taka-sign"
-                                    v-model="form.balance"
-                                    :message="form.errors.balance"
+                                    v-model="form.amount"
+                                    :message="form.errors.amount"
                                 />
 
-                                <!-- Reason -->
+                                <!-- Receive Date -->
                                 <TextInput
-                                    label="Reason"
-                                    icon="question"
-                                    v-model="form.reason"
-                                    :message="form.errors.reason"
+                                    label="Receive Date"
+                                    icon="calendar"
+                                    type="date"
+                                    v-model="form.receive_date"
+                                    :message="form.errors.receive_date"
                                 />
 
                                 <!-- Remarks -->
@@ -86,16 +261,6 @@ const form = useForm({
                                     :message="form.errors.remarks"
                                 />
 
-                                <!-- Status -->
-                                <SelectInput
-                                    label="Status"
-                                    icon="signal"
-                                    v-model="form.status">
-                                    <option value="complete">Complete</option>
-                                    <option value="processing">Processing</option>
-                                    <option value="pending">Pending</option>
-                                </SelectInput>
-
                                 <!-- Description -->
                                 <TextArea
                                     label="Description"
@@ -103,9 +268,10 @@ const form = useForm({
                                     v-model="form.description"
                                     :message="form.errors.description"
                                 />
+
                             </div>
 
-                            <PrimaryButton :disable="form.processing">Save Changes</PrimaryButton>
+                            <PrimaryButton :disable="form.processing">Add New Entry</PrimaryButton>
                         </form>
                     </div>
                 </div>
