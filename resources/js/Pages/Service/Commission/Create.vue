@@ -137,11 +137,11 @@ const submit = () => {
                                     @change="handleForChange"
                                     :message="form.errors.for"
                                 >
-                                    <option value="dd">DD House</option>
-                                    <option value="manager">Manager</option>
-                                    <option value="supervisor">Supervisor</option>
-                                    <option value="rso">Rso</option>
-                                    <option value="retailer">Retailer</option>
+                                    <option value="DD">DD House</option>
+                                    <option value="Manager">Manager</option>
+                                    <option value="Supervisor">Supervisor</option>
+                                    <option value="Rso">Rso</option>
+                                    <option value="Retailer">Retailer</option>
                                 </SelectInput>
 
                                 <!-- Conditional Rendering -->
@@ -153,7 +153,7 @@ const submit = () => {
                                     v-model="form.manager"
                                     :message="form.errors.manager"
                                 >
-                                    <option value="manager">Manager</option>
+                                    <option value="Manager">Manager</option>
                                 </SelectInput>
 
                                 <!-- Supervisor -->

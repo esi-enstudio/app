@@ -11,6 +11,7 @@ use App\Models\Rso;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 use Termwind\Components\Dd;
@@ -82,7 +83,7 @@ class CommissionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Commission $commission)
+    public function edit(Commission $commission): Response
     {
         $commission->manager = User::firstWhere('id', $commission->manager);
         $commission->supervisor = User::firstWhere('id', $commission->supervisor);
@@ -97,9 +98,9 @@ class CommissionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCommissionRequest $request, Commission $commission)
+    public function update(Request $request, Commission $commission)
     {
-        //
+        dd($request);
     }
 
     /**

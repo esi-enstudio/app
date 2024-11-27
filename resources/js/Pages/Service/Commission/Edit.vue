@@ -14,18 +14,10 @@ const props = defineProps({
     houses: Object,
 })
 
-let supervisors = ref({})
-let rsos = ref({})
-let retailers = ref({})
-
 console.log(props.commission)
 const form = useForm({
     dd_house_id: props.commission.dd_house.id,
     for: props.commission.for,
-    manager: props.commission.manager,
-    supervisor: props.commission.supervisor,
-    rso_id: props.commission.rso.id,
-    retailer_id: props.commission.retailer.id ?? null,
     type: props.commission.type,
     name: props.commission.name,
     month: props.commission.month,
@@ -35,65 +27,17 @@ const form = useForm({
     remarks: props.commission.remarks,
 })
 
-const showManagerField = computed(() => form.for === "manager");
-const showSupervisorField = computed(() => form.for === "supervisor");
-const showRsoField = computed(() => form.for === "rso");
-const showRetailerField = computed(() => form.for === "retailer");
-
-// Handle parent field changes
-const handleForChange = () => {
-    if (form.for !== "manager") {
-        form.manager = ""; // Reset child field if it's hidden
-    }
-
-    if(form.for !== "supervisor") {
-        form.supervisor = ""; // Reset child field if it's hidden
-    }
-
-    if(form.for !== "rso") {
-        form.rso_id = ""; // Reset child field if it's hidden
-    }
-
-    if(form.for !== "retailer") {
-        form.retailer_id = ""; // Reset child field if it's hidden
-    }
-};
-
-// Get data for selected house
-watch(() => form.dd_house_id, (id) => {
-    // Get Supervisor for selected house
-    axios.get('/api/supervisors?id=' + id).then((response) => {
-        supervisors.value = response.data
-    })
-
-    // Get Rso for selected house
-    axios.get('/api/rsos?id=' + id).then((response) => {
-        rsos.value = response.data
-    })
-
-    // Get Retailer for selected house
-    axios.get('/api/retailers?id=' + id).then((response) => {
-        retailers.value = response.data
-    })
-})
-
-const submit = (id) => {
-    form.post(route('commission.update', id), {
-        onSuccess: () => form.reset()
-    })
-}
-
 </script>
 
 <template>
-    <Head title="Add New"/>
+    <Head title="Update Commission"/>
     <SessionMessage :status="props.status"/>
 
     <AuthenticatedLayout>
         <template #header>
             <div class="flex items-center justify-between">
                 <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-                    Add new commission
+                    Update commission
                 </h2>
 
                 <div>
@@ -107,96 +51,20 @@ const submit = (id) => {
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                     <div class="p-6 text-gray-900 dark:text-gray-100">
 
-                        <form @submit.prevent="submit(props.commission.id)">
+                        <div class="text-2xl font-semibold mb-6">
+                            <p>House: {{props.commission.dd_house.name}}</p>
+                            <p>
+                                Commission For : {{props.commission.for}}
+                                <span v-if="props.commission.for === 'Manager'">({{props.commission.manager.name}})</span>
+                                <span v-if="props.commission.for === 'Supervisor'">({{props.commission.supervisor.name}})</span>
+                                <span v-if="props.commission.for === 'Rso'">({{props.commission.rso.user.name}})</span>
+                                <span v-if="props.commission.for === 'Retailer'">({{props.commission.retailer.user.name}})</span>
+                            </p>
+                            <input type="hidden" value="{{props.commission.dd_house.id}}">
+                        </div>
+
+                        <form @submit.prevent="form.put(route('commission.update', props.commission.id))">
                             <div class="grid md:grid-cols-2 gap-6">
-
-                                <!-- House -->
-                                <SelectInput
-                                    label="House"
-                                    icon="house"
-                                    v-model="form.dd_house_id"
-                                    :message="form.errors.dd_house_id"
-                                >
-                                    <option
-                                        v-for="house in houses"
-                                        :key="house.id"
-                                        :value="house.id"
-                                    >
-                                        {{house.code}} - {{house.name}}
-                                    </option>
-
-                                    <option v-if="props.houses.length < 1">
-                                        No House found
-                                    </option>
-                                </SelectInput>
-
-                                <!-- For -->
-                                <SelectInput
-                                    label="Commission For"
-                                    icon="people-arrows"
-                                    v-model="form.for"
-                                    @change="handleForChange"
-                                    :message="form.errors.for"
-                                >
-                                    <option value="dd">DD House</option>
-                                    <option value="manager">Manager</option>
-                                    <option value="supervisor">Supervisor</option>
-                                    <option value="rso">Rso</option>
-                                    <option value="retailer">Retailer</option>
-                                </SelectInput>
-
-                                <!-- Conditional Rendering -->
-                                <!-- Manager -->
-                                <SelectInput
-                                    v-if="showManagerField"
-                                    label="Manager"
-                                    icon="people-arrows"
-                                    v-model="form.manager"
-                                    :message="form.errors.manager"
-                                >
-                                    <option value="manager">Manager</option>
-                                </SelectInput>
-
-                                <!-- Supervisor -->
-                                <SelectInput
-                                    v-if="showSupervisorField"
-                                    label="Supervisor"
-                                    icon="people-arrows"
-                                    v-model="form.supervisor"
-                                    :message="form.errors.supervisor"
-                                >
-                                    <option v-for="supervisor in supervisors" :key="supervisor.id" :value="supervisor.id">
-                                        {{supervisor.phone +' - '+ supervisor.name}}
-                                    </option>
-                                </SelectInput>
-
-                                <!-- Rso -->
-                                <SelectInput
-                                    v-if="showRsoField"
-                                    label="Rso"
-                                    icon="people-arrows"
-                                    v-model="form.rso_id"
-                                    :message="form.errors.rso_id"
-                                >
-                                    <option v-for="rso in rsos" :key="rso.id" :value="rso.id">
-                                        {{rso.user.phone +' - '+ rso.user.name}}
-                                    </option>
-                                </SelectInput>
-
-                                <!-- Retailer -->
-                                <SelectInput
-                                    v-if="showRetailerField"
-                                    label="Retailer"
-                                    icon="people-arrows"
-                                    v-model="form.retailer_id"
-                                    :message="form.errors.retailer_id"
-                                >
-                                    <option v-for="retailer in retailers" :key="retailer.id" :value="retailer.id">
-                                        {{retailer.code +' - '+ retailer.number}}
-                                    </option>
-                                </SelectInput>
-                                <!-- Conditional Rendering End-->
-
                                 <!-- Type -->
                                 <SelectInput
                                     label="Commission Type"
@@ -271,7 +139,10 @@ const submit = (id) => {
 
                             </div>
 
-                            <PrimaryButton :disable="form.processing">Add New Entry</PrimaryButton>
+                            <div class="flex items-center justify-between">
+                                <PrimaryButton :disable="form.processing">Save Changes</PrimaryButton>
+                                <PrimaryButton class="bg-red-500" :disable="form.processing">Delete</PrimaryButton>
+                            </div>
                         </form>
                     </div>
                 </div>
