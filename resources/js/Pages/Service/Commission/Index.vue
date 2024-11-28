@@ -1,7 +1,9 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { ref } from 'vue';
-import { Inertia } from '@inertiajs/inertia';
+import SelectInput from "@/Components/SelectInput.vue";
+import {router} from "@inertiajs/vue3";
+import TextInput from "@/Components/TextInput.vue";
 
 // Props passed from the server
 const props = defineProps({
@@ -15,13 +17,18 @@ const filters = ref({ ...props.filters });
 
 // Filter function to trigger server-side filtering
 const filter = () => {
-    Inertia.get(route('commissions.index'), filters.value, {
+    router.get(route('commission.index'), filters.value, {
         preserveState: true,
         preserveScroll: true,
     });
 };
 
+const resetFilters = () => {
+    filters.value = {}
+}
 
+console.log(filters)
+console.log(props.commissions)
 // const delCommission = (id, name) => {
 //
 //     if (confirm(`Are you sure to delete "${name}" ?`))
@@ -48,18 +55,91 @@ const filter = () => {
             </div>
         </template>
 
+        <!-- Filter Section -->
+        <div class="py-5">
+            <div class="mx-auto max-w-7xl sm:px-4 lg:px-8">
+                <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
+                    <div class="p-3 text-gray-900 dark:text-gray-100 overflow-x-auto">
+                        <div class="grid lg:grid-cols-2 gap-6 mb-5">
+                            <!-- House -->
+                            <SelectInput
+                                label="House"
+                                icon="house"
+                                v-model="filters.house"
+                                @change="filter"
+                            >
+                                <option
+                                    v-for="house in houses"
+                                    :key="house.id"
+                                    :value="house.id"
+                                >
+                                    {{house.code}} - {{house.name}}
+                                </option>
+
+                                <option v-if="props.houses.length < 1">
+                                    No House found
+                                </option>
+                            </SelectInput>
+                            <!-- For -->
+                            <SelectInput
+                                label="Commission For"
+                                icon="people-arrows"
+                                v-model="filters.for"
+                                @change="filter"
+                            >
+                                <option value="DD">DD House</option>
+                                <option value="Manager">Manager</option>
+                                <option value="Supervisor">Supervisor</option>
+                                <option value="Rso">Rso</option>
+                                <option value="Retailer">Retailer</option>
+                            </SelectInput>
+                            <!-- Type -->
+                            <SelectInput
+                                label="Commission Type"
+                                icon="font-awesome"
+                                v-model="filters.type"
+                                @change="filter"
+                            >
+                                <option value="">All Type</option>
+                                <option value="regional_budget">Regional Budget</option>
+                                <option value="shera_partner">Shera Partner</option>
+                                <option value="ga">GA</option>
+                                <option value="roi_support">ROI Support</option>
+                                <option value="sc_lifting">SC Lifting</option>
+                                <option value="weekly_activation">Weekly Activation</option>
+                                <option value="deno">Deno</option>
+                                <option value="accelerate">Accelerate</option>
+                                <option value="bundle_booster">Bundle Booster</option>
+                                <option value="recharge_data_voice_mix">Recharge, Data, Voice, Mix</option>
+                                <option value="bsp_rent">BSP Rent</option>
+                                <option value="my_bl_referral">My BL Referral</option>
+                                <option value="other">Other</option>
+                            </SelectInput>
+                            <!-- Month -->
+                            <TextInput
+                                label="Month"
+                                icon="calendar"
+                                type="month"
+                                v-model="filters.month"
+                                @change="filter"
+                            />
+                            <!-- Receive Date -->
+                            <TextInput
+                                label="Receive Date"
+                                icon="calendar"
+                                type="date"
+                                v-model="filters.receive_date"
+                                @change="filter"
+                            />
+                        </div>
+                        <button @click.prevent="resetFilters" class="bg-red-600 py-2 px-4 rounded-md text-white hover:bg-red-500">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Filter Section End -->
+
         <div>
-            <select v-model="filters.dd_house_id" @change="filter">
-                <option value="">All Houses</option>
-                <option v-for="house in houses" :key="house.id" :value="house.id">{{ house.name }}</option>
-            </select>
-
-            <select v-model="filters.for" @change="filter">
-                <option value="">All For</option>
-                <option value="value1">Value 1</option>
-                <option value="value2">Value 2</option>
-            </select>
-
             <!-- Add similar dropdowns for 'type', 'month', and 'received_date' -->
 
             <table>
@@ -73,103 +153,17 @@ const filter = () => {
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="commission in commissions" :key="commission.id">
+                <tr v-for="commission in commissions.data" :key="commission.id">
                     <td>{{ commission.dd_house_id }}</td>
                     <td>{{ commission.for }}</td>
                     <td>{{ commission.type }}</td>
                     <td>{{ commission.month }}</td>
-                    <td>{{ commission.received_date }}</td>
+                    <td>{{ commission.receive_date }}</td>
                 </tr>
                 </tbody>
             </table>
         </div>
 
-        <!-- Filter Section -->
-<!--        <div class="py-5">-->
-<!--            <div class="mx-auto max-w-7xl sm:px-4 lg:px-8">-->
-<!--                <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">-->
-<!--                    <div class="p-3 text-gray-900 dark:text-gray-100 overflow-x-auto">-->
-<!--                        <form>-->
-<!--                            <div class="grid lg:grid-cols-4 gap-6 mb-5">-->
-<!--                                &lt;!&ndash; House &ndash;&gt;-->
-<!--                                <SelectInput-->
-<!--                                    label="House"-->
-<!--                                    icon="house"-->
-<!--                                    v-model="house"-->
-<!--                                >-->
-<!--                                    <option-->
-<!--                                        v-for="house in houses"-->
-<!--                                        :key="house.id"-->
-<!--                                        :value="house.id"-->
-<!--                                    >-->
-<!--                                        {{house.code}} - {{house.name}}-->
-<!--                                    </option>-->
-
-<!--                                    <option v-if="props.houses.length < 1">-->
-<!--                                        No House found-->
-<!--                                    </option>-->
-<!--                                </SelectInput>-->
-<!--                                &lt;!&ndash; For &ndash;&gt;-->
-<!--                                <SelectInput-->
-<!--                                    label="Commission For"-->
-<!--                                    icon="people-arrows"-->
-<!--                                    v-model="commissionFor"-->
-<!--                                >-->
-<!--                                    <option value="DD">DD House</option>-->
-<!--                                    <option value="Manager">Manager</option>-->
-<!--                                    <option value="Supervisor">Supervisor</option>-->
-<!--                                    <option value="Rso">Rso</option>-->
-<!--                                    <option value="Retailer">Retailer</option>-->
-<!--                                </SelectInput>-->
-<!--                                &lt;!&ndash; Type &ndash;&gt;-->
-<!--&lt;!&ndash;                                <SelectInput&ndash;&gt;-->
-<!--&lt;!&ndash;                                    label="Commission Type"&ndash;&gt;-->
-<!--&lt;!&ndash;                                    icon="font-awesome"&ndash;&gt;-->
-<!--&lt;!&ndash;                                    v-model="form.type"&ndash;&gt;-->
-<!--&lt;!&ndash;                                >&ndash;&gt;-->
-<!--&lt;!&ndash;                                    <option value="regional_budget">Regional Budget</option>&ndash;&gt;-->
-<!--&lt;!&ndash;                                    <option value="shera_partner">Shera Partner</option>&ndash;&gt;-->
-<!--&lt;!&ndash;                                    <option value="ga">GA</option>&ndash;&gt;-->
-<!--&lt;!&ndash;                                    <option value="roi_support">ROI Support</option>&ndash;&gt;-->
-<!--&lt;!&ndash;                                    <option value="sc_lifting">SC Lifting</option>&ndash;&gt;-->
-<!--&lt;!&ndash;                                    <option value="weekly_activation">Weekly Activation</option>&ndash;&gt;-->
-<!--&lt;!&ndash;                                    <option value="deno">Deno</option>&ndash;&gt;-->
-<!--&lt;!&ndash;                                    <option value="accelerate">Accelerate</option>&ndash;&gt;-->
-<!--&lt;!&ndash;                                    <option value="bundle_booster">Bundle Booster</option>&ndash;&gt;-->
-<!--&lt;!&ndash;                                    <option value="recharge_data_voice_mix">Recharge, Data, Voice, Mix</option>&ndash;&gt;-->
-<!--&lt;!&ndash;                                    <option value="bsp_rent">BSP Rent</option>&ndash;&gt;-->
-<!--&lt;!&ndash;                                    <option value="my_bl_referral">My BL Referral</option>&ndash;&gt;-->
-<!--&lt;!&ndash;                                    <option value="other">Other</option>&ndash;&gt;-->
-<!--&lt;!&ndash;                                </SelectInput>&ndash;&gt;-->
-<!--                                &lt;!&ndash; Month &ndash;&gt;-->
-<!--&lt;!&ndash;                                <TextInput&ndash;&gt;-->
-<!--&lt;!&ndash;                                    label="Month"&ndash;&gt;-->
-<!--&lt;!&ndash;                                    icon="calendar"&ndash;&gt;-->
-<!--&lt;!&ndash;                                    type="month"&ndash;&gt;-->
-<!--&lt;!&ndash;                                    v-model="form.month"&ndash;&gt;-->
-<!--&lt;!&ndash;                                />&ndash;&gt;-->
-<!--                                &lt;!&ndash; Receive Date &ndash;&gt;-->
-<!--&lt;!&ndash;                                <TextInput&ndash;&gt;-->
-<!--&lt;!&ndash;                                    label="Receive Date"&ndash;&gt;-->
-<!--&lt;!&ndash;                                    icon="calendar"&ndash;&gt;-->
-<!--&lt;!&ndash;                                    type="date"&ndash;&gt;-->
-<!--&lt;!&ndash;                                    v-model="form.receive_date"&ndash;&gt;-->
-<!--&lt;!&ndash;                                />&ndash;&gt;-->
-<!--                            </div>-->
-
-<!--&lt;!&ndash;                            <div class="text-right">&ndash;&gt;-->
-<!--&lt;!&ndash;                                <PrimaryButton>Apply Filter</PrimaryButton>&ndash;&gt;-->
-<!--&lt;!&ndash;                            </div>&ndash;&gt;-->
-<!--                        </form>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-        <!-- Filter Section End -->
-
-<!--        <p>{{ props.data.length }}</p>-->
-
-<!--        {{ props.data }}-->
 
         <!-- Table Section -->
 <!--        <div class="py-5">-->

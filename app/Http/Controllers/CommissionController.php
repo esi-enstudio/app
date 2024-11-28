@@ -24,45 +24,22 @@ class CommissionController extends Controller
      */
     public function index(Request $request)
     {
-        $filters = $request->only(['dd_house_id', 'for', 'type', 'month', 'received_date']);
+        $filters = $request->only(['house', 'for', 'type', 'month', 'receive_date']);
 
         $commissions = Commission::query()
-            ->when($filters['dd_house_id'] ?? null, fn($query, $dd_house_id) => $query->where('dd_house_id', $dd_house_id))
+            ->when($filters['house'] ?? null, fn($query, $dd_house_id) => $query->where('dd_house_id', $dd_house_id))
             ->when($filters['for'] ?? null, fn($query, $for) => $query->where('for', $for))
             ->when($filters['type'] ?? null, fn($query, $type) => $query->where('type', $type))
             ->when($filters['month'] ?? null, fn($query, $month) => $query->where('month', $month))
-            ->when($filters['received_date'] ?? null, fn($query, $received_date) => $query->whereDate('received_date', $received_date))
-            ->get();
+            ->when($filters['receive_date'] ?? null, fn($query, $received_date) => $query->whereDate('receive_date', $received_date))
+            ->paginate(5)
+            ->withQueryString();
 
         return Inertia::render('Service/Commission/Index', [
             'commissions' => $commissions,
             'filters' => $filters,
+            'houses' => DdHouse::all(['id','code','name']),
         ]);
-
-
-//        $commissions = Commission::when($request->input('house'), function ($q, $houseID){
-//                $q->where('dd_house_id', $houseID);
-//            })
-//            ->when($request->input('commissionFor'), function ($q, $for){
-//            $q->where('for', $for);
-//        })->get()->withQueryString();
-
-
-//        $query = Commission::query();
-//
-//        $query->when($request->input('house'), function ($q, $houseID){
-//            $q->where('dd_house_id', $houseID);
-//        });
-//        $query->when($request->input('commissionFor'), function ($q, $for){
-//            $q->where('for', $for);
-//        });
-//
-//        $commissions = $query->get();
-
-//        return Inertia::render('Service/Commission/Index',[
-//            'houses' => DdHouse::all(['id','code','name']),
-//            'data' => $commissions,
-//        ]);
 
 
 //        return Inertia::render('Service/Commission/Index', [
