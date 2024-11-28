@@ -22,19 +22,60 @@ class CommissionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): Response
+    public function index(Request $request)
     {
-        return Inertia::render('Service/Commission/Index', [
-            'commissions' => CommissionResource::collection(Commission::search($request->search)
-                ->latest()
-                ->paginate(5)
-                ->onEachSide(0)
-                ->withQueryString()),
+        $filters = $request->only(['dd_house_id', 'for', 'type', 'month', 'received_date']);
 
-            'houses' => DdHouse::all(['id','code','name']),
-            'searchTerm' => $request->search,
-            'status' => session('msg'),
+        $commissions = Commission::query()
+            ->when($filters['dd_house_id'] ?? null, fn($query, $dd_house_id) => $query->where('dd_house_id', $dd_house_id))
+            ->when($filters['for'] ?? null, fn($query, $for) => $query->where('for', $for))
+            ->when($filters['type'] ?? null, fn($query, $type) => $query->where('type', $type))
+            ->when($filters['month'] ?? null, fn($query, $month) => $query->where('month', $month))
+            ->when($filters['received_date'] ?? null, fn($query, $received_date) => $query->whereDate('received_date', $received_date))
+            ->get();
+
+        return Inertia::render('Service/Commission/Index', [
+            'commissions' => $commissions,
+            'filters' => $filters,
         ]);
+
+
+//        $commissions = Commission::when($request->input('house'), function ($q, $houseID){
+//                $q->where('dd_house_id', $houseID);
+//            })
+//            ->when($request->input('commissionFor'), function ($q, $for){
+//            $q->where('for', $for);
+//        })->get()->withQueryString();
+
+
+//        $query = Commission::query();
+//
+//        $query->when($request->input('house'), function ($q, $houseID){
+//            $q->where('dd_house_id', $houseID);
+//        });
+//        $query->when($request->input('commissionFor'), function ($q, $for){
+//            $q->where('for', $for);
+//        });
+//
+//        $commissions = $query->get();
+
+//        return Inertia::render('Service/Commission/Index',[
+//            'houses' => DdHouse::all(['id','code','name']),
+//            'data' => $commissions,
+//        ]);
+
+
+//        return Inertia::render('Service/Commission/Index', [
+//            'commissions' => CommissionResource::collection(Commission::search($request->search)
+//                ->latest()
+//                ->paginate(5)
+//                ->onEachSide(0)
+//                ->withQueryString()),
+//
+//            'houses' => DdHouse::all(['id','code','name']),
+//            'searchTerm' => $request->search,
+//            'status' => session('msg'),
+//        ]);
     }
 
     /**
@@ -133,10 +174,10 @@ class CommissionController extends Controller
     /**
      * Display the filtered resource.
      */
-    public function filter(Request $request, CommissionFilter $commissionFilter): Response
-    {
-        $commissions = $commissionFilter->apply(Commission::query())->get();
-
-        return Inertia::render('Service/Commission/Filter', ['commissions' => $commissions]);
-    }
+//    public function filter(Request $request, CommissionFilter $commissionFilter): Response
+//    {
+//        $commissions = $commissionFilter->apply(Commission::query())->get();
+//
+//        return Inertia::render('Service/Commission/Filter', ['commissions' => $commissions]);
+//    }
 }

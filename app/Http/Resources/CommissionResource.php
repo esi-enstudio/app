@@ -42,7 +42,7 @@ class CommissionResource extends JsonResource
             'retailer'      => new RetailerResource($this->retailer),
             'supervisor'    => User::firstWhere('id', $this->supervisor),
             'id'            => $this->id,
-            'for'           => Str::title($this->for),
+            'for'           => $this->for,
             'type'          => Str::title($this->type),
             'name'          => $this->name,
             'month'         => Carbon::parse($this->month)->format('M Y'),
