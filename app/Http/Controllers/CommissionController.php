@@ -2,29 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\CommissionExport;
 use App\Filters\CommissionFilter;
-use App\Http\Resources\CommissionResource;
 use App\Models\Commission;
-use App\Http\Requests\StoreCommissionRequest;
-use App\Http\Requests\UpdateCommissionRequest;
 use App\Models\DdHouse;
 use App\Models\Rso;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
-use Termwind\Components\Dd;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CommissionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
-        $filters = $request->only(['house', 'for', 'type', 'month', 'receive_date']);
+        $filters = $request->only([
+            'house', 'for', 'type', 'month', 'receive_date'
+        ]);
 
         $commissions = Commission::query()
             ->when($filters['house'] ?? null, fn($query, $dd_house_id) => $query->where('dd_house_id', $dd_house_id))
@@ -32,27 +31,17 @@ class CommissionController extends Controller
             ->when($filters['type'] ?? null, fn($query, $type) => $query->where('type', $type))
             ->when($filters['month'] ?? null, fn($query, $month) => $query->where('month', $month))
             ->when($filters['receive_date'] ?? null, fn($query, $received_date) => $query->whereDate('receive_date', $received_date))
+            ->latest()
             ->paginate(5)
+            ->onEachSide(0)
             ->withQueryString();
 
         return Inertia::render('Service/Commission/Index', [
             'commissions' => $commissions,
             'filters' => $filters,
             'houses' => DdHouse::all(['id','code','name']),
+            'status' => session('msg'),
         ]);
-
-
-//        return Inertia::render('Service/Commission/Index', [
-//            'commissions' => CommissionResource::collection(Commission::search($request->search)
-//                ->latest()
-//                ->paginate(5)
-//                ->onEachSide(0)
-//                ->withQueryString()),
-//
-//            'houses' => DdHouse::all(['id','code','name']),
-//            'searchTerm' => $request->search,
-//            'status' => session('msg'),
-//        ]);
     }
 
     /**
@@ -148,13 +137,11 @@ class CommissionController extends Controller
         return to_route('commission.index')->with('msg', 'Commission deleted successfully.');
     }
 
-    /**
-     * Display the filtered resource.
-     */
-//    public function filter(Request $request, CommissionFilter $commissionFilter): Response
-//    {
-//        $commissions = $commissionFilter->apply(Commission::query())->get();
-//
-//        return Inertia::render('Service/Commission/Filter', ['commissions' => $commissions]);
-//    }
+    public function export(Request $request)
+    {
+        $filters = $request->only([
+            'house', 'for', 'type', 'month', 'receive_date'
+        ]);
+        return Excel::download(new CommissionExport($filters), 'commissions.xlsx');
+    }
 }

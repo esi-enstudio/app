@@ -22,6 +22,8 @@ Route::middleware(['auth','verified'])->group(function () {
 
     // Filter Commission
     Route::post('/commission/filter', [ CommissionController::class, 'filter'])->name('commission.filter');
+    Route::get('/commission/export', [CommissionController::class, 'export'])->name('commission.export');
+
 
     Route::resources([
         // Users

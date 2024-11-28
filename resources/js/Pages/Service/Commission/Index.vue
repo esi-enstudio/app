@@ -4,11 +4,15 @@ import { ref } from 'vue';
 import SelectInput from "@/Components/SelectInput.vue";
 import {router} from "@inertiajs/vue3";
 import TextInput from "@/Components/TextInput.vue";
+import Pagination1 from "@/Components/Pagination1.vue";
+import PaginationWithoutLinks1 from "@/Components/PaginationWithoutLinks1.vue";
+import SessionMessage from "@/Components/SessionMessage.vue";
 
 // Props passed from the server
 const props = defineProps({
-    commissions: Array,
+    commissions: Object,
     filters: Object,
+    status: String,
     houses: Array, // Related data like DD Houses
 });
 
@@ -23,24 +27,41 @@ const filter = () => {
     });
 };
 
+// Reset Filters function
 const resetFilters = () => {
-    filters.value = {}
+    // Clear all filters
+    filters.value = {
+        dd_house_id: '',
+        for: '',
+        type: '',
+        month: '',
+        received_date: '',
+    };
+
+    // Refresh the page without filters
+    router.get(route('commission.index'), {}, {
+        preserveState: false,
+        preserveScroll: true,
+    });
+};
+
+const delCommission = (id, name) => {
+
+    if (confirm(`Are you sure to delete "${name}" ?`))
+    {
+        router.delete(route('commission.destroy', id));
+    }
 }
 
-console.log(filters)
-console.log(props.commissions)
-// const delCommission = (id, name) => {
-//
-//     if (confirm(`Are you sure to delete "${name}" ?`))
-//     {
-//         router.delete(route('commission.destroy', id));
-//     }
-// }
+const exportData = () => {
+    const queryParams = new URLSearchParams(filters.value).toString();
+    window.location.href = `${route('commission.export')}?${queryParams}`;
+};
 </script>
 
 <template>
     <Head title="Commission" />
-<!--    <SessionMessage :status="status"/>-->
+    <SessionMessage :status="status"/>
 
     <AuthenticatedLayout>
         <template #header>
@@ -60,7 +81,19 @@ console.log(props.commissions)
             <div class="mx-auto max-w-7xl sm:px-4 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                     <div class="p-3 text-gray-900 dark:text-gray-100 overflow-x-auto">
-                        <div class="grid lg:grid-cols-2 gap-6 mb-5">
+                        <div class="flex items-center justify-between mb-5">
+                            <!-- Section Title -->
+                            <p class="text-2xl">Commission Filter</p>
+
+                            <div class="flex items-center justify-between gap-3">
+                                <!-- Reset Button -->
+                                <button class="bg-red-600 py-2 px-5 rounded-md" @click="resetFilters"><i class="fa-solid fa-rotate"></i></button>
+                                <!-- Print Button -->
+                                <button @click="exportData" class="bg-green-600 py-2 px-5 rounded-md"><i class="fa-solid fa-file-excel"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="grid lg:grid-cols-5 gap-6 mb-5">
                             <!-- House -->
                             <SelectInput
                                 label="House"
@@ -73,7 +106,7 @@ console.log(props.commissions)
                                     :key="house.id"
                                     :value="house.id"
                                 >
-                                    {{house.code}} - {{house.name}}
+                                    {{house.code}}
                                 </option>
 
                                 <option v-if="props.houses.length < 1">
@@ -132,148 +165,98 @@ console.log(props.commissions)
                                 @change="filter"
                             />
                         </div>
-                        <button @click.prevent="resetFilters" class="bg-red-600 py-2 px-4 rounded-md text-white hover:bg-red-500">Reset</button>
                     </div>
                 </div>
             </div>
         </div>
         <!-- Filter Section End -->
 
-        <div>
-            <!-- Add similar dropdowns for 'type', 'month', and 'received_date' -->
-
-            <table>
-                <thead>
-                <tr>
-                    <th>DD House ID</th>
-                    <th>For</th>
-                    <th>Type</th>
-                    <th>Month</th>
-                    <th>Received Date</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="commission in commissions.data" :key="commission.id">
-                    <td>{{ commission.dd_house_id }}</td>
-                    <td>{{ commission.for }}</td>
-                    <td>{{ commission.type }}</td>
-                    <td>{{ commission.month }}</td>
-                    <td>{{ commission.receive_date }}</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-
         <!-- Table Section -->
-<!--        <div class="py-5">-->
-<!--            <div class="mx-auto max-w-7xl sm:px-4 lg:px-8">-->
-<!--                <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">-->
-<!--                    <div class="md:block hidden">-->
-<!--                        <div class="flex justify-end px-3 pt-4">-->
-<!--                            <TextInput-->
-<!--                                type="search"-->
-<!--                                icon="search"-->
-<!--                                v-model="search"-->
-<!--                                placeholder="Type something..."-->
-<!--                            />-->
-<!--                        </div>-->
-<!--                    </div>-->
+        <div class="py-5">
+            <div class="mx-auto max-w-7xl sm:px-4 lg:px-8">
+                <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
+                    <div class="p-3 text-gray-900 dark:text-gray-100 overflow-x-auto">
+                        <table class="w-full whitespace-nowrap">
+                            <thead>
+                            <tr>
+                                <th>SL</th>
+                                <th>House</th>
+                                <th>For/Type</th>
+                                <th>Name/Month</th>
+                                <th>Net Amount</th>
+                                <th>Receive Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
 
-<!--                    <div class="md:hidden block">-->
-<!--                        <div class="flex justify-end px-3 pt-4">-->
-<!--                            <TextInput-->
-<!--                                type="search"-->
-<!--                                class="w-full"-->
-<!--                                icon="search"-->
-<!--                                v-model="search"-->
-<!--                                placeholder="Type something..."-->
-<!--                            />-->
-<!--                        </div>-->
-<!--                    </div>-->
+                            <tbody>
 
-<!--                    <div class="p-3 text-gray-900 dark:text-gray-100 overflow-x-auto">-->
-<!--                        <table class="w-full whitespace-nowrap">-->
-<!--                            <thead>-->
-<!--                            <tr>-->
-<!--                                <th>SL</th>-->
-<!--                                <th>House</th>-->
-<!--                                <th>For/Type</th>-->
-<!--                                <th>Name/Month</th>-->
-<!--                                <th>Net Amount</th>-->
-<!--                                <th>Receive Date</th>-->
-<!--                                <th>Status</th>-->
-<!--                                <th>Action</th>-->
-<!--                            </tr>-->
-<!--                            </thead>-->
+                            <tr class="font-semibold" v-for="(commission, i) in props.commissions.data" :key="commission.id">
+                                <!-- SL -->
+                                <td>{{++i}}</td>
 
-<!--                            <tbody>-->
+                                <!-- House -->
+                                <td>
+                                    {{commission.dd_house.name}}
+                                    <p class="text-sm text-slate-400">{{commission.dd_house.code}}</p>
+                                </td>
 
-<!--                            <tr class="font-semibold" v-for="(commission, i) in props.commissions.data" :key="commission.id">-->
-<!--                                &lt;!&ndash; SL &ndash;&gt;-->
-<!--                                <td>{{++i}}</td>-->
+                                <!-- Commission For -->
+                                <td>
+                                    {{commission.for}}
+                                    <p class="text-sm text-slate-400">{{commission.c_type}}</p>
+                                </td>
 
-<!--                                &lt;!&ndash; House &ndash;&gt;-->
-<!--                                <td>-->
-<!--                                    {{commission.house.name}}-->
-<!--                                    <p class="text-sm text-slate-400">{{commission.house.code}}</p>-->
-<!--                                </td>-->
+                                <!-- Commission Name -->
+                                <td>
+                                    {{commission.name}}
+                                    <p class="text-sm text-slate-400">{{commission.month_name}}</p>
+                                </td>
 
-<!--                                &lt;!&ndash; Commission For &ndash;&gt;-->
-<!--                                <td>-->
-<!--                                    {{commission.for}}-->
-<!--                                    <p class="text-sm text-slate-400">{{commission.type}}</p>-->
-<!--                                </td>-->
+                                <!-- Net Amount -->
+                                <td>
+                                    {{commission.taka}}
+                                </td>
 
-<!--                                &lt;!&ndash; Commission Name &ndash;&gt;-->
-<!--                                <td>-->
-<!--                                    {{commission.name}}-->
-<!--                                    <p class="text-sm text-slate-400">{{commission.month}}</p>-->
-<!--                                </td>-->
+                                <!-- Receive Date -->
+                                <td>
+                                    {{commission.receive}}
+                                </td>
 
-<!--                                &lt;!&ndash; Net Amount &ndash;&gt;-->
-<!--                                <td>-->
-<!--                                    {{commission.amount}}-->
-<!--                                </td>-->
+                                <!-- Status -->
+                                <td class="text-center">
+                                    <span v-if="commission.status === 'pending'" class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">{{commission.c_status}}</span>
 
-<!--                                &lt;!&ndash; Receive Date &ndash;&gt;-->
-<!--                                <td>-->
-<!--                                    {{commission.receive_date}}-->
-<!--                                </td>-->
+                                    <span v-else class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">{{commission.c_status}}</span>
+                                </td>
 
-<!--                                &lt;!&ndash; Status &ndash;&gt;-->
-<!--                                <td class="text-center">-->
-<!--                                    <span v-if="commission.status === 'Pending'" class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">{{commission.status}}</span>-->
+                                <!-- Action -->
+                                <td class="text-center space-x-2">
+                                    <Link :href="route('commission.edit', commission.id)" class="hover:text-green-400">Edit</Link>
+                                    <button class="hover:text-red-500" @click="delCommission(commission.id, commission.name)">Delete</button>
+                                </td>
+                            </tr>
 
-<!--                                    <span v-else class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">{{commission.status}}</span>-->
-<!--                                </td>-->
+                            <tr v-if="props.commissions.data.length < 1">
+                                <td colspan="10">No data found.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-<!--                                &lt;!&ndash; Action &ndash;&gt;-->
-<!--                                <td class="text-center space-x-2">-->
-<!--                                    <Link :href="route('commission.edit', commission.id)" class="hover:text-green-400">Edit</Link>-->
-<!--                                    <button class="hover:text-red-500" @click="delCommission(commission.id, commission.name)">Delete</button>-->
-<!--                                </td>-->
-<!--                            </tr>-->
+                    <div class="px-3 pb-4">
+                        <div class="lg:block hidden">
+                            <Pagination1 :data="props.commissions"/>
+                        </div>
 
-<!--                            <tr v-if="props.commissions.data.length < 1">-->
-<!--                                <td colspan="10">No data found.</td>-->
-<!--                            </tr>-->
-<!--                            </tbody>-->
-<!--                        </table>-->
-<!--                    </div>-->
-
-<!--                    <div class="px-3 pb-4">-->
-<!--                        <div class="lg:block hidden">-->
-<!--                            <Pagination :links="props.commissions.meta"/>-->
-<!--                        </div>-->
-
-<!--                        <div class="lg:hidden block">-->
-<!--                            <PaginationWithoutLinks :links="props.commissions"/>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
+                        <div class="lg:hidden block">
+                            <PaginationWithoutLinks1 :data="props.commissions"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Table Section End -->
 
     </AuthenticatedLayout>
