@@ -1,26 +1,26 @@
 <script setup>
 
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import TextInput from "@/Components/TextInput.vue";
+import Pagination from "@/Components/Pagination.vue";
+import PaginationWithoutLinks from "@/Components/PaginationWithoutLinks.vue";
+import {ref, watch} from "vue";
+import {debounce} from "lodash";
+import {router} from "@inertiajs/vue3";
 
 
 const props = defineProps({
-    result: Object,
+    commissions: Array,
+    searchTerm: String,
 })
-console.log(props.result)
+console.log(props.commissions)
+
 // const search = ref(props.searchTerm)
 //
 // watch(search, debounce(
-//     (query) => router.get('/itopReplace/'+props.itopReplace.id, { search: query }, { preserveState:true }),
+//     (query) => router.get('/commission/filter', { search: query }, { preserveState:true }),
 //     500
 // ))
-
-// const delReplaceRecord = (id, name) => {
-//
-//     if (confirm(`Are you sure to delete "${name}"?`))
-//     {
-//         router.delete(route('itopReplace.destroy', id));
-//     }
-// }
 
 </script>
 
@@ -40,76 +40,109 @@ console.log(props.result)
             </div>
         </template>
 
-<!--        <div class="py-12">-->
-<!--            <div class="mx-auto max-w-7xl sm:px-4 lg:px-8">-->
-<!--                <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">-->
-
-<!--                    <div class="p-3 text-gray-900 dark:text-gray-100 overflow-x-auto">-->
-<!--                        <table class="w-full whitespace-nowrap">-->
-<!--                            <thead>-->
-<!--                            <tr>-->
-<!--                                <th>SL</th>-->
-<!--                                <th>House</th>-->
-<!--                                <th>Itop Number</th>-->
-<!--                                <th>Rso</th>-->
-<!--                                <th>Supervisor</th>-->
-<!--                                <th>Balance</th>-->
-<!--                                <th>Reason</th>-->
-<!--                                <th>Description</th>-->
-<!--                                <th>Requested From/By</th>-->
-<!--                                <th>Status</th>-->
-<!--                            </tr>-->
-<!--                            </thead>-->
-
-<!--                            <tbody>-->
-
-<!--                            <tr class="font-semibold">-->
-<!--                                &lt;!&ndash; SL &ndash;&gt;-->
-<!--                                <td></td>-->
-
-<!--                                &lt;!&ndash; House &ndash;&gt;-->
-<!--                                <td></td>-->
-
-<!--                                &lt;!&ndash; Itop Number &ndash;&gt;-->
-<!--                                <td></td>-->
-
-<!--                                &lt;!&ndash; Rso &ndash;&gt;-->
-<!--                                <td></td>-->
-
-<!--                                &lt;!&ndash; Supervisor &ndash;&gt;-->
-<!--                                <td></td>-->
-
-<!--                                &lt;!&ndash; Balance &ndash;&gt;-->
-<!--                                <td class="text-center"></td>-->
-
-<!--                                &lt;!&ndash; Reason &ndash;&gt;-->
-<!--                                <td class="text-center"></td>-->
-
-<!--                                &lt;!&ndash; Description &ndash;&gt;-->
-<!--                                <td class="text-center"></td>-->
-
-<!--                                &lt;!&ndash; Requested From &ndash;&gt;-->
-<!--                                <td class="text-center"></td>-->
-
-<!--                                &lt;!&ndash; Status &ndash;&gt;-->
-<!--                                <td class="text-center"></td>-->
-<!--                            </tr>-->
-<!--                            </tbody>-->
-<!--                        </table>-->
+        <!-- Table Section -->
+        <div class="py-12">
+            <div class="mx-auto max-w-7xl sm:px-4 lg:px-8">
+                <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
+<!--                    <div class="md:block hidden">-->
+<!--                        <div class="flex justify-end px-3 pt-4">-->
+<!--                            <TextInput-->
+<!--                                type="search"-->
+<!--                                icon="search"-->
+<!--                                v-model="search"-->
+<!--                                placeholder="Type something..."-->
+<!--                            />-->
+<!--                        </div>-->
 <!--                    </div>-->
 
-<!--&lt;!&ndash;                    <div class="px-3 pb-4">&ndash;&gt;-->
-<!--&lt;!&ndash;                        <div class="lg:block hidden">&ndash;&gt;-->
-<!--&lt;!&ndash;                            <Pagination :links="props.replaceHistory.meta"/>&ndash;&gt;-->
-<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--                    <div class="md:hidden block">-->
+<!--                        <div class="flex justify-end px-3 pt-4">-->
+<!--                            <TextInput-->
+<!--                                type="search"-->
+<!--                                class="w-full"-->
+<!--                                icon="search"-->
+<!--                                v-model="search"-->
+<!--                                placeholder="Type something..."-->
+<!--                            />-->
+<!--                        </div>-->
+<!--                    </div>-->
 
-<!--&lt;!&ndash;                        <div class="lg:hidden block">&ndash;&gt;-->
-<!--&lt;!&ndash;                            <PaginationWithoutLinks :links="props.replaceHistory"/>&ndash;&gt;-->
-<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
+                    <div class="p-3 text-gray-900 dark:text-gray-100 overflow-x-auto">
+                        <table class="w-full whitespace-nowrap">
+                            <thead>
+                            <tr>
+                                <th>SL</th>
+                                <th>House</th>
+                                <th>For/Type</th>
+                                <th>Name/Month</th>
+                                <th>Net Amount</th>
+                                <th>Receive Date</th>
+                                <th>Status</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+
+                            <tr class="font-semibold" v-for="(commission, i) in props.commissions" :key="commission.id">
+                                <!-- SL -->
+                                <td>{{++i}}</td>
+
+                                <!-- House -->
+                                <td>
+                                    {{commission.dd_house.name}}
+                                    <p class="text-sm text-slate-400">{{commission.dd_house.code}}</p>
+                                </td>
+
+                                <!-- Commission For -->
+                                <td>
+                                    {{commission.for}}
+                                    <p class="text-sm text-slate-400">{{commission.type}}</p>
+                                </td>
+
+                                <!-- Commission Name -->
+                                <td>
+                                    {{commission.name}}
+                                    <p class="text-sm text-slate-400">{{commission.month}}</p>
+                                </td>
+
+                                <!-- Net Amount -->
+                                <td>
+                                    {{commission.amount}}
+                                </td>
+
+                                <!-- Receive Date -->
+                                <td>
+                                    {{commission.receive_date}}
+                                </td>
+
+                                <!-- Status -->
+                                <td class="text-center">
+                                    <span v-if="commission.status === 'Pending'" class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">{{commission.status}}</span>
+
+                                    <span v-else class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">{{commission.status}}</span>
+                                </td>
+                            </tr>
+
+                            <tr v-if="props.commissions.length < 1">
+                                <td colspan="10">No data found.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+<!--                    <div class="px-3 pb-4">-->
+<!--                        <div class="lg:block hidden">-->
+<!--                            <Pagination :links="props.commissions.meta"/>-->
+<!--                        </div>-->
+
+<!--                        <div class="lg:hidden block">-->
+<!--                            <PaginationWithoutLinks :links="props.commissions"/>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </div>
+        <!-- Table Section End -->
 
     </AuthenticatedLayout>
 </template>

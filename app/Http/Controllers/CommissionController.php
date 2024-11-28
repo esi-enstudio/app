@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Filters\CommissionFilter;
 use App\Http\Resources\CommissionResource;
 use App\Models\Commission;
 use App\Http\Requests\StoreCommissionRequest;
@@ -132,16 +133,10 @@ class CommissionController extends Controller
     /**
      * Display the filtered resource.
      */
-    public function filter(Request $request)
+    public function filter(Request $request, CommissionFilter $commissionFilter): Response
     {
-        $commission = Commission::where([
-            ['dd_house_id', $request->house ?? ''],
-            ['for', $request->for ?? ''],
-            ['type', $request->type ?? ''],
-            ['month', $request->month ?? ''],
-            ['receive_date', $request->receive_date ?? ''],
-        ])->get();
-        dd($commission);
-        return Inertia::render('Service/Commission/Filter', ['result' => $request]);
+        $commissions = $commissionFilter->apply(Commission::query())->get();
+
+        return Inertia::render('Service/Commission/Filter', ['commissions' => $commissions]);
     }
 }

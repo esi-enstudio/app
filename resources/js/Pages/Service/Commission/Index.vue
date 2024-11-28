@@ -60,6 +60,7 @@ const delCommission = (id, name) => {
             </div>
         </template>
 
+        <!-- Filter Section -->
         <div class="py-5">
             <div class="mx-auto max-w-7xl sm:px-4 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
@@ -71,6 +72,7 @@ const delCommission = (id, name) => {
                                     label="House"
                                     icon="house"
                                     v-model="form.house"
+                                    :message="form.errors.house"
                                 >
                                     <option
                                         v-for="house in houses"
@@ -140,7 +142,9 @@ const delCommission = (id, name) => {
                 </div>
             </div>
         </div>
+        <!-- Filter Section End -->
 
+        <!-- Table Section -->
         <div class="py-5">
             <div class="mx-auto max-w-7xl sm:px-4 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
@@ -249,6 +253,8 @@ const delCommission = (id, name) => {
                 </div>
             </div>
         </div>
+        <!-- Table Section End -->
+
     </AuthenticatedLayout>
 </template>
 
