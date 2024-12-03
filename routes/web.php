@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\CommissionController;
+use App\Http\Controllers\LiftingController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -40,6 +42,12 @@ Route::middleware(['auth','verified'])->group(function () {
 
         // Commission
         'commission' => CommissionController::class,
+
+        // Lifting
+        'lifting' => LiftingController::class,
+
+        // Product
+        'product' => ProductController::class,
     ]);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

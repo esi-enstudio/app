@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\DdHouse;
+use App\Models\Product;
 use App\Models\Retailer;
 use App\Models\Rso;
 use App\Models\User;
@@ -21,6 +22,7 @@ class DatabaseSeeder extends Seeder
 //         DdHouse::factory(3)->create();
 //         Rso::factory(25)->create();
 //         Retailer::factory(250)->create();
+        Product::factory(20)->create();
 
         $this->call(DdHouseSeeder::class);
         $this->call(UserSeeder::class);

@@ -100,7 +100,7 @@ const showingNavigationDropdown = ref(false);
                                         <span class="inline-flex rounded-md">
                                             <button
                                                 type="button"
-                                                :class="route().current('itopReplace.*') || route().current('commission.*') ? 'inline-flex items-center px-1 pt-1 border-b-2 border-indigo-400 dark:border-green-600 text-sm font-medium leading-[3.7rem] text-gray-900 dark:text-gray-100 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out'
+                                                :class="route().current('itopReplace.*') || route().current('commission.*') || route().current('lifting.*') ? 'inline-flex items-center px-1 pt-1 border-b-2 border-indigo-400 dark:border-green-600 text-sm font-medium leading-[3.7rem] text-gray-900 dark:text-gray-100 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out'
                                                 : 'inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-[3.7rem] text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700 focus:outline-none focus:text-gray-700 dark:focus:text-gray-300 focus:border-gray-300 dark:focus:border-gray-700 transition duration-150 ease-in-out'"
                                             >
                                                 Services
@@ -129,6 +129,49 @@ const showingNavigationDropdown = ref(false);
                                             <!-- Commission -->
                                             <DropdownLink :href="route('commission.index')" :active="route().current('commission.*')">
                                                 Commission
+                                            </DropdownLink>
+
+                                            <!-- Lifting -->
+                                            <DropdownLink :href="route('lifting.index')" :active="route().current('lifting.*')">
+                                                Lifting
+                                            </DropdownLink>
+                                        </template>
+                                    </Dropdown>
+                                </div>
+                            </div>
+
+                            <!-- Inventory -->
+                            <div class="hidden sm:ms-6 sm:flex sm:items-center">
+                                <div class="relative ms-3">
+                                    <Dropdown align="right" width="48">
+                                        <template #trigger>
+                                        <span class="inline-flex rounded-md">
+                                            <button
+                                                type="button"
+                                                :class="route().current('product.*') ? 'inline-flex items-center px-1 pt-1 border-b-2 border-indigo-400 dark:border-green-600 text-sm font-medium leading-[3.7rem] text-gray-900 dark:text-gray-100 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out'
+                                                : 'inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-[3.7rem] text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700 focus:outline-none focus:text-gray-700 dark:focus:text-gray-300 focus:border-gray-300 dark:focus:border-gray-700 transition duration-150 ease-in-out'"
+                                            >
+                                                Inventory
+                                                <svg
+                                                    class="-me-0.5 ms-2 h-4 w-4"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 20 20"
+                                                    fill="currentColor"
+                                                >
+                                                    <path
+                                                        fill-rule="evenodd"
+                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                        clip-rule="evenodd"
+                                                    />
+                                                </svg>
+                                            </button>
+                                        </span>
+                                        </template>
+
+                                        <template #content>
+                                            <!-- Product -->
+                                            <DropdownLink :href="route('product.index')" :active="route().current('product.*')">
+                                                Product
                                             </DropdownLink>
                                         </template>
                                     </Dropdown>
