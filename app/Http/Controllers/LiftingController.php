@@ -78,7 +78,11 @@ class LiftingController extends Controller
      */
     public function edit(Lifting $lifting)
     {
-        //
+        return Inertia::render('Service/Lifting/Edit', [
+            'lifting' => $lifting,
+            'houses' => DdHouse::all(),
+            'products' => Product::all(), // Pass products for dropdowns
+        ]);
     }
 
     /**

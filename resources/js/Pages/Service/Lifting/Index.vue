@@ -15,7 +15,7 @@ const props = defineProps({
     // searchTerm: String,
     status: String,
 })
-console.log(props.liftings)
+
 // const search = ref(props.searchTerm)
 //
 // watch(search, debounce(
@@ -52,29 +52,6 @@ const delReplaceRecord = (id, number) => {
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-4 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
-<!--                    <div class="md:block hidden">-->
-<!--                        <div class="flex justify-end px-3 pt-4">-->
-<!--                            <TextInput-->
-<!--                                type="search"-->
-<!--                                icon="search"-->
-<!--                                v-model="search"-->
-<!--                                placeholder="Type something..."-->
-<!--                            />-->
-<!--                        </div>-->
-<!--                    </div>-->
-
-<!--                    <div class="md:hidden block">-->
-<!--                        <div class="flex justify-end px-3 pt-4">-->
-<!--                            <TextInput-->
-<!--                                type="search"-->
-<!--                                class="w-full"-->
-<!--                                icon="search"-->
-<!--                                v-model="search"-->
-<!--                                placeholder="Type something..."-->
-<!--                            />-->
-<!--                        </div>-->
-<!--                    </div>-->
-
                     <div class="p-3 text-gray-900 dark:text-gray-100 overflow-x-auto">
                         <table class="w-full">
                             <thead>
@@ -82,6 +59,7 @@ const delReplaceRecord = (id, number) => {
                                 <th>SL</th>
                                 <th>House</th>
                                 <th>Products</th>
+                                <th>Action</th>
                             </tr>
                             </thead>
 
@@ -92,34 +70,33 @@ const delReplaceRecord = (id, number) => {
                                 <td class="text-center">{{++i}}</td>
 
                                 <!-- House -->
-                                <td>
+                                <td class="text-center">
                                     {{lifting.dd_house.name}}
                                     <p class="text-sm text-slate-400">{{lifting.dd_house.code}}</p>
                                 </td>
 
                                 <!-- Products -->
-                                <td class="grid grid-cols-4 gap-4">
+                                <td class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-3">
                                     <div v-for="(item, index) in lifting.products" :key="index">
                                         <p>
                                             <span v-if="item.category !== 'SIM'">{{item.sub_category}},</span>
                                             {{item.code}}
                                         </p>
+                                        <p class="text-sm text-slate-400">Quantity: {{new Intl.NumberFormat('en-IN', {maximumSignificantDigits: 2}).format(item.quantity)}}p</p>
                                         <p class="text-xs text-slate-400">Lifting Price: {{item.lifting_price}}</p>
-                                        <p class="text-xs text-slate-400">Quantity: {{item.quantity}}p</p>
                                     </div>
                                 </td>
 
                                 <!-- Action -->
-<!--                                <td class="text-center space-x-2">-->
-<!--                                    <Link :href="route('itopReplace.show', itopReplace.id)" class="hover:text-green-400">Details</Link>-->
-<!--                                    <Link :href="route('itopReplace.edit', itopReplace.id)" class="hover:text-green-400">Edit</Link>-->
-<!--                                    <button class="hover:text-red-500" @click="delReplaceRecord(itopReplace.id, itopReplace.number)">Delete</button>-->
-<!--                                </td>-->
+                                <td class="text-center space-x-2">
+                                    <Link :href="route('lifting.edit', lifting.id)" class="hover:text-green-400">Edit</Link>
+                                    <button class="text-red-600 hover:text-red-500" @click="delLifting(lifting.id, lifting.dd_house.name)">Delete</button>
+                                </td>
                             </tr>
 
-<!--                            <tr v-if="props.itopReplaces.data.length < 1">-->
-<!--                                <td colspan="8">No data found.</td>-->
-<!--                            </tr>-->
+                            <tr v-if="props.liftings.data.length < 1">
+                                <td colspan="8">No data found.</td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
