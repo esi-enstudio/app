@@ -11,11 +11,11 @@ import PaginationWithoutLinks from "@/Components/PaginationWithoutLinks.vue";
 import Verified from "@/Components/Verified.vue";
 
 const props = defineProps({
-    // itopReplaces: Object,
+    liftings: Object,
     // searchTerm: String,
     status: String,
 })
-
+console.log(props.liftings)
 // const search = ref(props.searchTerm)
 //
 // watch(search, debounce(
@@ -52,53 +52,62 @@ const delReplaceRecord = (id, number) => {
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-4 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
-                    <div class="md:block hidden">
-                        <div class="flex justify-end px-3 pt-4">
-                            <TextInput
-                                type="search"
-                                icon="search"
-                                v-model="search"
-                                placeholder="Type something..."
-                            />
-                        </div>
-                    </div>
+<!--                    <div class="md:block hidden">-->
+<!--                        <div class="flex justify-end px-3 pt-4">-->
+<!--                            <TextInput-->
+<!--                                type="search"-->
+<!--                                icon="search"-->
+<!--                                v-model="search"-->
+<!--                                placeholder="Type something..."-->
+<!--                            />-->
+<!--                        </div>-->
+<!--                    </div>-->
 
-                    <div class="md:hidden block">
-                        <div class="flex justify-end px-3 pt-4">
-                            <TextInput
-                                type="search"
-                                class="w-full"
-                                icon="search"
-                                v-model="search"
-                                placeholder="Type something..."
-                            />
-                        </div>
-                    </div>
+<!--                    <div class="md:hidden block">-->
+<!--                        <div class="flex justify-end px-3 pt-4">-->
+<!--                            <TextInput-->
+<!--                                type="search"-->
+<!--                                class="w-full"-->
+<!--                                icon="search"-->
+<!--                                v-model="search"-->
+<!--                                placeholder="Type something..."-->
+<!--                            />-->
+<!--                        </div>-->
+<!--                    </div>-->
 
                     <div class="p-3 text-gray-900 dark:text-gray-100 overflow-x-auto">
-                        <table class="w-full whitespace-nowrap">
+                        <table class="w-full">
                             <thead>
                             <tr>
                                 <th>SL</th>
                                 <th>House</th>
-                                <th>Itop Number</th>
-                                <th>Rso</th>
-                                <th>Status</th>
-                                <th>Action</th>
+                                <th>Products</th>
                             </tr>
                             </thead>
 
                             <tbody>
 
-                            <tr class="font-semibold">
+                            <tr v-for="(lifting, i) in props.liftings.data" :key="lifting.id" class="font-semibold">
                                 <!-- SL -->
-                                <td>{{++i}}</td>
+                                <td class="text-center">{{++i}}</td>
 
                                 <!-- House -->
-<!--                                <td>-->
-<!--                                    {{itopReplace.house.name}}-->
-<!--                                    <p class="text-sm text-slate-400">{{itopReplace.house.code}}</p>-->
-<!--                                </td>-->
+                                <td>
+                                    {{lifting.dd_house.name}}
+                                    <p class="text-sm text-slate-400">{{lifting.dd_house.code}}</p>
+                                </td>
+
+                                <!-- Products -->
+                                <td class="grid grid-cols-4 gap-4">
+                                    <div v-for="(item, index) in lifting.products" :key="index">
+                                        <p>
+                                            <span v-if="item.category !== 'SIM'">{{item.sub_category}},</span>
+                                            {{item.code}}
+                                        </p>
+                                        <p class="text-xs text-slate-400">Lifting Price: {{item.lifting_price}}</p>
+                                        <p class="text-xs text-slate-400">Quantity: {{item.quantity}}p</p>
+                                    </div>
+                                </td>
 
                                 <!-- Action -->
 <!--                                <td class="text-center space-x-2">-->

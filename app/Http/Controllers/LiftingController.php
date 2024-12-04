@@ -19,7 +19,7 @@ class LiftingController extends Controller
     public function index()
     {
         return inertia('Service/Lifting/Index', [
-            'liftings' => Lifting::with('house')->get(),
+            'liftings' => Lifting::latest()->paginate(5),
             'products' => Product::all(),
             'status' => session('msg'),
         ]);
