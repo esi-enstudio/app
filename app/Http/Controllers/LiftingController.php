@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateLiftingRequest;
 use App\Models\DdHouse;
 use App\Models\Lifting;
 use App\Models\Product;
@@ -10,13 +11,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
+use Inertia\ResponseFactory;
 
 class LiftingController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Response|ResponseFactory
     {
         return inertia('Service/Lifting/Index', [
             'liftings' => Lifting::latest()->paginate(5),
@@ -76,7 +78,7 @@ class LiftingController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Lifting $lifting)
+    public function edit(Lifting $lifting): Response
     {
         return Inertia::render('Service/Lifting/Edit', [
             'lifting' => $lifting,
@@ -88,16 +90,31 @@ class LiftingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateLiftingRequest $request, Lifting $lifting)
+    public function update(UpdateLiftingRequest $request, Lifting $lifting): RedirectResponse
     {
-        //
+        $attributes = $request->validated();
+
+        $attributes['itopup'] = round(
+            ($attributes['deposit'] - array_reduce($attributes['products'], function ($carry, $product)
+                {
+                    return $carry + ($product['lifting_price'] * $product['quantity']);
+                }, 0)) / 0.9625
+        );
+
+        $attributes['user_id'] = Auth::id();
+
+        $lifting->update($attributes);
+
+        return to_route('lifting.index')->with('msg', 'Lifting data updated successfully!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Lifting $lifting)
+    public function destroy(Lifting $lifting): RedirectResponse
     {
-        //
+        $lifting->delete();
+
+        return to_route('lifting.index')->with('msg', 'Lifting data deleted successfully!');
     }
 }

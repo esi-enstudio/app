@@ -83,8 +83,11 @@ const delProduct = (id, name) => {
                                 <th>SL</th>
                                 <th>Name</th>
                                 <th>Code</th>
+                                <th>Category</th>
+                                <th>Sub Category</th>
                                 <th>Lifting Price</th>
                                 <th>Price</th>
+                                <th>Offer</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -95,8 +98,11 @@ const delProduct = (id, name) => {
                                 <td>{{++i}}</td>
                                 <td>{{product.name}}</td>
                                 <td>{{product.code}}</td>
+                                <td>{{product.category}}</td>
+                                <td>{{product.sub_category}}</td>
                                 <td>{{product.lifting_price}}</td>
                                 <td>{{product.face_value}}</td>
+                                <td>{{product.offer}}</td>
                                 <td>{{product.status}}</td>
                                 <td class="text-center space-x-2">
                                     <Link :href="route('product.edit', product.id)" class="hover:text-green-400">Edit</Link>

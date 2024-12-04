@@ -9,8 +9,11 @@ import SelectInput from "@/Components/SelectInput.vue";
 const form = useForm({
     name: null,
     code: null,
+    category: null,
+    sub_category: null,
     face_value: null,
     lifting_price: null,
+    offer: null,
 })
 
 </script>
@@ -54,6 +57,22 @@ const form = useForm({
                                     :message="form.errors.code"
                                 />
 
+                                <!-- Category -->
+                                <TextInput
+                                    label="Category"
+                                    icon="share"
+                                    v-model="form.category"
+                                    :message="form.errors.category"
+                                />
+
+                                <!-- Sub Category -->
+                                <TextInput
+                                    label="Sub Category"
+                                    icon="share"
+                                    v-model="form.sub_category"
+                                    :message="form.errors.sub_category"
+                                />
+
                                 <!-- Face Value -->
                                 <TextInput
                                     label="Face Value"
@@ -69,9 +88,17 @@ const form = useForm({
                                     v-model="form.lifting_price"
                                     :message="form.errors.lifting_price"
                                 />
+
+                                <!-- Offer -->
+                                <TextInput
+                                    label="Offer"
+                                    icon="share"
+                                    v-model="form.offer"
+                                    :message="form.errors.offer"
+                                />
                             </div>
 
-                            <PrimaryButton :disable="form.processing">Create</PrimaryButton>
+                            <PrimaryButton :disable="form.processing">Create new product</PrimaryButton>
                         </form>
                     </div>
                 </div>

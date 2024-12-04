@@ -13,8 +13,11 @@ const props = defineProps({
 const form = useForm({
     name: props.product.name,
     code: props.product.code,
+    category: props.product.category,
+    sub_category: props.product.sub_category,
     face_value: props.product.face_value,
     lifting_price: props.product.lifting_price,
+    offer: props.product.offer,
 })
 
 </script>
@@ -58,6 +61,22 @@ const form = useForm({
                                     :message="form.errors.code"
                                 />
 
+                                <!-- Category -->
+                                <TextInput
+                                    label="Category"
+                                    icon="share"
+                                    v-model="form.category"
+                                    :message="form.errors.category"
+                                />
+
+                                <!-- Sub Category -->
+                                <TextInput
+                                    label="Sub Category"
+                                    icon="share"
+                                    v-model="form.sub_category"
+                                    :message="form.errors.sub_category"
+                                />
+
                                 <!-- Face Value -->
                                 <TextInput
                                     label="Face Value"
@@ -72,6 +91,14 @@ const form = useForm({
                                     icon="share"
                                     v-model="form.lifting_price"
                                     :message="form.errors.lifting_price"
+                                />
+
+                                <!-- Offer -->
+                                <TextInput
+                                    label="Offer"
+                                    icon="share"
+                                    v-model="form.offer"
+                                    :message="form.errors.offer"
                                 />
                             </div>
 

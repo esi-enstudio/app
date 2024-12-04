@@ -45,9 +45,12 @@ class ProductController extends Controller
     {
         $attributes = $request->validate([
             'name' => ['nullable'],
-            'code' => ['nullable'],
+            'code' => ['required'],
+            'category' => ['required'],
+            'sub_category' => ['required'],
             'lifting_price' => ['nullable'],
-            'face_value' => ['nullable'],
+            'face_value' => ['required'],
+            'offer' => ['nullable'],
         ]);
 
         Product::create($attributes);
@@ -78,9 +81,12 @@ class ProductController extends Controller
     {
         $attributes = $request->validate([
             'name' => ['nullable'],
-            'code' => ['nullable'],
+            'code' => ['required'],
+            'category' => ['required'],
+            'sub_category' => ['required'],
             'lifting_price' => ['nullable'],
-            'face_value' => ['nullable'],
+            'face_value' => ['required'],
+            'offer' => ['nullable'],
         ]);
 
         $product->update($attributes);

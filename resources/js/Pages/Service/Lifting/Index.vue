@@ -23,11 +23,11 @@ const props = defineProps({
 //     500
 // ))
 
-const delReplaceRecord = (id, number) => {
+const delLifting = (id, house) => {
 
-    if (confirm(`Are you sure to delete "${number}"?`))
+    if (confirm(`Are you sure to delete "${house}"?`))
     {
-        router.delete(route('itopReplace.destroy', id));
+        router.delete(route('lifting.destroy', id));
     }
 }
 </script>
@@ -58,6 +58,7 @@ const delReplaceRecord = (id, number) => {
                             <tr>
                                 <th>SL</th>
                                 <th>House</th>
+                                <th>Itop-Up</th>
                                 <th>Products</th>
                                 <th>Action</th>
                             </tr>
@@ -75,15 +76,35 @@ const delReplaceRecord = (id, number) => {
                                     <p class="text-sm text-slate-400">{{lifting.dd_house.code}}</p>
                                 </td>
 
+                                <!-- ItopUp -->
+                                <td class="text-center">
+                                    <p title="Itop-Up Amount">
+                                        {{new Intl.NumberFormat('en-IN').format(lifting.itopup)}}
+                                    </p>
+                                    <p title="Bank deposit amount" class="text-sm text-slate-400">
+                                        {{new Intl.NumberFormat('en-IN').format(lifting.deposit)}}
+                                    </p>
+                                    <p class="text-xs text-slate-400">{{lifting.attempt}} Lifting</p>
+                                </td>
+
                                 <!-- Products -->
-                                <td class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-3">
-                                    <div v-for="(item, index) in lifting.products" :key="index">
-                                        <p>
-                                            <span v-if="item.category !== 'SIM'">{{item.sub_category}},</span>
-                                            {{item.code}}
-                                        </p>
-                                        <p class="text-sm text-slate-400">Quantity: {{new Intl.NumberFormat('en-IN', {maximumSignificantDigits: 2}).format(item.quantity)}}p</p>
-                                        <p class="text-xs text-slate-400">Lifting Price: {{item.lifting_price}}</p>
+                                <td>
+                                    <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-3">
+                                        <div v-for="(item, index) in lifting.products" :key="index">
+                                            <!-- Product Category, Sub Category, Code -->
+                                            <p v-if="item.code">
+                                                <span v-if="item.category !== 'SIM'">{{item.sub_category}},</span>
+                                                {{item.code}}
+                                            </p>
+
+                                            <!-- Product Quantity -->
+                                            <p v-if="item.quantity" class="text-sm text-slate-400">
+                                                Quantity: {{new Intl.NumberFormat('en-IN').format(item.quantity)}}p
+                                            </p>
+
+                                            <!-- Product Lifting Price -->
+                                            <p v-if="item.lifting_price" class="text-xs text-slate-400">Lifting Price: {{item.lifting_price}}</p>
+                                        </div>
                                     </div>
                                 </td>
 

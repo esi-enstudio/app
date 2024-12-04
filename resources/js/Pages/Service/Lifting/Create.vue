@@ -59,7 +59,7 @@ const removeProduct = (index) => {
 const populateProductDetails = (product) => {
     if (product.id) {
         const selectedProduct = props.products.find((p) => p.id === product.id);
-        console.log(selectedProduct)
+
         if (selectedProduct) {
             product.name = selectedProduct.name;
             product.code = selectedProduct.code;
@@ -118,6 +118,7 @@ const submit = () => {
                                         v-model="form.dd_house_id"
                                         :message="form.errors.dd_house_id"
                                     >
+                                        <option value="" disabled>Select a house</option>
                                         <option
                                             v-for="house in houses"
                                             :key="house.id"
@@ -170,7 +171,10 @@ const submit = () => {
                                         </div>
 
                                         <div class="flex items-center justify-between text-xs text-slate-500" v-if="product.id">
-                                            <p><strong>Category:</strong> {{ product.category }}</p>
+                                            <p>
+                                                <strong>Category:</strong> {{ product.category }}
+                                                <span v-if="product.sub_category">/ {{product.sub_category}}</span>
+                                            </p>
                                             <p><strong>Lifting Price:</strong> ${{ product.lifting_price }}</p>
                                         </div>
 
