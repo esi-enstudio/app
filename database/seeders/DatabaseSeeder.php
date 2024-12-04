@@ -22,12 +22,12 @@ class DatabaseSeeder extends Seeder
 //         DdHouse::factory(3)->create();
 //         Rso::factory(25)->create();
 //         Retailer::factory(250)->create();
-        Product::factory(20)->create();
 
         $this->call(DdHouseSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(RsoSeeder::class);
         $this->call(RetailerSeeder::class);
+        $this->call(ProductSeeder::class);
 
 
         User::factory()->create([

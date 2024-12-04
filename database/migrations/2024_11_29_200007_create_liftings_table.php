@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::create('liftings', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor( DdHouse::class);  // Distribution House ID
-            $table->foreignIdFor( User::class);     // User ID
-            $table->json('products');              // Products array
-            $table->integer('itopup');             // ITOP value
-            $table->integer('deposit');       // Bank Deposit
-            $table->string('attempt')->unique();
+            $table->foreignIdFor( DdHouse::class);
+            $table->foreignIdFor( User::class);
+            $table->json('products')->nullable();
+            $table->integer('itopup')->nullable();
+            $table->integer('deposit');
+            $table->string('attempt');
             $table->timestamps();
         });
     }

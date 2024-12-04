@@ -21,6 +21,7 @@ class LiftingController extends Controller
         return inertia('Service/Lifting/Index', [
             'liftings' => Lifting::with('house')->get(),
             'products' => Product::all(),
+            'status' => session('msg'),
         ]);
     }
 
@@ -31,7 +32,8 @@ class LiftingController extends Controller
     {
         return Inertia::render('Service/Lifting/Create', [
             'houses' => DdHouse::all(['id','code','name']),
-            'products' => Product::all()
+            'products' => Product::all(),
+            'status' => session('msg'),
         ]);
     }
 
@@ -41,11 +43,15 @@ class LiftingController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'dd_house_id' => 'required',
-            'products' => 'required|array',
-            'deposit' => 'required|numeric',
-            'itopup' => 'nullable',
-            'attempt' => 'required',
+            'dd_house_id'   => ['required'],
+            'products'      => ['required','array'],
+            'deposit'       => ['required','numeric','min:1'],
+            'itopup'        => ['nullable'],
+            'attempt'       => ['required'],
+        ],[
+
+        ],[
+            'dd_house_id' => 'house'
         ]);
 
         $validated['itopup'] = round(($validated['deposit'] - array_reduce($validated['products'], function ($carry, $product) {
@@ -56,7 +62,7 @@ class LiftingController extends Controller
 
         Lifting::create($validated);
 
-        return redirect()->back()->with('success', 'Lifting data added successfully!');
+        return to_route('lifting.create')->with('msg', 'Lifting data added successfully!');
     }
 
     /**

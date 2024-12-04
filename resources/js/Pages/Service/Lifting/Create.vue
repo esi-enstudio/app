@@ -12,6 +12,7 @@ const props = defineProps({
     houses: Object,
     products: Object,
     liftings: Object,
+    status: String,
 })
 
 const form = useForm({
@@ -19,11 +20,13 @@ const form = useForm({
     products: [
         {
             id: null,
-            category: null,
             name: null,
             code: null,
+            category: null,
+            sub_category: null,
             face_value: null,
             lifting_price: null,
+            offer: null,
             quantity: null,
         },
     ],
@@ -35,11 +38,13 @@ const form = useForm({
 const addProduct = () => {
     form.products.push({
         id: null,
-        category: null,
         name: null,
         code: null,
+        category: null,
+        sub_category: null,
         face_value: null,
         lifting_price: null,
+        offer: null,
         quantity: null,
     });
 };
@@ -56,11 +61,13 @@ const populateProductDetails = (product) => {
         const selectedProduct = props.products.find((p) => p.id === product.id);
         console.log(selectedProduct)
         if (selectedProduct) {
-            product.category = selectedProduct.category;
             product.name = selectedProduct.name;
             product.code = selectedProduct.code;
+            product.category = selectedProduct.category;
+            product.sub_category = selectedProduct.sub_category;
             product.face_value = selectedProduct.face_value;
             product.lifting_price = selectedProduct.lifting_price;
+            product.offer = selectedProduct.offer;
         }
     }
 };
@@ -125,10 +132,21 @@ const submit = () => {
                                     </SelectInput>
 
                                     <!-- Bank Deposit -->
-                                    <TextInput icon="bangladeshi-taka-sign" v-model="form.deposit" label="Bank Deposit" placeholder="Deposit amount" type="number" required/>
+                                    <TextInput
+                                        label="Bank Deposit"
+                                        icon="bangladeshi-taka-sign"
+                                        v-model="form.deposit"
+                                        :message="form.errors.deposit"
+                                        placeholder="Deposit amount"
+                                        type="number"
+                                    />
 
                                     <!-- Lifting Attempt -->
-                                    <SelectInput label="Lifting Attempt" v-model="form.attempt">
+                                    <SelectInput
+                                        label="Lifting Attempt"
+                                        v-model="form.attempt"
+                                        :message="form.errors.attempt"
+                                    >
                                         <option value="" disabled>Select a attempt</option>
                                         <option value="1st">1st Lifting</option>
                                         <option value="2nd">2nd Lifting</option>
@@ -151,9 +169,8 @@ const submit = () => {
                                             <TextInput v-model="product.quantity" placeholder="Quantity" type="number"/>
                                         </div>
 
-                                        <div class="flex items-center justify-between text-xs text-slate-600" v-if="product.id">
+                                        <div class="flex items-center justify-between text-xs text-slate-500" v-if="product.id">
                                             <p><strong>Category:</strong> {{ product.category }}</p>
-                                            <p><strong>Face Value:</strong> ${{ product.face_value }}</p>
                                             <p><strong>Lifting Price:</strong> ${{ product.lifting_price }}</p>
                                         </div>
 
@@ -166,7 +183,7 @@ const submit = () => {
                                             </button>
                                         </div>
                                     </div>
-                                    <button class="bg-green-500 px-4 py-1 rounded-full text-white mt-2" type="button" @click="addProduct">Add Product</button>
+                                    <button class="bg-indigo-600 hover:bg-indigo-500 px-4 py-1 rounded-full text-white mt-2" type="button" @click="addProduct">Add Product</button>
                                 </div>
                             </div>
 

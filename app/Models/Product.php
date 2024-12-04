@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @method static search( $search )
  * @method static create( array $attributes )
+ * @method static insert(array[] $array)
  */
 class Product extends Model
 {
