@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateLiftingRequest;
 use App\Http\Resources\DdHouseResource;
-use App\Http\Resources\LiftingResource;
 use App\Http\Resources\UserResource;
 use App\Models\DdHouse;
 use App\Models\Lifting;
@@ -27,13 +26,39 @@ class LiftingController extends Controller
         // Start building the query for filtered results
         $query = Lifting::query();
 
-        // Apply date range filter if provided
-        if ($request->filled('startDate') && $request->filled('endDate')) {
-            $query->whereBetween('created_at', [
-                Carbon::parse($request->startDate)->startOfDay(),
-                Carbon::parse($request->endDate)->endOfDay()
-            ]);
-        }
+        $allTimeGroupedData = $query->get()
+            ->groupBy(fn($lifting) => $lifting->ddHouse->name) // Group by house
+            ->map(function ($houseLiftings){
+                return $houseLiftings->flatMap(function ($lifting) {
+                    return collect($lifting->products);
+                })->groupBy('category') // Group by category
+                    ->map(function ($categoryProducts){
+                        return $categoryProducts->groupBy('sub_category') // Group by subcategory
+                        ->map(function ($subcategoryProducts){
+                            return $subcategoryProducts->groupBy('code') // Group by code
+                            ->map(function ($codeProducts) {
+                                return [
+                                    'total_quantity' => $codeProducts->sum('quantity'),
+                                ];
+                        });
+                    });
+                });
+            });
+
+
+
+
+//            ->flatMap(function ($lifting){
+//            return collect($lifting->products);
+//        })->groupBy('code')
+//            ->map(function ($products){
+//                return [
+//                    'code' => $products->first()['code'],
+//                    'total_quantity' => $products->sum('quantity'),
+//                ];
+//            })->values();
+
+        $allTimeDepositSum = $query->sum('deposit');
 
         // Current month total bank deposit amount
         $currentMonthDepositSum = Lifting::whereBetween('created_at', [
@@ -42,6 +67,7 @@ class LiftingController extends Controller
         ])->sum('deposit');
 
         // Filtered bank deposit amount
+        $filteredDepositSum = null;
         if ($request->filled('startDate') && $request->filled('endDate')) {
             $filteredDepositSum = Lifting::whereBetween('created_at', [
                 Carbon::parse($request->startDate)->startOfDay(),
@@ -49,7 +75,13 @@ class LiftingController extends Controller
             ])->sum('deposit');
         }
 
-//        dd($request->filled('startDate') && $request->filled('endDate'));
+        // Apply date range filter if provided
+        if ($request->filled('startDate') && $request->filled('endDate')) {
+            $query->whereBetween('created_at', [
+                Carbon::parse($request->startDate)->startOfDay(),
+                Carbon::parse($request->endDate)->endOfDay()
+            ]);
+        }
 
         // Get filtered lifting records
         $liftings = $query->latest()
@@ -70,12 +102,14 @@ class LiftingController extends Controller
 
         // Pass data and filters back to the frontend
         return Inertia::render('Service/Lifting/Index', [
-            'liftings' => $liftings,
-            'products' => Product::all(),
-            'status' => session('msg'),
-            'filters' => $request->only('startDate', 'endDate'),
-            'currentMonthDepositSum' => $currentMonthDepositSum,
-            'filteredDepositSum' => $filteredDepositSum,
+            'liftings'                  => $liftings,
+            'products'                  => Product::all(),
+            'status'                    => session('msg'),
+            'filters'                   => $request->only('startDate', 'endDate'),
+            'allTimeGroupedData'        => $allTimeGroupedData,
+            'allTimeDepositSum'         => $allTimeDepositSum,
+            'currentMonthDepositSum'    => $currentMonthDepositSum,
+            'filteredDepositSum'        => $filteredDepositSum,
         ]);
     }
 

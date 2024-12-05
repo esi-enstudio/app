@@ -12,11 +12,11 @@ const page = usePage();
 
 const props = defineProps({
     liftings: Object,
+    allTimeGroupedData: Array,
     filters: Object,
     status: String,
 })
-console.log('Filter sum: '+ new Intl.NumberFormat('en-IN').format(page.props.filteredDepositSum))
-
+console.log(props.allTimeGroupedData)
 // Reactive filters object
 const filters = ref({ ...props.filters });
 
@@ -70,11 +70,32 @@ const delLifting = (id, house) => {
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-4 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
-                    <div class="p-3 text-gray-900 dark:text-gray-100 overflow-x-auto">
+                    <div class="grid lg:grid-cols-3 p-3 text-gray-900 dark:text-gray-100">
+                        <div>
+                            <h3 class="font-semibold">All Time Record</h3>
+                            <ul v-for="(categories, houseName) in props.allTimeGroupedData" :key="houseName">
+                                <li>{{houseName}}</li>
+                                <ul v-for="(subcategories, category) in categories" :key="category" class="pl-5">
+                                    <li>{{ category }}</li>
+                                    <ul v-for="(codes, subcategory) in subcategories" :key="subcategory" class="pl-5">
+                                        <li>{{subcategory}}</li>
+                                        <ul v-for="(details, code) in codes" :key="code" class="pl-5">
+                                            <li>{{code}}: {{details.total_quantity}}</li>
+                                        </ul>
+                                    </ul>
+                                </ul>
+                            </ul>
+                        </div>
 
-                        <p>Deposit: {{new Intl.NumberFormat('en-IN', {style: 'currency', currency: 'BDT'}).format(page.props.currentMonthDepositSum)}}</p>
-                        <p>Total Deposit: {{new Intl.NumberFormat('en-IN', {style: 'currency', currency: 'BDT'}).format(page.props.totalDepositSum)}}</p>
+                        <div>
+                            <h3 class="font-semibold">Current Month Record</h3>
+                            <p>Deposit: {{new Intl.NumberFormat('en-IN').format(page.props.currentMonthDepositSum)}}</p>
+                        </div>
 
+                        <div>
+                            <h3 class="font-semibold">Filtered Record</h3>
+                            <p>Deposit: {{new Intl.NumberFormat('en-IN').format(page.props.filteredDepositSum)}}</p>
+                        </div>
                     </div>
                 </div>
             </div>

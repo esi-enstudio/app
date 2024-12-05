@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\Searchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @method static latest()
@@ -34,8 +35,13 @@ class DdHouse extends Model
      * Relationship with User model
      *
      */
-    public function rso()
+    public function rso(): HasMany
     {
         return $this->hasMany(Rso::class);
+    }
+
+    public function liftings(): HasMany
+    {
+        return $this->hasMany(Lifting::class);
     }
 }
