@@ -22,10 +22,14 @@ const form = useForm({
 
     <AuthenticatedLayout>
         <template #header>
-            <div>
+            <div class="flex items-center justify-between">
                 <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
                     Create new replace
                 </h2>
+
+                <div>
+                    <Link :href="route('itopReplace.index')" class="hover:text-green-400">Back to list</Link>
+                </div>
             </div>
         </template>
 
@@ -33,9 +37,6 @@ const form = useForm({
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                     <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <div class="mb-4 text-right">
-                            <Link :href="route('itopReplace.index')" class="hover:text-green-400">Back to list</Link>
-                        </div>
 
                         <form @submit.prevent="form.post(route('itopReplace.store'))">
                             <div class="grid md:grid-cols-2 gap-6">

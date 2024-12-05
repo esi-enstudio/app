@@ -10,15 +10,17 @@ import SessionMessage from "@/Components/SessionMessage.vue";
 import PaginationWithoutLinks from "@/Components/PaginationWithoutLinks.vue";
 import Verified from "@/Components/Verified.vue";
 import SelectInput from "@/Components/SelectInput.vue";
+import Pagination1 from "@/Components/Pagination1.vue";
+import PaginationWithoutLinks1 from "@/Components/PaginationWithoutLinks1.vue";
 
 const props = defineProps({
     liftings: Object,
     filters: Object,
     status: String,
-    filteredDepositTotal: String,
-    unfilteredDepositTotal: String,
+    filteredDepositTotal: Number,
+    unfilteredDepositTotal: Number,
 })
-console.log(props.filteredDepositTotal)
+
 // Reactive filters object
 const filters = ref({ ...props.filters });
 
@@ -74,9 +76,20 @@ const delLifting = (id, house) => {
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                     <div class="p-3 text-gray-900 dark:text-gray-100 overflow-x-auto">
 
-                        <div class="flex items-center justify-between mb-5">
-                            <p>Total Sc Amount: </p>
+                        <p>Deposit: {{new Intl.NumberFormat('en-IN', {style: 'currency', currency: 'BDT'}).format(filteredDepositTotal)}}</p>
+                        <p>Total Deposit: {{new Intl.NumberFormat('en-IN', {style: 'currency', currency: 'BDT'}).format(unfilteredDepositTotal)}}</p>
 
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="py-5">
+            <div class="mx-auto max-w-7xl sm:px-4 lg:px-8">
+                <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
+                    <div class="p-3 text-gray-900 dark:text-gray-100 overflow-x-auto">
+
+                        <div class="flex justify-end mb-5">
                             <div class="flex items-end gap-2">
                                 <!-- Start Date -->
                                 <TextInput
@@ -174,11 +187,11 @@ const delLifting = (id, house) => {
 
                     <div class="px-3 pb-4">
                         <div class="lg:block hidden">
-<!--                            <Pagination :links="props.itopReplaces.meta"/>-->
+                            <Pagination1 :data="props.liftings"/>
                         </div>
 
                         <div class="lg:hidden block">
-<!--                            <PaginationWithoutLinks :links="props.itopReplaces"/>-->
+                            <PaginationWithoutLinks1 :data="props.liftings"/>
                         </div>
                     </div>
                 </div>

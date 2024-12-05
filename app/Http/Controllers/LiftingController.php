@@ -52,33 +52,15 @@ class LiftingController extends Controller
             ->onEachSide(0)
             ->withQueryString();
 
-        // Calculate deposit totals
-        $filteredDepositTotal = $query->sum('deposit'); // Sum for filtered records
-        $unfilteredDepositTotal = Lifting::sum('deposit'); // Sum for all records
-
         // Pass data and filters back to the frontend
         return Inertia::render('Service/Lifting/Index', [
             'liftings' => $liftings,
             'products' => Product::all(),
             'status' => session('msg'),
             'filters' => $request->only('startDate', 'endDate'),
-            'filteredDepositTotal' => $filteredDepositTotal,
-            'unfilteredDepositTotal' => $unfilteredDepositTotal,
+            'filteredDepositTotal' => $query->sum('deposit'),
+            'unfilteredDepositTotal' => Lifting::sum('deposit'),
         ]);
-
-
-//        return inertia('Service/Lifting/Index', [
-//            'liftings' => LiftingResource::collection(
-//                Lifting::when($request->filled('startDate') && $request->filled('endDate'), fn($query) => $query->whereBetween('created_at', [$start_date, $end_date]))
-//                    ->latest()
-//                    ->paginate(5)
-//                    ->onEachSide(0)
-//                    ->withQueryString()
-//            ),
-//            'products' => Product::all(),
-//            'status' => session('msg'),
-//            'filters' => $request->only('startDate', 'endDate'),
-//        ]);
     }
 
     /**
