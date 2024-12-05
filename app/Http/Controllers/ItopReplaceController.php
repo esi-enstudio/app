@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ItopReplaceResource;
-use App\Models\DdHouse;
 use App\Models\ItopReplace;
 use App\Models\Retailer;
-use App\Models\Rso;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;

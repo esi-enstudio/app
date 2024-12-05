@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateLiftingRequest;
+use App\Http\Resources\DdHouseResource;
+use App\Http\Resources\LiftingResource;
+use App\Http\Resources\UserResource;
 use App\Models\DdHouse;
 use App\Models\Lifting;
 use App\Models\Product;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,13 +22,63 @@ class LiftingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response|ResponseFactory
+    public function index(Request $request): Response|ResponseFactory
     {
-        return inertia('Service/Lifting/Index', [
-            'liftings' => Lifting::latest()->paginate(5),
+        $start_date = Carbon::parse($request->startDate)->startOfDay();
+        $end_date = Carbon::parse($request->endDate)->endOfDay();
+
+        // Start building the query for filtered results
+        $query = Lifting::query();
+
+        // Apply date range filter if provided
+        if ($request->filled('startDate') && $request->filled('endDate')) {
+            $query->whereBetween('created_at', [$start_date, $end_date]);
+        }
+
+        // Get filtered lifting records
+        $liftings = $query->latest()
+            ->paginate(5)
+            ->through(fn($lifting) => [
+                'id'        => $lifting->id,
+                'house'     => new DdHouseResource($lifting->ddHouse),
+                'user'      => new UserResource($lifting->user),
+                'products'  => $lifting->products,
+                'itopup'    => $lifting->itopup,
+                'deposit'   => $lifting->deposit,
+                'attempt'   => $lifting->attempt,
+                'created'   => Carbon::parse($lifting->created_at)->toDayDateTimeString(),
+                'updated'   => Carbon::parse($lifting->updated_at)->toDayDateTimeString(),
+            ])
+            ->onEachSide(0)
+            ->withQueryString();
+
+        // Calculate deposit totals
+        $filteredDepositTotal = $query->sum('deposit'); // Sum for filtered records
+        $unfilteredDepositTotal = Lifting::sum('deposit'); // Sum for all records
+
+        // Pass data and filters back to the frontend
+        return Inertia::render('Service/Lifting/Index', [
+            'liftings' => $liftings,
             'products' => Product::all(),
             'status' => session('msg'),
+            'filters' => $request->only('startDate', 'endDate'),
+            'filteredDepositTotal' => $filteredDepositTotal,
+            'unfilteredDepositTotal' => $unfilteredDepositTotal,
         ]);
+
+
+//        return inertia('Service/Lifting/Index', [
+//            'liftings' => LiftingResource::collection(
+//                Lifting::when($request->filled('startDate') && $request->filled('endDate'), fn($query) => $query->whereBetween('created_at', [$start_date, $end_date]))
+//                    ->latest()
+//                    ->paginate(5)
+//                    ->onEachSide(0)
+//                    ->withQueryString()
+//            ),
+//            'products' => Product::all(),
+//            'status' => session('msg'),
+//            'filters' => $request->only('startDate', 'endDate'),
+//        ]);
     }
 
     /**

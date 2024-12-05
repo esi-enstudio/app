@@ -9,22 +9,42 @@ import TextInput from "@/Components/TextInput.vue";
 import SessionMessage from "@/Components/SessionMessage.vue";
 import PaginationWithoutLinks from "@/Components/PaginationWithoutLinks.vue";
 import Verified from "@/Components/Verified.vue";
+import SelectInput from "@/Components/SelectInput.vue";
 
 const props = defineProps({
     liftings: Object,
-    // searchTerm: String,
+    filters: Object,
     status: String,
+    filteredDepositTotal: String,
+    unfilteredDepositTotal: String,
 })
+console.log(props.filteredDepositTotal)
+// Reactive filters object
+const filters = ref({ ...props.filters });
 
-// const search = ref(props.searchTerm)
-//
-// watch(search, debounce(
-//     (query) => router.get('/itopReplace', { search: query }, { preserveState:true }),
-//     500
-// ))
+// Filter function to trigger server-side filtering
+const filter = () => {
+    router.get(route('lifting.index'), filters.value, {
+        preserveState: true,
+        preserveScroll: true,
+    });
+};
 
+// Reset Filters function
+const resetFilters = () => {
+    // Clear all filters
+    filters.value = {
+        startDate: null,
+        endDate: null,
+    };
+
+    // Refresh the page without filters
+    router.get(route('lifting.index'), {}, {
+        preserveState: false,
+        preserveScroll: true,
+    });
+}
 const delLifting = (id, house) => {
-
     if (confirm(`Are you sure to delete "${house}"?`))
     {
         router.delete(route('lifting.destroy', id));
@@ -53,7 +73,36 @@ const delLifting = (id, house) => {
             <div class="mx-auto max-w-7xl sm:px-4 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                     <div class="p-3 text-gray-900 dark:text-gray-100 overflow-x-auto">
-                        <table class="w-full">
+
+                        <div class="flex items-center justify-between mb-5">
+                            <p>Total Sc Amount: </p>
+
+                            <div class="flex items-end gap-2">
+                                <!-- Start Date -->
+                                <TextInput
+                                    v-model="filters.startDate"
+                                    @change="filter"
+                                    label="Start Date"
+                                    icon="calendar"
+                                    type="date"
+                                />
+
+                                <!-- End Date -->
+                                <TextInput
+                                    v-model="filters.endDate"
+                                    @change="filter"
+                                    label="End Date"
+                                    icon="calendar"
+                                    type="date"
+                                />
+
+                                <!-- Reset Button -->
+                                <button class="bg-red-600 text-white py-2 px-5 rounded-md" @click="resetFilters"><i class="fa-solid fa-rotate"></i></button>
+                            </div>
+                        </div>
+
+
+                        <table class="w-full whitespace-nowrap">
                             <thead>
                             <tr>
                                 <th>SL</th>
@@ -72,8 +121,8 @@ const delLifting = (id, house) => {
 
                                 <!-- House -->
                                 <td class="text-center">
-                                    {{lifting.dd_house.name}}
-                                    <p class="text-sm text-slate-400">{{lifting.dd_house.code}}</p>
+                                    {{lifting.house.data.name}}
+                                    <p class="text-sm text-slate-400">{{lifting.house.data.code}}</p>
                                 </td>
 
                                 <!-- ItopUp -->
@@ -81,15 +130,16 @@ const delLifting = (id, house) => {
                                     <p title="Itop-Up Amount">
                                         {{new Intl.NumberFormat('en-IN').format(lifting.itopup)}}
                                     </p>
-                                    <p title="Bank deposit amount" class="text-sm text-slate-400">
+                                    <p title="Bank deposit amount" class="text-sm text-green-400">
                                         {{new Intl.NumberFormat('en-IN').format(lifting.deposit)}}
                                     </p>
                                     <p class="text-xs text-slate-400">{{lifting.attempt}} Lifting</p>
+                                    <p class="text-xs text-slate-400">{{ lifting.created }}</p>
                                 </td>
 
                                 <!-- Products -->
                                 <td>
-                                    <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-3">
+                                    <div class="grid xl:grid-cols-4 lg:grid-cols-3 gap-4">
                                         <div v-for="(item, index) in lifting.products" :key="index">
                                             <!-- Product Category, Sub Category, Code -->
                                             <p v-if="item.code">
@@ -103,7 +153,7 @@ const delLifting = (id, house) => {
                                             </p>
 
                                             <!-- Product Lifting Price -->
-                                            <p v-if="item.lifting_price" class="text-xs text-slate-400">Lifting Price: {{item.lifting_price}}</p>
+                                            <p v-if="item.lifting_price" class="text-xs text-slate-400">Lifting Price: {{new Intl.NumberFormat('en-IN', {style: 'currency', currency: 'BDT', maximumSignificantDigits: 8}).format(item.lifting_price)}}</p>
                                         </div>
                                     </div>
                                 </td>

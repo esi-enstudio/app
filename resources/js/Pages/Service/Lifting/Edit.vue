@@ -182,7 +182,7 @@ watch(() => form.products.map((p) => p.id), () => {
                                 </div>
                             </div>
 
-                            <PrimaryButton class="" :disable="form.processing">Create new lifting</PrimaryButton>
+                            <PrimaryButton class="" :disable="form.processing">Save Changes</PrimaryButton>
                         </form>
                     </div>
                 </div>
