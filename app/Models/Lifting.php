@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static create( array $validated )
  * @method static latest()
  * @method static sum(string $string)
+ * @method static whereBetween(string $string, array $array)
  */
 class Lifting extends Model
 {

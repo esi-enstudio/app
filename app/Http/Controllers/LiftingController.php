@@ -24,33 +24,49 @@ class LiftingController extends Controller
      */
     public function index(Request $request): Response|ResponseFactory
     {
-        $start_date = Carbon::parse($request->startDate)->startOfDay();
-        $end_date = Carbon::parse($request->endDate)->endOfDay();
-
         // Start building the query for filtered results
         $query = Lifting::query();
 
         // Apply date range filter if provided
         if ($request->filled('startDate') && $request->filled('endDate')) {
-            $query->whereBetween('created_at', [$start_date, $end_date]);
+            $query->whereBetween('created_at', [
+                Carbon::parse($request->startDate)->startOfDay(),
+                Carbon::parse($request->endDate)->endOfDay()
+            ]);
         }
+
+        // Current month total bank deposit amount
+        $currentMonthDepositSum = Lifting::whereBetween('created_at', [
+            Carbon::now()->startOfMonth(),
+            Carbon::now()->endOfMonth(),
+        ])->sum('deposit');
+
+        // Filtered bank deposit amount
+        if ($request->filled('startDate') && $request->filled('endDate')) {
+            $filteredDepositSum = Lifting::whereBetween('created_at', [
+                Carbon::parse($request->startDate)->startOfDay(),
+                Carbon::parse($request->endDate)->endOfDay()
+            ])->sum('deposit');
+        }
+
+//        dd($request->filled('startDate') && $request->filled('endDate'));
 
         // Get filtered lifting records
         $liftings = $query->latest()
-            ->paginate(5)
-            ->through(fn($lifting) => [
-                'id'        => $lifting->id,
-                'house'     => new DdHouseResource($lifting->ddHouse),
-                'user'      => new UserResource($lifting->user),
-                'products'  => $lifting->products,
-                'itopup'    => $lifting->itopup,
-                'deposit'   => $lifting->deposit,
-                'attempt'   => $lifting->attempt,
-                'created'   => Carbon::parse($lifting->created_at)->toDayDateTimeString(),
-                'updated'   => Carbon::parse($lifting->updated_at)->toDayDateTimeString(),
-            ])
-            ->onEachSide(0)
-            ->withQueryString();
+           ->paginate(5)
+           ->through(fn($lifting) => [
+               'id'        => $lifting->id,
+               'house'     => new DdHouseResource($lifting->ddHouse),
+               'user'      => new UserResource($lifting->user),
+               'products'  => $lifting->products,
+               'itopup'    => $lifting->itopup,
+               'deposit'   => $lifting->deposit,
+               'attempt'   => $lifting->attempt,
+               'created'   => Carbon::parse($lifting->created_at)->toDayDateTimeString(),
+               'updated'   => Carbon::parse($lifting->updated_at)->toDayDateTimeString(),
+           ])
+           ->onEachSide(0)
+           ->withQueryString();
 
         // Pass data and filters back to the frontend
         return Inertia::render('Service/Lifting/Index', [
@@ -58,8 +74,8 @@ class LiftingController extends Controller
             'products' => Product::all(),
             'status' => session('msg'),
             'filters' => $request->only('startDate', 'endDate'),
-            'filteredDepositTotal' => $query->sum('deposit'),
-            'unfilteredDepositTotal' => Lifting::sum('deposit'),
+            'currentMonthDepositSum' => $currentMonthDepositSum,
+            'filteredDepositSum' => $filteredDepositSum,
         ]);
     }
 
