@@ -45,6 +45,29 @@ class LiftingController extends Controller
                 });
             });
 
+        $currentMonthGroupedData = $query->whereBetween('created_at', [
+            Carbon::now()->startOfMonth(),
+            Carbon::now()->endOfMonth(),
+        ])
+            ->get()
+            ->groupBy(fn($lifting) => $lifting->ddHouse->name) // Group by house
+            ->map(function ($houseLiftings){
+                return $houseLiftings->flatMap(function ($lifting) {
+                    return collect($lifting->products);
+                })->groupBy('category') // Group by category
+                ->map(function ($categoryProducts){
+                    return $categoryProducts->groupBy('sub_category') // Group by subcategory
+                    ->map(function ($subcategoryProducts){
+                        return $subcategoryProducts->groupBy('code') // Group by code
+                        ->map(function ($codeProducts) {
+                            return [
+                                'total_quantity' => $codeProducts->sum('quantity'),
+                            ];
+                        });
+                    });
+                });
+            });
+
 
 
 
@@ -107,6 +130,7 @@ class LiftingController extends Controller
             'status'                    => session('msg'),
             'filters'                   => $request->only('startDate', 'endDate'),
             'allTimeGroupedData'        => $allTimeGroupedData,
+            'currentMonthGroupedData'        => $currentMonthGroupedData,
             'allTimeDepositSum'         => $allTimeDepositSum,
             'currentMonthDepositSum'    => $currentMonthDepositSum,
             'filteredDepositSum'        => $filteredDepositSum,
