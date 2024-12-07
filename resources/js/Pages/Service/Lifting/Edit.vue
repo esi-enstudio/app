@@ -155,7 +155,7 @@ watch(() => form.products.map((p) => p.id), () => {
                                             <SelectInput v-model="product.id">
                                                 <option value="" disabled>Select a product</option>
                                                 <option v-for="p in products" :key="p.id" :value="p.id">
-                                                    {{ p.name }} ({{ p.code }})
+                                                    {{p.sub_category + ' - ' + p.code }}
                                                 </option>
                                             </SelectInput>
                                             <TextInput v-model="product.quantity" placeholder="Quantity" type="number"/>

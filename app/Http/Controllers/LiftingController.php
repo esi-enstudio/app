@@ -24,9 +24,9 @@ class LiftingController extends Controller
     public function index(Request $request): Response|ResponseFactory
     {
         // Start building the query for filtered results
-        $query = Lifting::query();
+        $liftings = Lifting::query();
 
-        $allTimeGroupedData = $query->get()
+        $allTimeGroupedData = $liftings->get()
             ->groupBy(fn($lifting) => $lifting->ddHouse->name) // Group by house
             ->map(function ($houseLiftings){
                 return $houseLiftings->flatMap(function ($lifting) {
@@ -35,17 +35,31 @@ class LiftingController extends Controller
                     ->map(function ($categoryProducts){
                         return $categoryProducts->groupBy('sub_category') // Group by subcategory
                         ->map(function ($subcategoryProducts){
-                            return $subcategoryProducts->groupBy('code') // Group by code
-                            ->map(function ($codeProducts) {
-                                return [
-                                    'total_quantity' => $codeProducts->sum('quantity'),
-                                ];
-                        });
+                            $totalLiftingPrice = $subcategoryProducts->sum(function ($product){
+                                return $product['lifting_price'] * $product['quantity'];
+                            });
+                            $totalPrice = $subcategoryProducts->sum(function ($product){
+                                return $product['face_value'] * $product['quantity'];
+                            });
+
+                            return [
+                                'total_quantity' => $subcategoryProducts->sum('quantity'),
+                                'total_price' => $totalPrice,
+                                'total_lifting_price' => $totalLiftingPrice,
+                                'products' => $subcategoryProducts->groupBy('code')->map(function ($codeProducts){
+                                    return [
+                                        'total_quantity' => $codeProducts->sum('quantity'),
+                                        'total_price' => $codeProducts->sum(function ($product) {
+                                            return $product['lifting_price'] * $product['quantity'];
+                                        }),
+                                    ];
+                                })
+                            ];
                     });
                 });
             });
 
-        $currentMonthGroupedData = $query->whereBetween('created_at', [
+        $currentMonthGroupedData = $liftings->whereBetween('created_at', [
             Carbon::now()->startOfMonth(),
             Carbon::now()->endOfMonth(),
         ])
@@ -68,21 +82,6 @@ class LiftingController extends Controller
                 });
             });
 
-
-
-
-//            ->flatMap(function ($lifting){
-//            return collect($lifting->products);
-//        })->groupBy('code')
-//            ->map(function ($products){
-//                return [
-//                    'code' => $products->first()['code'],
-//                    'total_quantity' => $products->sum('quantity'),
-//                ];
-//            })->values();
-
-        $allTimeDepositSum = $query->sum('deposit');
-
         // Current month total bank deposit amount
         $currentMonthDepositSum = Lifting::whereBetween('created_at', [
             Carbon::now()->startOfMonth(),
@@ -97,6 +96,9 @@ class LiftingController extends Controller
                 Carbon::parse($request->endDate)->endOfDay()
             ])->sum('deposit');
         }
+
+        // Start building the query for filtered results
+        $query = Lifting::query();
 
         // Apply date range filter if provided
         if ($request->filled('startDate') && $request->filled('endDate')) {
@@ -130,8 +132,8 @@ class LiftingController extends Controller
             'status'                    => session('msg'),
             'filters'                   => $request->only('startDate', 'endDate'),
             'allTimeGroupedData'        => $allTimeGroupedData,
-            'currentMonthGroupedData'        => $currentMonthGroupedData,
-            'allTimeDepositSum'         => $allTimeDepositSum,
+            'currentMonthGroupedData'   => $currentMonthGroupedData,
+//            'allTimeDepositSum'         => $allTimeDepositSum,
             'currentMonthDepositSum'    => $currentMonthDepositSum,
             'filteredDepositSum'        => $filteredDepositSum,
         ]);

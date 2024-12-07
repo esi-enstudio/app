@@ -291,7 +291,7 @@ const delLifting = (id, house) => {
                                                                             </svg>
                                                                             <div class="grow">
                                                                                 <span class="text-sm text-gray-800 dark:text-neutral-200">
-                                                                                  {{code}}: {{numberFormat(details.total_quantity)}}
+                                                                                  {{code}}: <span class="font-semibold">{{numberFormat(details.total_quantity)}}</span>
                                                                                 </span>
                                                                             </div>
                                                                         </div>
@@ -424,7 +424,7 @@ const delLifting = (id, house) => {
                                                                             </svg>
                                                                             <div class="grow">
                                                                                 <span class="text-sm text-gray-800 dark:text-neutral-200">
-                                                                                  {{code}}: {{numberFormat(details.total_quantity)}}
+                                                                                  {{code}}: <span class="font-semibold">{{numberFormat(details.total_quantity)}}</span>
                                                                                 </span>
                                                                             </div>
                                                                         </div>
