@@ -24,7 +24,7 @@ class LiftingController extends Controller
     public function index(Request $request): Response|ResponseFactory
     {
         // Fetch all liftings grouped by house
-        $houses = Lifting::all()
+        $allTimeGroupedData = Lifting::all()
             ->groupBy(fn($lifting) => optional($lifting->ddHouse)->name)
             ->map(function ($liftings, $houseId) {
                 // Flatten the products for this house
@@ -42,63 +42,36 @@ class LiftingController extends Controller
                                 $codes = collect($subcategoryProducts)->groupBy('code')
                                     ->map(function ($codeProducts, $code) {
                                         return [
-                                            'product_code' => $code,
-                                            'total_quantity' => collect($codeProducts)->sum('quantity'),
-                                            'product_count' => collect($codeProducts)->count(),
+                                            'code' => $code,
+                                            'price' => collect($codeProducts)->sum(fn($item) => $item['face_value'] ? $item['face_value'] * $item['quantity'] : $item['lifting_price'] * $item['quantity']),
+                                            'quantity' => collect($codeProducts)->sum('quantity'),
+                                            'count' => collect($codeProducts)->count(),
                                         ];
                                     })->values();
 
                                 return [
                                     'name' => $subcategory,
-                                    'total_quantity' => collect($subcategoryProducts)->sum('quantity'),
-                                    'product_count' => collect($subcategoryProducts)->count(),
+                                    'price' => collect($subcategoryProducts)->sum(fn($item) => $item['face_value'] ? $item['face_value'] * $item['quantity'] : $item['lifting_price'] * $item['quantity']),
+                                    'quantity' => collect($subcategoryProducts)->sum('quantity'),
+                                    'count' => collect($subcategoryProducts)->count(),
                                     'codes' => $codes,
                                 ];
                             })->values();
 
                         return [
-                            'name' => $category,
-                            'total_quantity' => collect($categoryProducts)->sum('quantity'),
-                            'product_count' => collect($categoryProducts)->count(),
+                            'name'          => $category,
+                            'price'         => collect($categoryProducts)->sum( fn($item) => $item['face_value'] ? $item['face_value'] * $item['quantity'] : $item['lifting_price'] * $item['quantity'] ),
+                            'quantity'      => collect($categoryProducts)->sum('quantity'),
+                            'count'         => collect($categoryProducts)->count(),
                             'subcategories' => $subcategories,
                         ];
                     })->values();
-//dd($houseId);
+
                 return [
                     'name' => $houseId,
                     'categories' => $categories,
                 ];
             })->values();
-
-
-
-
-
-
-
-
-//        $currentMonthGroupedData = $liftings->whereBetween('created_at', [
-//            Carbon::now()->startOfMonth(),
-//            Carbon::now()->endOfMonth(),
-//        ])
-//            ->get()
-//            ->groupBy(fn($lifting) => $lifting->ddHouse->name) // Group by house
-//            ->map(function ($houseLiftings){
-//                return $houseLiftings->flatMap(function ($lifting) {
-//                    return collect($lifting->products);
-//                })->groupBy('category') // Group by category
-//                ->map(function ($categoryProducts){
-//                    return $categoryProducts->groupBy('sub_category') // Group by subcategory
-//                    ->map(function ($subcategoryProducts){
-//                        return $subcategoryProducts->groupBy('code') // Group by code
-//                        ->map(function ($codeProducts) {
-//                            return [
-//                                'total_quantity' => $codeProducts->sum('quantity'),
-//                            ];
-//                        });
-//                    });
-//                });
-//            });
 
         // Current month total bank deposit amount
         $currentMonthDepositSum = Lifting::whereBetween('created_at', [
@@ -149,8 +122,7 @@ class LiftingController extends Controller
             'products'                  => Product::all(),
             'status'                    => session('msg'),
             'filters'                   => $request->only('startDate', 'endDate'),
-            'houses'                    => $houses,
-//            'allTimeGroupedData'        => $allTimeGroupedData,
+            'allTimeGroupedData'        => $allTimeGroupedData,
 //            'currentMonthGroupedData'   => $currentMonthGroupedData,
 //            'allTimeDepositSum'         => $allTimeDepositSum,
             'currentMonthDepositSum'    => $currentMonthDepositSum,

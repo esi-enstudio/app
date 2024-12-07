@@ -7,20 +7,18 @@ import TextInput from "@/Components/TextInput.vue";
 import SessionMessage from "@/Components/SessionMessage.vue";
 import Pagination1 from "@/Components/Pagination1.vue";
 import PaginationWithoutLinks1 from "@/Components/PaginationWithoutLinks1.vue";
+import LiftingDetailsAccordion from "@/Components/LiftingDetailsAccordion.vue";
 
 const page = usePage();
 
 const props = defineProps({
     liftings: Object,
-    houses: Object,
-    // allTimeGroupedData: Object,
+    allTimeGroupedData: Object,
     // currentMonthGroupedData: Object,
     filters: Object,
     status: String,
 })
-console.log(props.houses);
-// const numberFormat = (data) => console.log(data);
-const numberFormat = (int) => new Intl.NumberFormat('en-IN').format(int);
+console.log(props.allTimeGroupedData);
 
 // Reactive filters object
 const filters = ref({ ...props.filters });
@@ -193,147 +191,7 @@ const delLifting = (id, house) => {
                     <div>
                         <h3 class="font-semibold">All Time Record</h3>
                         <!-- Tree Root -->
-                        <div class="hs-accordion-treeview-root" role="tree" aria-orientation="vertical">
-                            <!-- 1st Level Accordion Group -->
-                            <div class="hs-accordion-group" role="group">
-                                <!-- 1st Level Accordion -->
-                                <div
-                                    v-for="house in houses" :key="house.name"
-
-                                    class="mb-10 hs-accordion active" role="treeitem" aria-expanded="true" id="hs-basic-usage-example-tree-heading-one">
-                                    <!-- 1st Level Accordion Heading -->
-                                    <div class="hs-accordion-heading py-0.5 flex items-center gap-x-0.5 w-full">
-                                        <button class="hs-accordion-toggle size-6 flex justify-center items-center hover:bg-gray-100 rounded-md focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:hover:bg-neutral-700 dark:focus:bg-neutral-700" aria-expanded="true" aria-controls="hs-basic-usage-example-tree-collapse-one">
-                                            <svg class="size-4 text-gray-800 dark:text-neutral-200" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M5 12h14"></path>
-                                                <path class="hs-accordion-active:hidden block" d="M12 5v14"></path>
-                                            </svg>
-                                        </button>
-
-                                        <div class="grow hs-accordion-selectable hs-accordion-selected:bg-gray-100 dark:hs-accordion-selected:bg-neutral-700 px-1.5 rounded-md cursor-pointer">
-                                            <div class="flex items-center gap-x-3">
-                                                <svg class="shrink-0 size-4 text-gray-500 dark:text-neutral-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"></path>
-                                                </svg>
-                                                <div class="grow">
-                                                  <span class="text-sm text-gray-800 dark:text-neutral-200">
-                                                    {{house.name}}
-                                                  </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- End 1st Level Accordion Heading -->
-
-                                    <!-- 1st Level Collapse -->
-                                    <div id="hs-basic-usage-example-tree-collapse-one" class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300" role="group" aria-labelledby="hs-basic-usage-example-tree-heading-one">
-                                        <!-- 2nd Level Accordion Group -->
-                                        <div class="hs-accordion-group ps-7 relative before:absolute before:top-0 before:start-3 before:w-0.5 before:-ms-px before:h-full before:bg-gray-100 dark:before:bg-neutral-700" role="group" data-hs-accordion-always-open="">
-                                            <!-- 2nd Level Nested Accordion -->
-                                            <div
-                                                v-for="category in house.categories" :key="category.name"
-
-                                                class="hs-accordion active" role="treeitem" aria-expanded="true" id="hs-basic-usage-example-tree-sub-heading-one">
-                                                <!-- 2nd Level Accordion Heading -->
-                                                <div class="hs-accordion-heading py-0.5 flex items-center gap-x-0.5 w-full">
-                                                    <button class="hs-accordion-toggle size-6 flex justify-center items-center hover:bg-gray-100 rounded-md focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:hover:bg-neutral-700 dark:focus:bg-neutral-700" aria-expanded="true" aria-controls="hs-basic-usage-example-tree-sub-collapse-one">
-                                                        <svg class="size-4 text-gray-800 dark:text-neutral-200" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                            <path d="M5 12h14"></path>
-                                                            <path class="hs-accordion-active:hidden block" d="M12 5v14"></path>
-                                                        </svg>
-                                                    </button>
-
-                                                    <div class="grow hs-accordion-selectable hs-accordion-selected:bg-gray-100 dark:hs-accordion-selected:bg-neutral-700 px-1.5 rounded-md cursor-pointer">
-                                                        <div class="flex items-center gap-x-3">
-                                                            <svg class="shrink-0 size-4 text-gray-500 dark:text-neutral-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                                <path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"></path>
-                                                            </svg>
-                                                            <div class="grow">
-                                                                <span class="text-sm text-gray-800 dark:text-neutral-200">
-                                                                  {{ category.name }} (Type: {{category.product_count}}, Qty: {{category.total_quantity}})
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- End 2nd Level Accordion Heading -->
-
-                                                <!-- 2nd Level Collapse -->
-                                                <div id="hs-basic-usage-example-tree-sub-collapse-one" class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300" role="group" aria-labelledby="hs-basic-usage-example-tree-sub-heading-one">
-                                                    <!-- 3rd Level Accordion Group -->
-                                                    <div class="hs-accordion-group ps-7 relative before:absolute before:top-0 before:start-3 before:w-0.5 before:-ms-px before:h-full before:bg-gray-100 dark:before:bg-neutral-700" role="group" data-hs-accordion-always-open="">
-                                                        <!-- 3rd Level Accordion -->
-                                                        <div
-
-                                                            v-for="subcategory in category.subcategories" :key="subcategory.name"
-
-                                                            class="hs-accordion active" role="treeitem" aria-expanded="true" id="hs-basic-usage-example-tree-sub-level-two-heading-one">
-                                                            <!-- 3rd Level Accordion Heading -->
-                                                            <div class="hs-accordion-heading py-0.5 flex items-center gap-x-0.5 w-full">
-                                                                <button class="hs-accordion-toggle size-6 flex justify-center items-center hover:bg-gray-100 rounded-md focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:hover:bg-neutral-700 dark:focus:bg-neutral-700" aria-expanded="true" aria-controls="hs-basic-usage-example-tree-sub-level-two-collapse-one">
-                                                                    <svg class="size-4 text-gray-800 dark:text-neutral-200" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                                        <path d="M5 12h14"></path>
-                                                                        <path class="hs-accordion-active:hidden block" d="M12 5v14"></path>
-                                                                    </svg>
-                                                                </button>
-
-                                                                <div class="grow hs-accordion-selectable hs-accordion-selected:bg-gray-100 dark:hs-accordion-selected:bg-neutral-700 px-1.5 rounded-md cursor-pointer">
-                                                                    <div class="flex items-center gap-x-3">
-                                                                        <svg class="shrink-0 size-4 text-gray-500 dark:text-neutral-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                                            <path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"></path>
-                                                                        </svg>
-                                                                        <div class="grow">
-                                                                          <span class="text-sm text-gray-800 dark:text-neutral-200">
-                                                                            {{ subcategory.name }} (Type: {{subcategory.product_count}}, Qty: {{subcategory.total_quantity}})
-                                                                          </span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <!-- End 3rd Level Accordion Heading -->
-
-                                                            <!-- 3rd Level Collapse -->
-                                                            <div id="hs-basic-usage-example-tree-sub-level-two-collapse-one" class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300" role="group" aria-labelledby="hs-basic-usage-example-tree-sub-level-two-heading-one">
-                                                                <div class="ms-3 ps-3 relative before:absolute before:top-0 before:start-0 before:w-0.5 before:-ms-px before:h-full before:bg-gray-100 dark:before:bg-neutral-700">
-                                                                    <!-- 3rd Level Item -->
-                                                                    <div class="hs-accordion-selectable hs-accordion-selected:bg-gray-100 dark:hs-accordion-selected:bg-neutral-700 px-2 rounded-md cursor-pointer" role="treeitem">
-                                                                        <div
-
-                                                                            v-for="code in subcategory.codes" :key="code.product_code"
-
-                                                                            class="flex items-center gap-x-3">
-                                                                            <svg class="shrink-0 size-4 text-gray-500 dark:text-neutral-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                                                                <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
-                                                                                <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
-                                                                            </svg>
-                                                                            <div class="grow">
-                                                                                <span class="text-sm text-gray-800 dark:text-neutral-200">
-                                                                                  {{code.product_code}}: <span class="font-semibold">{{numberFormat(code.total_quantity)}}</span>
-                                                                                </span>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <!-- End 3rd Level Item -->
-                                                                </div>
-                                                            </div>
-                                                            <!-- End 3rd Level Collapse -->
-                                                        </div>
-                                                        <!-- End 3rd Level Accordion -->
-                                                    </div>
-                                                    <!-- End 3rd Level Accordion Group -->
-                                                </div>
-                                                <!-- End 2nd Level Collapse -->
-                                            </div>
-                                            <!-- End 2nd Level Nested Accordion -->
-                                        </div>
-                                        <!-- 2nd Level Accordion Group -->
-                                    </div>
-                                    <!-- End 1st Level Collapse -->
-                                </div>
-                                <!-- End 1st Level Accordion -->
-                            </div>
-                            <!-- End 1st Level Accordion Group -->
-                        </div>
+                        <LiftingDetailsAccordion :allTimeGroupedData="allTimeGroupedData"/>
                         <!-- End Tree Root -->
                     </div>
 
