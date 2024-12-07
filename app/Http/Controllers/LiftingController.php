@@ -23,64 +23,82 @@ class LiftingController extends Controller
      */
     public function index(Request $request): Response|ResponseFactory
     {
-        // Start building the query for filtered results
-        $liftings = Lifting::query();
-
-        $allTimeGroupedData = $liftings->get()
-            ->groupBy(fn($lifting) => $lifting->ddHouse->name) // Group by house
-            ->map(function ($houseLiftings){
-                return $houseLiftings->flatMap(function ($lifting) {
-                    return collect($lifting->products);
-                })->groupBy('category') // Group by category
-                    ->map(function ($categoryProducts){
-                        return $categoryProducts->groupBy('sub_category') // Group by subcategory
-                        ->map(function ($subcategoryProducts){
-                            $totalLiftingPrice = $subcategoryProducts->sum(function ($product){
-                                return $product['lifting_price'] * $product['quantity'];
-                            });
-                            $totalPrice = $subcategoryProducts->sum(function ($product){
-                                return $product['face_value'] * $product['quantity'];
-                            });
-
-                            return [
-                                'total_quantity' => $subcategoryProducts->sum('quantity'),
-                                'total_price' => $totalPrice,
-                                'total_lifting_price' => $totalLiftingPrice,
-                                'products' => $subcategoryProducts->groupBy('code')->map(function ($codeProducts){
-                                    return [
-                                        'total_quantity' => $codeProducts->sum('quantity'),
-                                        'total_price' => $codeProducts->sum(function ($product) {
-                                            return $product['lifting_price'] * $product['quantity'];
-                                        }),
-                                    ];
-                                })
-                            ];
-                    });
+        // Fetch all liftings grouped by house
+        $houses = Lifting::all()
+            ->groupBy(fn($lifting) => optional($lifting->ddHouse)->name)
+            ->map(function ($liftings, $houseId) {
+                // Flatten the products for this house
+                $products = $liftings->flatMap(function ($lifting) {
+                    return $lifting->products; // 'products' is already cast as an array
                 });
-            });
 
-        $currentMonthGroupedData = $liftings->whereBetween('created_at', [
-            Carbon::now()->startOfMonth(),
-            Carbon::now()->endOfMonth(),
-        ])
-            ->get()
-            ->groupBy(fn($lifting) => $lifting->ddHouse->name) // Group by house
-            ->map(function ($houseLiftings){
-                return $houseLiftings->flatMap(function ($lifting) {
-                    return collect($lifting->products);
-                })->groupBy('category') // Group by category
-                ->map(function ($categoryProducts){
-                    return $categoryProducts->groupBy('sub_category') // Group by subcategory
-                    ->map(function ($subcategoryProducts){
-                        return $subcategoryProducts->groupBy('code') // Group by code
-                        ->map(function ($codeProducts) {
-                            return [
-                                'total_quantity' => $codeProducts->sum('quantity'),
-                            ];
-                        });
-                    });
-                });
-            });
+                // Group by category
+                $categories = $products->groupBy('category')
+                    ->map(function ($categoryProducts, $category) {
+                        // Group by subcategory within each category
+                        $subcategories = collect($categoryProducts)->groupBy('sub_category')
+                            ->map(function ($subcategoryProducts, $subcategory) {
+                                // Group by code within each subcategory
+                                $codes = collect($subcategoryProducts)->groupBy('code')
+                                    ->map(function ($codeProducts, $code) {
+                                        return [
+                                            'product_code' => $code,
+                                            'total_quantity' => collect($codeProducts)->sum('quantity'),
+                                            'product_count' => collect($codeProducts)->count(),
+                                        ];
+                                    })->values();
+
+                                return [
+                                    'name' => $subcategory,
+                                    'total_quantity' => collect($subcategoryProducts)->sum('quantity'),
+                                    'product_count' => collect($subcategoryProducts)->count(),
+                                    'codes' => $codes,
+                                ];
+                            })->values();
+
+                        return [
+                            'name' => $category,
+                            'total_quantity' => collect($categoryProducts)->sum('quantity'),
+                            'product_count' => collect($categoryProducts)->count(),
+                            'subcategories' => $subcategories,
+                        ];
+                    })->values();
+//dd($houseId);
+                return [
+                    'name' => $houseId,
+                    'categories' => $categories,
+                ];
+            })->values();
+
+
+
+
+
+
+
+
+//        $currentMonthGroupedData = $liftings->whereBetween('created_at', [
+//            Carbon::now()->startOfMonth(),
+//            Carbon::now()->endOfMonth(),
+//        ])
+//            ->get()
+//            ->groupBy(fn($lifting) => $lifting->ddHouse->name) // Group by house
+//            ->map(function ($houseLiftings){
+//                return $houseLiftings->flatMap(function ($lifting) {
+//                    return collect($lifting->products);
+//                })->groupBy('category') // Group by category
+//                ->map(function ($categoryProducts){
+//                    return $categoryProducts->groupBy('sub_category') // Group by subcategory
+//                    ->map(function ($subcategoryProducts){
+//                        return $subcategoryProducts->groupBy('code') // Group by code
+//                        ->map(function ($codeProducts) {
+//                            return [
+//                                'total_quantity' => $codeProducts->sum('quantity'),
+//                            ];
+//                        });
+//                    });
+//                });
+//            });
 
         // Current month total bank deposit amount
         $currentMonthDepositSum = Lifting::whereBetween('created_at', [
@@ -131,8 +149,9 @@ class LiftingController extends Controller
             'products'                  => Product::all(),
             'status'                    => session('msg'),
             'filters'                   => $request->only('startDate', 'endDate'),
-            'allTimeGroupedData'        => $allTimeGroupedData,
-            'currentMonthGroupedData'   => $currentMonthGroupedData,
+            'houses'                    => $houses,
+//            'allTimeGroupedData'        => $allTimeGroupedData,
+//            'currentMonthGroupedData'   => $currentMonthGroupedData,
 //            'allTimeDepositSum'         => $allTimeDepositSum,
             'currentMonthDepositSum'    => $currentMonthDepositSum,
             'filteredDepositSum'        => $filteredDepositSum,
