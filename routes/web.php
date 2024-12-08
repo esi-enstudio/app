@@ -1,9 +1,14 @@
 <?php
 
 use App\Http\Controllers\CommissionController;
+use App\Http\Controllers\DdHouseController;
+use App\Http\Controllers\ItopReplaceController;
 use App\Http\Controllers\LiftingController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RetailerController;
+use App\Http\Controllers\RsoController;
+use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -28,26 +33,14 @@ Route::middleware(['auth','verified'])->group(function () {
 
 
     Route::resources([
-        // Users
-        'user' => \App\Http\Controllers\UserController::class,
-        // DD House
-        'ddHouse' => \App\Http\Controllers\DdHouseController::class,
-        // Rso
-        'rso' => \App\Http\Controllers\RsoController::class,
-        // Retailer
-        'retailer' => \App\Http\Controllers\RetailerController::class,
-
-        // Itop Replace
-        'itopReplace' => \App\Http\Controllers\ItopReplaceController::class,
-
-        // Commission
-        'commission' => CommissionController::class,
-
-        // Lifting
-        'lifting' => LiftingController::class,
-
-        // Product
-        'product' => ProductController::class,
+        'user'          => UserController::class,
+        'ddHouse'       => DdHouseController::class,
+        'rso'           => RsoController::class,
+        'retailer'      => RetailerController::class,
+        'itopReplace'   => ItopReplaceController::class,
+        'commission'    => CommissionController::class,
+        'lifting'       => LiftingController::class,
+        'product'       => ProductController::class,
     ]);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

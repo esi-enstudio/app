@@ -83,10 +83,6 @@ class LiftingController extends Controller
             'allTimeGroupedData'        => $allTimeGroupedData,
             'currentMonthGroupedData'   => $currentMonthGroupedData,
             'filteredGroupedData'       => $filteredGroupedData,
-//            'currentMonthGroupedData'   => $currentMonthGroupedData,
-//            'allTimeDepositSum'         => $allTimeDepositSum,
-//            'currentMonthDepositSum'    => $currentMonthDepositSum,
-//            'filteredDepositSum'        => $filteredDepositSum,
         ]);
     }
 
