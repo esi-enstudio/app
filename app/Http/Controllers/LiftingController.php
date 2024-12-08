@@ -8,6 +8,9 @@ use App\Http\Resources\UserResource;
 use App\Models\DdHouse;
 use App\Models\Lifting;
 use App\Models\Product;
+use App\Services\AllTimeLiftingAggregationService;
+use App\Services\CurrentMonthLiftingAggregationService;
+use App\Services\FilteredLiftingAggregationService;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,74 +21,36 @@ use Inertia\ResponseFactory;
 
 class LiftingController extends Controller
 {
+    protected AllTimeLiftingAggregationService $allTimeLiftingService;
+    protected CurrentMonthLiftingAggregationService $currentMonthLiftingService;
+    protected FilteredLiftingAggregationService $filteredLiftingService;
+
+    public function __construct(AllTimeLiftingAggregationService $allTimeLiftingService, CurrentMonthLiftingAggregationService $currentMonthLiftingService, FilteredLiftingAggregationService $filteredLiftingService)
+    {
+        $this->allTimeLiftingService        = $allTimeLiftingService;
+        $this->currentMonthLiftingService   = $currentMonthLiftingService;
+        $this->filteredLiftingService       = $filteredLiftingService;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request): Response|ResponseFactory
     {
         // Fetch all liftings grouped by house
-        $allTimeGroupedData = Lifting::all()
-            ->groupBy(fn($lifting) => optional($lifting->ddHouse)->name)
-            ->map(function ($liftings, $houseId) {
-                // Flatten the products for this house
-                $products = $liftings->flatMap(function ($lifting) {
-                    return $lifting->products; // 'products' is already cast as an array
-                });
+        $allTimeGroupedData = $this->allTimeLiftingService->getAllTimeGroupedLiftingData();
+        $currentMonthGroupedData = $this->currentMonthLiftingService->getCurrentMonthGroupedLiftingData();
 
-                // Group by category
-                $categories = $products->groupBy('category')
-                    ->map(function ($categoryProducts, $category) {
-                        // Group by subcategory within each category
-                        $subcategories = collect($categoryProducts)->groupBy('sub_category')
-                            ->map(function ($subcategoryProducts, $subcategory) {
-                                // Group by code within each subcategory
-                                $codes = collect($subcategoryProducts)->groupBy('code')
-                                    ->map(function ($codeProducts, $code) {
-                                        return [
-                                            'code' => $code,
-                                            'price' => collect($codeProducts)->sum(fn($item) => $item['face_value'] ? $item['face_value'] * $item['quantity'] : $item['lifting_price'] * $item['quantity']),
-                                            'quantity' => collect($codeProducts)->sum('quantity'),
-                                            'count' => collect($codeProducts)->count(),
-                                        ];
-                                    })->values();
-
-                                return [
-                                    'name' => $subcategory,
-                                    'price' => collect($subcategoryProducts)->sum(fn($item) => $item['face_value'] ? $item['face_value'] * $item['quantity'] : $item['lifting_price'] * $item['quantity']),
-                                    'quantity' => collect($subcategoryProducts)->sum('quantity'),
-                                    'count' => collect($subcategoryProducts)->count(),
-                                    'codes' => $codes,
-                                ];
-                            })->values();
-
-                        return [
-                            'name'          => $category,
-                            'price'         => collect($categoryProducts)->sum( fn($item) => $item['face_value'] ? $item['face_value'] * $item['quantity'] : $item['lifting_price'] * $item['quantity'] ),
-                            'quantity'      => collect($categoryProducts)->sum('quantity'),
-                            'count'         => collect($categoryProducts)->count(),
-                            'subcategories' => $subcategories,
-                        ];
-                    })->values();
-
-                return [
-                    'name' => $houseId,
-                    'categories' => $categories,
-                ];
-            })->values();
-
-        // Current month total bank deposit amount
-        $currentMonthDepositSum = Lifting::whereBetween('created_at', [
-            Carbon::now()->startOfMonth(),
-            Carbon::now()->endOfMonth(),
-        ])->sum('deposit');
+//        dd($filteredGroupedData);
 
         // Filtered bank deposit amount
-        $filteredDepositSum = null;
+        $filteredGroupedData = null;
         if ($request->filled('startDate') && $request->filled('endDate')) {
-            $filteredDepositSum = Lifting::whereBetween('created_at', [
-                Carbon::parse($request->startDate)->startOfDay(),
-                Carbon::parse($request->endDate)->endOfDay()
-            ])->sum('deposit');
+            $filteredGroupedData = $this->filteredLiftingService->getFilteredGroupedLiftingData($request);
+
+//            $filteredDepositSum = Lifting::whereBetween('created_at', [
+//                Carbon::parse($request->startDate)->startOfDay(),
+//                Carbon::parse($request->endDate)->endOfDay()
+//            ])->sum('deposit');
         }
 
         // Start building the query for filtered results
@@ -101,7 +66,7 @@ class LiftingController extends Controller
 
         // Get filtered lifting records
         $liftings = $query->latest()
-           ->paginate(5)
+           ->paginate(3)
            ->through(fn($lifting) => [
                'id'        => $lifting->id,
                'house'     => new DdHouseResource($lifting->ddHouse),
@@ -123,10 +88,12 @@ class LiftingController extends Controller
             'status'                    => session('msg'),
             'filters'                   => $request->only('startDate', 'endDate'),
             'allTimeGroupedData'        => $allTimeGroupedData,
+            'currentMonthGroupedData'   => $currentMonthGroupedData,
+            'filteredGroupedData'       => $filteredGroupedData,
 //            'currentMonthGroupedData'   => $currentMonthGroupedData,
 //            'allTimeDepositSum'         => $allTimeDepositSum,
-            'currentMonthDepositSum'    => $currentMonthDepositSum,
-            'filteredDepositSum'        => $filteredDepositSum,
+//            'currentMonthDepositSum'    => $currentMonthDepositSum,
+//            'filteredDepositSum'        => $filteredDepositSum,
         ]);
     }
 

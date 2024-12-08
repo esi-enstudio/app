@@ -14,11 +14,12 @@ const page = usePage();
 const props = defineProps({
     liftings: Object,
     allTimeGroupedData: Object,
-    // currentMonthGroupedData: Object,
+    currentMonthGroupedData: Object,
+    filteredGroupedData: Object,
     filters: Object,
     status: String,
 })
-console.log(props.allTimeGroupedData);
+console.log(props.filteredGroupedData);
 
 // Reactive filters object
 const filters = ref({ ...props.filters });
@@ -183,26 +184,34 @@ const delLifting = (id, house) => {
             </div>
         </div>
 
-        <!-- Secondary Table -->
-        <div class="pb-5 mx-auto max-w-7xl sm:px-4 lg:px-8">
-            <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
-                <div class="grid lg:grid-cols-3 p-3 text-gray-900 dark:text-gray-100">
-
-                    <div>
-                        <h3 class="font-semibold">All Time Record</h3>
+            <!-- All Time Record -->
+            <div class="pb-5 mx-auto max-w-7xl sm:px-4 lg:px-8">
+                <div class="grid lg:grid-cols-3 gap-2 text-gray-900 dark:text-gray-100">
+                    <!-- Filtered Record -->
+                    <div class="p-3 overflow-hidden sm:rounded-lg shadow-sm bg-white dark:bg-gray-800">
+                        <h3 class="font-semibold">Filtered Record</h3>
                         <!-- Tree Root -->
-                        <LiftingDetailsAccordion :allTimeGroupedData="allTimeGroupedData"/>
+                        <LiftingDetailsAccordion :groupedData="filteredGroupedData"/>
                         <!-- End Tree Root -->
                     </div>
 
-                    <div>
-                        <h3 class="font-semibold">Filtered Record</h3>
-                        <p>Deposit: </p>
+                    <!-- Current Month Record -->
+                    <div class="p-3 overflow-hidden sm:rounded-lg shadow-sm bg-white dark:bg-gray-800">
+                        <h3 class="font-semibold">Current Month Record</h3>
+                        <!-- Tree Root -->
+                        <LiftingDetailsAccordion :groupedData="currentMonthGroupedData"/>
+                        <!-- End Tree Root -->
                     </div>
 
+                    <!-- All Time Record -->
+                    <div class="p-3 overflow-hidden sm:rounded-lg shadow-sm bg-white dark:bg-gray-800">
+                        <h3 class="font-semibold">All Time Record</h3>
+                        <!-- Tree Root -->
+                        <LiftingDetailsAccordion :groupedData="allTimeGroupedData"/>
+                        <!-- End Tree Root -->
+                    </div>
                 </div>
             </div>
-        </div>
     </AuthenticatedLayout>
 </template>
 

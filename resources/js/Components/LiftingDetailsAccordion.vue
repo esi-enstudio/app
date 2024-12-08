@@ -3,7 +3,7 @@
         <!-- 1st Level Accordion Group -->
         <div class="hs-accordion-group" role="group">
             <!-- 1st Level Accordion -->
-            <div v-for="house in allTimeGroupedData" :key="house.name" class="mb-5 hs-accordion active" role="treeitem" aria-expanded="true" id="hs-basic-usage-example-tree-heading-one">
+            <div v-for="house in groupedData" :key="house.name" class="mb-5 hs-accordion active" role="treeitem" aria-expanded="true" id="hs-basic-usage-example-tree-heading-one">
                 <!-- 1st Level Accordion Heading -->
                 <div class="hs-accordion-heading py-0.5 flex items-center gap-x-0.5 w-full">
                     <button class="hs-accordion-toggle size-6 flex justify-center items-center hover:bg-gray-100 rounded-md focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:hover:bg-neutral-700 dark:focus:bg-neutral-700" aria-expanded="true" aria-controls="hs-basic-usage-example-tree-collapse-one">
@@ -136,7 +136,7 @@
 
 <script setup>
 defineProps({
-    allTimeGroupedData: Object,
+    groupedData: Object,
 });
 
 const numberFormat = (int) => new Intl.NumberFormat('en-IN').format(int);
