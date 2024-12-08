@@ -29,11 +29,12 @@ class AllTimeLiftingAggregationService
         // Group by category
         return $products->groupBy('category')
             ->map(function ($categoryProducts, $category) {
+//                dd(collect($categoryProducts)->pluck('sub_category')->unique()->count());
                 return [
                     'name'          => $category,
                     'price'         => collect($categoryProducts)->sum( fn($item) => $item['face_value'] ? $item['face_value'] * $item['quantity'] : $item['lifting_price'] * $item['quantity'] ),
                     'quantity'      => collect($categoryProducts)->sum('quantity'),
-                    'count'         => collect($categoryProducts)->count(),
+                    'count'         => collect($categoryProducts)->pluck('sub_category')->unique()->count(),
                     'subcategories' => $this->groupBySubcategory($categoryProducts),
                 ];
             })->values();
@@ -48,7 +49,7 @@ class AllTimeLiftingAggregationService
                     'name'      => $subcategory,
                     'price'     => collect($subcategoryProducts)->sum(fn($item) => $item['face_value'] ? $item['face_value'] * $item['quantity'] : $item['lifting_price'] * $item['quantity']),
                     'quantity'  => collect($subcategoryProducts)->sum('quantity'),
-                    'count'     => collect($subcategoryProducts)->count(),
+                    'count'     => collect($subcategoryProducts)->pluck('code')->unique()->count(),
                     'codes'     => $this->groupByCode($subcategoryProducts),
                 ];
             })->values();

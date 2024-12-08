@@ -40,17 +40,10 @@ class LiftingController extends Controller
         $allTimeGroupedData = $this->allTimeLiftingService->getAllTimeGroupedLiftingData();
         $currentMonthGroupedData = $this->currentMonthLiftingService->getCurrentMonthGroupedLiftingData();
 
-//        dd($filteredGroupedData);
-
         // Filtered bank deposit amount
         $filteredGroupedData = null;
         if ($request->filled('startDate') && $request->filled('endDate')) {
             $filteredGroupedData = $this->filteredLiftingService->getFilteredGroupedLiftingData($request);
-
-//            $filteredDepositSum = Lifting::whereBetween('created_at', [
-//                Carbon::parse($request->startDate)->startOfDay(),
-//                Carbon::parse($request->endDate)->endOfDay()
-//            ])->sum('deposit');
         }
 
         // Start building the query for filtered results

@@ -8,6 +8,8 @@ import SessionMessage from "@/Components/SessionMessage.vue";
 import Pagination1 from "@/Components/Pagination1.vue";
 import PaginationWithoutLinks1 from "@/Components/PaginationWithoutLinks1.vue";
 import LiftingDetailsAccordion from "@/Components/LiftingDetailsAccordion.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import DangerButton from "@/Components/DangerButton.vue";
 
 const page = usePage();
 
@@ -76,8 +78,8 @@ const delLifting = (id, house) => {
             <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                 <div class="p-3 text-gray-900 dark:text-gray-100 overflow-x-auto">
 
-                    <div class="flex justify-end mb-5">
-                        <div class="flex items-end gap-2">
+                    <div class="mb-5">
+                        <div class="grid md:grid-cols-3 items-end gap-4 mb-5">
                             <!-- Start Date -->
                             <TextInput
                                 v-model="filters.startDate"
@@ -96,9 +98,18 @@ const delLifting = (id, house) => {
                                 type="date"
                             />
 
-                            <!-- Reset Button -->
-                            <button class="bg-red-600 text-white py-2 px-5 rounded-md" @click="resetFilters"><i class="fa-solid fa-rotate"></i></button>
+                            <div>
+                                <!-- Reset Button -->
+                                <DangerButton @click="resetFilters">
+                                    <i class="fa-solid fa-rotate"></i>
+                                </DangerButton>
+                            </div>
                         </div>
+
+                        <!-- Reset Button -->
+<!--                        <DangerButton @click="resetFilters">-->
+<!--                            <i class="fa-solid fa-rotate"></i>-->
+<!--                        </DangerButton>-->
                     </div>
 
 
