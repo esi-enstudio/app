@@ -7,6 +7,7 @@
     },
     "devDependencies": {
         "@inertiajs/vue3": "^1.0.0",
+        "@mdi/font": "^7.4.47",
         "@tailwindcss/forms": "^0.5.3",
         "@vitejs/plugin-vue": "^5.0.0",
         "autoprefixer": "^10.4.12",
@@ -21,7 +22,9 @@
     },
     "dependencies": {
         "@inertiajs/inertia": "^0.11.1",
-        "@mdi/font": "^7.4.47",
+        "@jamescoyle/svg-icon": "^0.2.1",
+        "@jamescoyle/vue-icon": "^0.1.2",
+        "@mdi/js": "^7.4.47",
         "lodash": "^4.17.21",
         "preline": "^2.6.0",
         "vuetify": "^3.7.5"

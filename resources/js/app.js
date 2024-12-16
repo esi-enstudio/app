@@ -9,17 +9,20 @@ import '../css/app.css';
 import './bootstrap';
 import 'preline';
 import 'vuetify/styles';
-import {aliases} from "vuetify/iconsets/fa";
-import {mdi} from "vuetify/iconsets/mdi";
+import '@jamescoyle/svg-icon'
+import { aliases, fa } from 'vuetify/iconsets/fa'
+import { mdi } from 'vuetify/iconsets/mdi'
+
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 const vuetify = createVuetify({
     // theme: {defaultTheme: 'dark'},
     icons: {
-        defaultSet: 'mdi', // Use Material Design Icons
+        defaultSet: 'fa',
         aliases,
         sets: {
+            fa,
             mdi,
         },
     },

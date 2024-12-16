@@ -5,17 +5,16 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
 
 const cards = ['Today', 'Yesterday']
 const menuItems = [
-    {icon: 'mdi-dashboard', label: 'Dashboard', route: 'dashboard'},
-    {icon: 'mdi-inbox-arrow-down', label: 'DD House', route: 'ddHouse.index'},
-    {icon: 'mdi-send', label: 'All Rso', route: 'rso.index'},
-    {icon: 'mdi-delete', label: 'Users', route: 'user.index'},
-    {icon: 'mdi-alert-octagon', label: 'Itop Replace', route: 'itopReplace.index'},
+    {icon: 'bangladeshi-taka-sign', label: 'Dashboard', route: 'dashboard', type: 'fas'},
+    {icon: 'video', label: 'DD House', route: 'ddHouse.index', type: 'fas'},
+    {icon: 'mdi-abugida-thai', label: 'All Rso', route: 'rso.index', type: 'mdi'},
+    {icon: 'mdi-delete', label: 'Users', route: 'user.index', type: 'mdi'},
+    {icon: 'mdi-alert-octagon', label: 'Itop Replace', route: 'itopReplace.index', type: 'mdi'},
 ]
 
 const drawer = ref(null)
@@ -36,12 +35,12 @@ const drawer = ref(null)
 
                 <div>john@google.com</div>
             </v-sheet>
-
             <v-divider></v-divider>
-
             <v-list>
-              <v-list-item v-for="(menu, index) in menuItems" :key="index" :prepend-icon="menu.icon">
-                <v-icon icon="mdi-call-split"></v-icon>
+              <v-list-item v-for="(menu, index) in menuItems" :key="index">
+                  <v-icon v-if="menu.type === 'fas'" :icon="`fas fa-${menu.icon}`" />
+                  <v-icon v-if="menu.type === 'mdi'" :icon="`mdi:${menu.icon}`" />
+
                   <Link :href="route(menu.route)">{{menu.label}}</Link>
               </v-list-item>
             </v-list>
@@ -54,9 +53,7 @@ const drawer = ref(null)
 
                     <v-app-bar-title>Application</v-app-bar-title>
                 </v-app-bar>
-
                 <slot />
-
             </v-container>
         </v-main>
     </v-app>
