@@ -8,9 +8,60 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
+
+const cards = ['Today', 'Yesterday']
+const links = [
+    ['mdi-inbox-arrow-down', 'Inbox', 'ddHouse.index'],
+    ['mdi-send', 'Send'],
+    ['mdi-delete', 'Trash'],
+    ['mdi-alert-octagon', 'Spam'],
+]
+
+const drawer = ref(null)
 </script>
 
 <template>
+    <v-app id="inspire">
+        <v-navigation-drawer v-model="drawer">
+            <v-sheet
+                class="pa-4"
+                color="grey-lighten-4"
+            >
+                <v-avatar
+                    class="mb-4"
+                    color="grey-darken-1"
+                    size="64"
+                ></v-avatar>
+
+                <div>john@google.com</div>
+            </v-sheet>
+
+            <v-divider></v-divider>
+
+            <v-list>
+                    <v-list-item v-for="[icon, text, link] in links" :key="icon" :prepend-icon="icon">
+                        <Link>{{text}}</Link>
+                    </v-list-item>
+            </v-list>
+        </v-navigation-drawer>
+
+        <v-main>
+            <v-container class="py-8 px-6" fluid>
+                <v-app-bar scroll-behavior="elevate">
+                    <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+
+                    <v-app-bar-title>Application</v-app-bar-title>
+                </v-app-bar>
+
+                <slot />
+
+            </v-container>
+        </v-main>
+    </v-app>
+
+
+
+
     <div>
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
             <nav class="border-b border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-800">
@@ -28,7 +79,7 @@ const showingNavigationDropdown = ref(false);
                             </div>
 
                             <!-- Navigation Links -->
-                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 xl:flex">
                                 <NavLink
                                     :href="route('dashboard')"
                                     :active="route().current('dashboard')"
@@ -38,7 +89,7 @@ const showingNavigationDropdown = ref(false);
                             </div>
 
                             <!-- Category -->
-                            <div class="hidden sm:ms-6 sm:flex sm:items-center">
+                            <div class="hidden sm:ms-6 xl:flex sm:items-center">
                                 <div class="relative ms-3">
                                     <Dropdown align="right" width="48">
                                         <template #trigger>
@@ -91,7 +142,7 @@ const showingNavigationDropdown = ref(false);
                             </div>
 
                             <!-- Services -->
-                            <div class="hidden sm:ms-6 sm:flex sm:items-center">
+                            <div class="hidden sm:ms-6 xl:flex sm:items-center">
                                 <div class="relative ms-3">
                                     <Dropdown align="right" width="48">
                                         <template #trigger>
@@ -139,7 +190,7 @@ const showingNavigationDropdown = ref(false);
                             </div>
 
                             <!-- Inventory -->
-                            <div class="hidden sm:ms-6 sm:flex sm:items-center">
+                            <div class="hidden sm:ms-6 xl:flex sm:items-center">
                                 <div class="relative ms-3">
                                     <Dropdown align="right" width="48">
                                         <template #trigger>
@@ -177,7 +228,7 @@ const showingNavigationDropdown = ref(false);
                             </div>
 
                             <!-- Sales & Stock -->
-                            <div class="hidden sm:ms-6 sm:flex sm:items-center">
+                            <div class="hidden sm:ms-6 xl:flex sm:items-center">
                                 <div class="relative ms-3">
                                     <Dropdown align="right" width="48">
                                         <template #trigger>
@@ -225,7 +276,7 @@ const showingNavigationDropdown = ref(false);
                             </div>
                         </div>
 
-                        <div class="hidden sm:ms-6 sm:flex sm:items-center">
+                        <div class="hidden sm:ms-6 xl:flex sm:items-center">
                             <!-- Settings Dropdown -->
                             <div class="relative ms-3">
                                 <Dropdown align="right" width="48">
@@ -272,7 +323,7 @@ const showingNavigationDropdown = ref(false);
                         </div>
 
                         <!-- Hamburger -->
-                        <div class="-me-2 flex items-center lg:hidden">
+                        <div class="-me-2 flex items-center xl:hidden">
                             <button
                                 @click="showingNavigationDropdown = !showingNavigationDropdown"
                                 class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none dark:text-gray-500 dark:hover:bg-gray-900 dark:hover:text-gray-400 dark:focus:bg-gray-900 dark:focus:text-gray-400">
@@ -311,18 +362,23 @@ const showingNavigationDropdown = ref(false);
                 </div>
 
                 <!-- Responsive Navigation Menu -->
-                <div
-                    :class="{
-                        block: showingNavigationDropdown,
-                        hidden: !showingNavigationDropdown,
-                    }"
-                    class="lg:hidden">
+                <div :class="{block: showingNavigationDropdown, hidden: !showingNavigationDropdown,}" class="xl:hidden">
                     <div class="space-y-1 pb-3 pt-2">
                         <ResponsiveNavLink
                             :href="route('dashboard')"
                             :active="route().current('dashboard')">
                             Dashboard
                         </ResponsiveNavLink>
+                    </div>
+
+                    <!-- Category -->
+                    <div class="space-y-1 pb-3 pt-2">
+                        Category
+<!--                        <ResponsiveNavLink-->
+<!--                            :href="route('dashboard')"-->
+<!--                            :active="route().current('dashboard')">-->
+<!--                            Category-->
+<!--                        </ResponsiveNavLink>-->
                     </div>
 
                     <!-- Category -->
@@ -372,140 +428,6 @@ const showingNavigationDropdown = ref(false);
                                     <!-- Retailer -->
                                     <DropdownLink :href="route('retailer.index')" :active="route().current('retailer.*')">
                                         Retailer
-                                    </DropdownLink>
-                                </template>
-                            </Dropdown>
-                        </div>
-                    </div>
-
-                    <!-- Services -->
-                    <div class="hidden sm:ms-6 sm:flex sm:items-center">
-                        <div class="relative ms-3">
-                            <Dropdown align="right" width="48">
-                                <template #trigger>
-                                        <span class="inline-flex rounded-md">
-                                            <button
-                                                type="button"
-                                                :class="route().current('itopReplace.*') || route().current('commission.*') || route().current('lifting.*') ? 'inline-flex items-center px-1 pt-1 border-b-2 border-indigo-400 dark:border-green-600 text-sm font-medium leading-[3.7rem] text-gray-900 dark:text-gray-100 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out'
-                                                : 'inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-[3.7rem] text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700 focus:outline-none focus:text-gray-700 dark:focus:text-gray-300 focus:border-gray-300 dark:focus:border-gray-700 transition duration-150 ease-in-out'"
-                                            >
-                                                Services
-                                                <svg
-                                                    class="-me-0.5 ms-2 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path
-                                                        fill-rule="evenodd"
-                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                        clip-rule="evenodd"
-                                                    />
-                                                </svg>
-                                            </button>
-                                        </span>
-                                </template>
-
-                                <template #content>
-                                    <!-- Itop Replace -->
-                                    <DropdownLink :href="route('itopReplace.index')" :active="route().current('itopReplace.*')">
-                                        Itop Replace
-                                    </DropdownLink>
-
-                                    <!-- Commission -->
-                                    <DropdownLink :href="route('commission.index')" :active="route().current('commission.*')">
-                                        Commission
-                                    </DropdownLink>
-
-                                    <!-- Lifting -->
-                                    <DropdownLink :href="route('lifting.index')" :active="route().current('lifting.*')">
-                                        Lifting
-                                    </DropdownLink>
-                                </template>
-                            </Dropdown>
-                        </div>
-                    </div>
-
-                    <!-- Inventory -->
-                    <div class="hidden sm:ms-6 sm:flex sm:items-center">
-                        <div class="relative ms-3">
-                            <Dropdown align="right" width="48">
-                                <template #trigger>
-                                        <span class="inline-flex rounded-md">
-                                            <button
-                                                type="button"
-                                                :class="route().current('product.*') ? 'inline-flex items-center px-1 pt-1 border-b-2 border-indigo-400 dark:border-green-600 text-sm font-medium leading-[3.7rem] text-gray-900 dark:text-gray-100 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out'
-                                                : 'inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-[3.7rem] text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700 focus:outline-none focus:text-gray-700 dark:focus:text-gray-300 focus:border-gray-300 dark:focus:border-gray-700 transition duration-150 ease-in-out'"
-                                            >
-                                                Inventory
-                                                <svg
-                                                    class="-me-0.5 ms-2 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path
-                                                        fill-rule="evenodd"
-                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                        clip-rule="evenodd"
-                                                    />
-                                                </svg>
-                                            </button>
-                                        </span>
-                                </template>
-
-                                <template #content>
-                                    <!-- Product -->
-                                    <DropdownLink :href="route('product.index')" :active="route().current('product.*')">
-                                        Product
-                                    </DropdownLink>
-                                </template>
-                            </Dropdown>
-                        </div>
-                    </div>
-
-                    <!-- Sales & Stock -->
-                    <div class="hidden sm:ms-6 sm:flex sm:items-center">
-                        <div class="relative ms-3">
-                            <Dropdown align="right" width="48">
-                                <template #trigger>
-                                        <span class="inline-flex rounded-md">
-                                            <button
-                                                type="button"
-                                                :class="route().current('product.*') ? 'inline-flex items-center px-1 pt-1 border-b-2 border-indigo-400 dark:border-green-600 text-sm font-medium leading-[3.7rem] text-gray-900 dark:text-gray-100 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out'
-                                                : 'inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-[3.7rem] text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700 focus:outline-none focus:text-gray-700 dark:focus:text-gray-300 focus:border-gray-300 dark:focus:border-gray-700 transition duration-150 ease-in-out'"
-                                            >
-                                                Sales & Stock
-                                                <svg
-                                                    class="-me-0.5 ms-2 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path
-                                                        fill-rule="evenodd"
-                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                        clip-rule="evenodd"
-                                                    />
-                                                </svg>
-                                            </button>
-                                        </span>
-                                </template>
-
-                                <template #content>
-                                    <!-- House Stock -->
-                                    <DropdownLink href="#">
-                                        House Stock
-                                    </DropdownLink>
-
-                                    <!-- RS0 Stock -->
-                                    <DropdownLink href="#">
-                                        RS0 Stock
-                                    </DropdownLink>
-
-                                    <!-- Today Sale -->
-                                    <DropdownLink href="#">
-                                        Today Sale
                                     </DropdownLink>
                                 </template>
                             </Dropdown>

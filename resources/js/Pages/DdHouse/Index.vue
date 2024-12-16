@@ -8,6 +8,7 @@ import {ref, watch} from "vue";
 import TextInput from "@/Components/TextInput.vue";
 import SessionMessage from "@/Components/SessionMessage.vue";
 import PaginationWithoutLinks from "@/Components/PaginationWithoutLinks.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
 
 const props = defineProps({
     ddHouses: Object,
@@ -53,26 +54,36 @@ const delHouse = (id, name) => {
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
 
-                    <div class="md:block hidden">
-                        <div class="flex justify-end px-3 pt-4">
-                            <TextInput
-                                type="search"
-                                icon="search"
-                                v-model="search"
-                                placeholder="Type something..."
-                            />
+                    <div class="grid md:grid-cols-2">
+                        <div class="px-3 pt-4">
+                            <button class="text-pink-600 bg-pink-200 text-center md:text-start px-4 py-1 rounded-lg">
+                                <i class="fa-solid fa-file-import"></i>
+                            </button>
                         </div>
-                    </div>
 
-                    <div class="md:hidden block">
-                        <div class="flex justify-end px-3 pt-4">
-                            <TextInput
-                                type="search"
-                                class="w-full"
-                                icon="search"
-                                v-model="search"
-                                placeholder="Type something..."
-                            />
+                        <div>
+                            <div class="md:block hidden">
+                                <div class="flex justify-end px-3 pt-4">
+                                    <TextInput
+                                        type="search"
+                                        icon="search"
+                                        v-model="search"
+                                        placeholder="Type something..."
+                                    />
+                                </div>
+                            </div>
+
+                            <div class="md:hidden block">
+                                <div class="flex justify-end px-3 pt-4">
+                                    <TextInput
+                                        type="search"
+                                        class="w-full"
+                                        icon="search"
+                                        v-model="search"
+                                        placeholder="Type something..."
+                                    />
+                                </div>
+                            </div>
                         </div>
                     </div>
 

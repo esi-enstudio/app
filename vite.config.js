@@ -17,4 +17,9 @@ export default defineConfig({
             },
         }),
     ],
+    server: {
+        watch: {
+            usePolling: true, // Optional: Fixes file changes not updating in some environments
+        },
+    },
 });
