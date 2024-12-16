@@ -10,11 +10,12 @@ import { Link } from '@inertiajs/vue3';
 const showingNavigationDropdown = ref(false);
 
 const cards = ['Today', 'Yesterday']
-const links = [
-    ['mdi-inbox-arrow-down', 'Inbox', 'ddHouse.index'],
-    ['mdi-send', 'Send'],
-    ['mdi-delete', 'Trash'],
-    ['mdi-alert-octagon', 'Spam'],
+const menuItems = [
+    {icon: 'mdi-dashboard', label: 'Dashboard', route: 'dashboard'},
+    {icon: 'mdi-inbox-arrow-down', label: 'DD House', route: 'ddHouse.index'},
+    {icon: 'mdi-send', label: 'All Rso', route: 'rso.index'},
+    {icon: 'mdi-delete', label: 'Users', route: 'user.index'},
+    {icon: 'mdi-alert-octagon', label: 'Itop Replace', route: 'itopReplace.index'},
 ]
 
 const drawer = ref(null)
@@ -39,9 +40,10 @@ const drawer = ref(null)
             <v-divider></v-divider>
 
             <v-list>
-                    <v-list-item v-for="[icon, text, link] in links" :key="icon" :prepend-icon="icon">
-                        <Link>{{text}}</Link>
-                    </v-list-item>
+              <v-list-item v-for="(menu, index) in menuItems" :key="index" :prepend-icon="menu.icon">
+                <v-icon icon="mdi-call-split"></v-icon>
+                  <Link :href="route(menu.route)">{{menu.label}}</Link>
+              </v-list-item>
             </v-list>
         </v-navigation-drawer>
 
@@ -58,9 +60,6 @@ const drawer = ref(null)
             </v-container>
         </v-main>
     </v-app>
-
-
-
 
     <div>
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">

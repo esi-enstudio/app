@@ -22,7 +22,6 @@ Route::get('/', function () {
     ]);
 });
 
-
 Route::middleware(['auth','verified'])->group(function () {
     // Dashboard
     Route::inertia('/dashboard', 'Dashboard')->name('dashboard');

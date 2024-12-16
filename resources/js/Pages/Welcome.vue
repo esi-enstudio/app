@@ -28,12 +28,8 @@ function handleImageError() {
 
 <template>
     <Head title="Welcome" />
-    <div class="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
-        <img
-            id="background"
-            class="absolute -left-20 top-0 max-w-[877px]"
-            src="https://laravel.com/assets/img/welcome/background.svg"
-        />
+    <div class="bg-gray-50 text-black/50 dark:bg-pink dark:text-white/50">
+
         <div
             class="relative flex min-h-screen flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white"
         >
@@ -41,36 +37,6 @@ function handleImageError() {
                 <header
                     class="grid grid-cols-2 items-center gap-2 py-10 lg:grid-cols-3"
                 >
-                    <div class="flex lg:col-start-2 lg:justify-center">
-<!--                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 150" width="300" height="150">-->
-<!--                            &lt;!&ndash; Background &ndash;&gt;-->
-<!--                            <rect width="250" height="150" fill="#1E293B" rx="20" />-->
-
-<!--                            &lt;!&ndash; EN Symbol &ndash;&gt;-->
-<!--                            <g transform="translate(50, 30)">-->
-<!--                                &lt;!&ndash; E Shape &ndash;&gt;-->
-<!--                                <rect x="0" y="0" width="60" height="15" fill="#4F46E5" />-->
-<!--                                <rect x="0" y="22" width="40" height="15" fill="#4F46E5" />-->
-<!--                                <rect x="0" y="44" width="60" height="15" fill="#4F46E5" />-->
-
-<!--                                &lt;!&ndash; N Shape &ndash;&gt;-->
-<!--                                <path d="M80,60 V0 H100 L140,60 H120 L100,20 V60 Z" fill="#22D3EE" />-->
-<!--                            </g>-->
-
-<!--                            &lt;!&ndash; Text &ndash;&gt;-->
-<!--                            <text x="50%" y="130" fill="url(#textGradient)" font-family="'Poppins', sans-serif" font-size="22" font-weight="600" text-anchor="middle" style="text-transform: uppercase; letter-spacing: 3px;">-->
-<!--                                EN Studio-->
-<!--                            </text>-->
-
-<!--                            &lt;!&ndash; Gradient Definition &ndash;&gt;-->
-<!--                            <defs>-->
-<!--                                <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">-->
-<!--                                    <stop offset="0%" style="stop-color:#4F46E5;stop-opacity:1" />-->
-<!--                                    <stop offset="100%" style="stop-color:#22D3EE;stop-opacity:1" />-->
-<!--                                </linearGradient>-->
-<!--                            </defs>-->
-<!--                        </svg>-->
-                    </div>
                     <nav v-if="canLogin" class="-mx-3 flex flex-1 justify-end">
                         <Link
                             v-if="$page.props.auth.user"

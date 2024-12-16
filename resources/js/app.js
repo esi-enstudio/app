@@ -5,24 +5,23 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import { createVuetify } from 'vuetify';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
-import '@mdi/font/css/materialdesignicons.css';
 import '../css/app.css';
 import './bootstrap';
 import 'preline';
 import 'vuetify/styles';
+import {aliases} from "vuetify/iconsets/fa";
+import {mdi} from "vuetify/iconsets/mdi";
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
-// const customIcons = {
-//     email: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 17.93c-4.26-.47-7.66-3.87-8.13-8.13H3v-1h1.02c.47-4.26 3.87-7.66 8.13-8.13V3h1v1.02c4.26.47 7.66 3.87 8.13 8.13H21v1h-1.02c-.47 4.26-3.87 7.66-8.13 8.13V21h-1v-1.07z"></path></svg>',
-// };
-
 const vuetify = createVuetify({
+    // theme: {defaultTheme: 'dark'},
     icons: {
         defaultSet: 'mdi', // Use Material Design Icons
-        // sets: {
-        //     custom: customIcons,
-        // },
+        aliases,
+        sets: {
+            mdi,
+        },
     },
     components,
     directives,
