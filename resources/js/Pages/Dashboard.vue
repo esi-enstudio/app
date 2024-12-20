@@ -24,7 +24,33 @@ onMounted(() => {
     <AuthenticatedLayout>
         <v-app>
             <v-container>
-                <h1>The current theme is: {{ currentTheme }}</h1>
+                <!-- KPI Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-white rounded-lg shadow-md p-4">
+                        <h3 class="text-lg font-bold">Total Sales</h3>
+                        <p class="text-gray-600 mt-2">$12,345</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md p-4">
+                        <h3 class="text-lg font-bold">New Users</h3>
+                        <p class="text-gray-600 mt-2">345</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md p-4">
+                        <h3 class="text-lg font-bold">Active Sessions</h3>
+                        <p class="text-gray-600 mt-2">1,234</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md p-4">
+                        <h3 class="text-lg font-bold">Reports</h3>
+                        <p class="text-gray-600 mt-2">87</p>
+                    </div>
+                </div>
+
+                <!-- Chart Section -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold mb-4">Monthly Sales Chart</h3>
+                    <div class="h-48 bg-gray-200 flex items-center justify-center">
+                        <p>Chart Placeholder</p>
+                    </div>
+                </div>
             </v-container>
         </v-app>
 <!--        <template #header>-->
