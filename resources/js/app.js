@@ -9,9 +9,6 @@ import '../css/app.css';
 import './bootstrap';
 import 'preline';
 import 'vuetify/styles';
-import '@jamescoyle/svg-icon'
-import { aliases, fa } from 'vuetify/iconsets/fa'
-import { mdi } from 'vuetify/iconsets/mdi'
 
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
@@ -19,12 +16,7 @@ const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 const vuetify = createVuetify({
     // theme: {defaultTheme: 'dark'},
     icons: {
-        defaultSet: 'fa',
-        aliases,
-        sets: {
-            fa,
-            mdi,
-        },
+        defaultSet: 'mdi',
     },
     components,
     directives,

@@ -21,7 +21,6 @@ const props = defineProps({
     filters: Object,
     status: String,
 })
-console.log(props.filteredGroupedData);
 
 // Reactive filters object
 const filters = ref({ ...props.filters });
