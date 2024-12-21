@@ -60,60 +60,95 @@ const toggleDropdown = (index) => {
 
 <template>
   <VApp>
-    <VNavigationDrawer expand-on-hover >
-      <v-list>
+      <VNavigationDrawer expand-on-hover >
+          <v-list>
         <v-list-item
             prepend-avatar="https://randomuser.me/api/portraits/women/85.jpg"
             subtitle="sandra_a88@gmailcom"
             title="Sandra Adams"
         ></v-list-item>
       </v-list>
-      <v-divider></v-divider>
+          <v-divider></v-divider>
 
-      <v-list density="compact" nav>
-        <div>
-          <v-list-group v-for="(menu, index) in menus" :key="index">
-            <template #activator="{ props }">
+          <v-list v-for="(menu, index) in menus" :key="index">
+              <v-list-subheader>{{menu.label}}</v-list-subheader>
+
               <v-list-item
-                  v-bind="props"
+                  v-if="menu.children.length < 1"
+                  :value="menu"
                   :prepend-icon="menu.icon"
-                  :title="menu.label"
-              ></v-list-item>
-            </template>
-            <v-list-item
-                title="Create House"
-                value="Create House"
-            ></v-list-item>
-            <v-list-item
-                title="Edit House"
-                value="Edit House"
-            ></v-list-item>
-          </v-list-group>
-        </div>
+                  color="primary"
+                  rounded="md"
+              >
+                  <v-list-item-title v-text="menu.label"/>
+              </v-list-item>
 
-<!--        <v-list-group value="Users">-->
-<!--          <template #activator="{ props }">-->
-<!--            <v-list-item-->
-<!--                v-bind="props"-->
-<!--                prepend-icon="mdi-account-circle"-->
-<!--                title="Users"-->
-<!--            ></v-list-item>-->
-<!--          </template>-->
+              <!-- Main Menu -->
+              <v-list-group v-else :value="menu.label">
+                  <!-- Main Menu Title -->
+                  <template v-slot:activator="{ props }">
+                      <v-list-item
+                          v-bind="props"
+                          :value="menu"
+                          :prepend-icon="menu.icon"
+                          :title="menu.label"
+                          color="primary"
+                          rounded="md"
+                      />
+                  </template>
+                  <!-- Main Menu Title End -->
 
-<!--          <v-list-group value="Admin">-->
-<!--            <template #activator="{ props }">-->
-<!--              <v-list-item-->
-<!--                  v-bind="props"-->
-<!--                  title="Admin"-->
-<!--              ></v-list-item>-->
-<!--            </template>-->
-<!--          </v-list-group>-->
+                  <!-- First Level Dropdown Menu -->
+                  <v-list-group v-for="(dropdown, i) in menu.children" :key="i" value="Admin">
+                      <!-- First Level Dropdown Menu Title -->
+                      <template v-slot:activator="{ props }">
+                          <v-list-item
+                              v-bind="props"
+                              :title="dropdown.label"
+                          ></v-list-item>
+                      </template>
+                      <!-- First Level Dropdown Menu Title End -->
+
+<!--                      <v-list-item-->
+<!--                          v-for="([title, icon], i) in admins"-->
+<!--                          :key="i"-->
+<!--                          :prepend-icon="icon"-->
+<!--                          :title="title"-->
+<!--                          :value="title"-->
+<!--                      ></v-list-item>-->
+                  </v-list-group>
+                  <!-- First Level Dropdown Menu End -->
+              </v-list-group>
+              <!-- Main Menu End -->
+        </v-list>
 
 
-<!--        </v-list-group>-->
+<!--            <v-list v-else>-->
+<!--                <v-list-group value="Users">-->
+<!--                    <template v-slot:activator="{ props }">-->
+<!--                        <v-list-item-->
+<!--                            v-bind="props"-->
+<!--                            prepend-icon="mdi-account-circle"-->
+<!--                            title="Users"-->
+<!--                        ></v-list-item>-->
+<!--                    </template>-->
 
+<!--                    <v-list-group value="Admin">-->
+<!--                        <template v-slot:activator="{ props }">-->
+<!--                            <v-list-item-->
+<!--                                v-bind="props"-->
+<!--                                title="Admin"-->
+<!--                            ></v-list-item>-->
+<!--                        </template>-->
 
-      </v-list>
+<!--                        <v-list-item-->
+<!--                            prepend-icon="mdi-home"-->
+<!--                            title="Title"-->
+<!--                        ></v-list-item>-->
+<!--                    </v-list-group>-->
+<!--                </v-list-group>-->
+<!--            </v-list>-->
+<!--        </div>-->
 
       <!-- Sidebar -->
       <div
