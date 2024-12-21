@@ -3,35 +3,53 @@ import { ref } from 'vue';
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 
 const menus = [
-  {icon: 'mdi-home', label: 'Dashboard', route: 'dashboard', children: []},
+  {subheader: 'Dashboard', menuItems: [
+      {icon: 'mdi-home', label: 'Dashboard', route: 'dashboard', children: []},
+    ]
+  },
+
   // Category
-  {icon: 'mdi-home', label: 'Category', route: 'dashboard', children: [
+  {subheader: 'Category', menuItems: [
       // Users
-      {icon: 'mdi-home', label: 'Users', route: 'user.index'},
+      {icon: 'mdi-home', label: 'Users', children: [
+          // All User
+          {icon: 'mdi-home', label: 'All User', route: 'user.index'},
+          // Add New
+          {icon: 'mdi-home', label: 'Add New', route: 'user.create'},
+        ]
+      },
+
       // DD House
-      {icon: 'mdi-home', label: 'House', route: 'ddHouse.index'},
+      {icon: 'mdi-home', label: 'House', children: [
+          // All House
+          {icon: 'mdi-home', label: 'All House', route: 'ddHouse.index'},
+          // Add New
+          {icon: 'mdi-home', label: 'Add New', route: 'ddHouse.create'},
+        ]
+      },
+
       // Rso
-      {icon: 'mdi-home', label: 'Rso', route: 'rso.index'},
+      {icon: 'mdi-home', label: 'Rso', route: 'rso.index', children: []},
       // Retailer
-      {icon: 'mdi-home', label: 'Retailer', route: 'retailer.index'},
+      {icon: 'mdi-home', label: 'Retailer', route: 'retailer.index', children: []},
     ]
   },
 
   // Services
-  {icon: 'mdi-home', label: 'Services', route: 'dashboard', children: [
+  {subheader: 'Services', menuItems: [
       // Itop Replace
-      {icon: 'mdi-home', label: 'Itop Replace', route: 'itopReplace.index'},
+      {icon: 'mdi-home', label: 'Itop Replace', route: 'itopReplace.index', children: []},
       // Commission
-      {icon: 'mdi-home', label: 'Commission', route: 'commission.index'},
+      {icon: 'mdi-home', label: 'Commission', route: 'commission.index', children: []},
       // Lifting
-      {icon: 'mdi-home', label: 'Lifting', route: 'lifting.index'},
+      {icon: 'mdi-home', label: 'Lifting', route: 'lifting.index', children: []},
     ]
   },
 
   // Inventory
-  {icon: 'mdi-home', label: 'Inventory', route: 'dashboard', children: [
+  {subheader: 'Inventory', menuItems: [
       // Product
-      {icon: 'mdi-home', label: 'Product', route: 'product.index'},
+      {icon: 'mdi-home', label: 'Product', route: 'product.index', children: []},
     ]
   },
 
@@ -60,256 +78,167 @@ const toggleDropdown = (index) => {
 
 <template>
   <VApp>
-      <VNavigationDrawer expand-on-hover >
-          <v-list>
+    <VNavigationDrawer expand-on-hover >
+      <v-list>
         <v-list-item
             prepend-avatar="https://randomuser.me/api/portraits/women/85.jpg"
             subtitle="sandra_a88@gmailcom"
             title="Sandra Adams"
-        ></v-list-item>
+        />
       </v-list>
-          <v-divider></v-divider>
 
-          <v-list v-for="(menu, index) in menus" :key="index">
-              <v-list-subheader>{{menu.label}}</v-list-subheader>
+      <v-divider></v-divider>
 
+      <v-list v-for="(subheading, index) in menus" :key="index">
+
+        <v-list-subheader>{{subheading.subheader}}</v-list-subheader>
+
+        <!-- Main Menu -->
+        <div v-for="(menu, indx) in subheading.menuItems" :key="indx">
+          <v-list-item
+              v-if="menu.children.length < 1"
+              :value="indx"
+              :prepend-icon="menu.icon"
+              color="primary"
+              rounded="md"
+          >
+            <v-list-item-title v-text="menu.label"/>
+          </v-list-item>
+
+          <!-- Main Menu With Dropdown -->
+          <v-list-group v-else :value="menu.label">
+            <!-- Main Menu Title -->
+            <template v-slot:activator="{ props }">
               <v-list-item
-                  v-if="menu.children.length < 1"
-                  :value="menu"
+                  v-bind="props"
                   :prepend-icon="menu.icon"
+                  :title="menu.label"
                   color="primary"
                   rounded="md"
-              >
-                  <v-list-item-title v-text="menu.label"/>
-              </v-list-item>
+              />
+            </template>
+            <!-- Main Menu Title End -->
 
-              <!-- Main Menu -->
-              <v-list-group v-else :value="menu.label">
-                  <!-- Main Menu Title -->
-                  <template v-slot:activator="{ props }">
-                      <v-list-item
-                          v-bind="props"
-                          :value="menu"
-                          :prepend-icon="menu.icon"
-                          :title="menu.label"
-                          color="primary"
-                          rounded="md"
-                      />
-                  </template>
-                  <!-- Main Menu Title End -->
-
-                  <!-- First Level Dropdown Menu -->
-                  <v-list-group v-for="(dropdown, i) in menu.children" :key="i" value="Admin">
-                      <!-- First Level Dropdown Menu Title -->
-                      <template v-slot:activator="{ props }">
-                          <v-list-item
-                              v-bind="props"
-                              :title="dropdown.label"
-                          ></v-list-item>
-                      </template>
-                      <!-- First Level Dropdown Menu Title End -->
-
-<!--                      <v-list-item-->
-<!--                          v-for="([title, icon], i) in admins"-->
-<!--                          :key="i"-->
-<!--                          :prepend-icon="icon"-->
-<!--                          :title="title"-->
-<!--                          :value="title"-->
-<!--                      ></v-list-item>-->
-                  </v-list-group>
-                  <!-- First Level Dropdown Menu End -->
-              </v-list-group>
-              <!-- Main Menu End -->
-        </v-list>
-
-
-<!--            <v-list v-else>-->
-<!--                <v-list-group value="Users">-->
-<!--                    <template v-slot:activator="{ props }">-->
-<!--                        <v-list-item-->
-<!--                            v-bind="props"-->
-<!--                            prepend-icon="mdi-account-circle"-->
-<!--                            title="Users"-->
-<!--                        ></v-list-item>-->
-<!--                    </template>-->
-
-<!--                    <v-list-group value="Admin">-->
-<!--                        <template v-slot:activator="{ props }">-->
-<!--                            <v-list-item-->
-<!--                                v-bind="props"-->
-<!--                                title="Admin"-->
-<!--                            ></v-list-item>-->
-<!--                        </template>-->
-
-<!--                        <v-list-item-->
-<!--                            prepend-icon="mdi-home"-->
-<!--                            title="Title"-->
-<!--                        ></v-list-item>-->
-<!--                    </v-list-group>-->
-<!--                </v-list-group>-->
-<!--            </v-list>-->
-<!--        </div>-->
-
-      <!-- Sidebar -->
-      <div
-          :class="{'hidden' : sidebarToggle}"
-          class="bg-gray-800 text-gray-100 w-full md:w-64 px-4 py-6 md:block">
-        <div class="text-2xl font-bold mb-4">
-          <Link :href="route('dashboard')">
-            <ApplicationLogo class="w-full h-20"/>
-          </Link>
+            <!-- First Level Dropdown Menu -->
+            <v-list-group v-for="(dropdown, i) in menu.children" :key="i">
+              <!-- First Level Dropdown Menu Title -->
+              <template v-slot:activator>
+                <v-list-item
+                    :value="dropdown.label"
+                    :title="dropdown.label"
+                ></v-list-item>
+              </template>
+              <!-- First Level Dropdown Menu Title End -->
+            </v-list-group>
+            <!-- First Level Dropdown Menu End -->
+          </v-list-group>
+          <!-- Main Menu With Dropdown End -->
         </div>
-        <nav class="space-y-2">
-          <ul>
-            <li v-for="(menu, index) in menus" :key="index">
-              <Link
-                  v-if="menu.children.length < 1"
-                  class="block px-4 py-2 rounded hover:bg-gray-500 font-semibold"
-                  :class="{'bg-gray-700' : route().current(menu.route)}"
-                  :href="route(menu.route)"
-              >
-                {{menu.label}}
-              </Link>
-
-              <span
-                  v-else
-                  @click="toggleDropdown(index)"
-                  class="block px-4 py-2 rounded hover:bg-gray-500 cursor-pointer font-semibold"
-                  :class="{'bg-gray-700' : route().current(menu.route+'.*')}"
-              >
-                            {{menu.label}}
-
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </span>
-
-              <div
-                  v-if="menu.children.length > 0"
-                  :class="{'hidden' : openDropdown !== index}"
-                  class="space-y-2 bg-slate-600 rounded"
-              >
-                <ul>
-                  <li>
-                    <Link
-                        v-for="(subMenu, index) in menu.children"
-                        :key="index"
-                        :href="route(subMenu.route)"
-                        class="block pl-8 py-2 rounded hover:bg-gray-700"
-                    >
-                      {{subMenu.label}}
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            </li>
-          </ul>
-        </nav>
-      </div>
+      </v-list>
     </VNavigationDrawer>
     <VMain>
       <!-- Dashboard Wrapper -->
-      <div class="flex flex-col md:flex-row min-h-screen">
-        <!-- Sidebar -->
-<!--        <div-->
-<!--            :class="{'hidden' : sidebarToggle}"-->
-<!--            class="bg-gray-800 text-gray-100 w-full md:w-64 px-4 py-6 md:block">-->
-<!--          <div class="text-2xl font-bold mb-4">-->
-<!--            <Link :href="route('dashboard')">-->
-<!--              <ApplicationLogo class="w-full h-20"/>-->
-<!--            </Link>-->
-<!--          </div>-->
-<!--          <nav class="space-y-2">-->
-<!--            <ul>-->
-<!--              <li v-for="(menu, index) in menus" :key="index">-->
-<!--                <Link-->
-<!--                    v-if="menu.children.length < 1"-->
-<!--                    class="block px-4 py-2 rounded hover:bg-gray-500 font-semibold"-->
-<!--                    :class="{'bg-gray-700' : route().current(menu.route)}"-->
-<!--                    :href="route(menu.route)"-->
-<!--                >-->
-<!--                  {{menu.label}}-->
-<!--                </Link>-->
+<!--      <div class="flex flex-col md:flex-row min-h-screen">-->
+<!--        &lt;!&ndash; Sidebar &ndash;&gt;-->
+<!--&lt;!&ndash;        <div&ndash;&gt;-->
+<!--&lt;!&ndash;            :class="{'hidden' : sidebarToggle}"&ndash;&gt;-->
+<!--&lt;!&ndash;            class="bg-gray-800 text-gray-100 w-full md:w-64 px-4 py-6 md:block">&ndash;&gt;-->
+<!--&lt;!&ndash;          <div class="text-2xl font-bold mb-4">&ndash;&gt;-->
+<!--&lt;!&ndash;            <Link :href="route('dashboard')">&ndash;&gt;-->
+<!--&lt;!&ndash;              <ApplicationLogo class="w-full h-20"/>&ndash;&gt;-->
+<!--&lt;!&ndash;            </Link>&ndash;&gt;-->
+<!--&lt;!&ndash;          </div>&ndash;&gt;-->
+<!--&lt;!&ndash;          <nav class="space-y-2">&ndash;&gt;-->
+<!--&lt;!&ndash;            <ul>&ndash;&gt;-->
+<!--&lt;!&ndash;              <li v-for="(menu, index) in menus" :key="index">&ndash;&gt;-->
+<!--&lt;!&ndash;                <Link&ndash;&gt;-->
+<!--&lt;!&ndash;                    v-if="menu.children.length < 1"&ndash;&gt;-->
+<!--&lt;!&ndash;                    class="block px-4 py-2 rounded hover:bg-gray-500 font-semibold"&ndash;&gt;-->
+<!--&lt;!&ndash;                    :class="{'bg-gray-700' : route().current(menu.route)}"&ndash;&gt;-->
+<!--&lt;!&ndash;                    :href="route(menu.route)"&ndash;&gt;-->
+<!--&lt;!&ndash;                >&ndash;&gt;-->
+<!--&lt;!&ndash;                  {{menu.label}}&ndash;&gt;-->
+<!--&lt;!&ndash;                </Link>&ndash;&gt;-->
 
-<!--                <span-->
-<!--                    v-else-->
-<!--                    @click="toggleDropdown(index)"-->
-<!--                    class="block px-4 py-2 rounded hover:bg-gray-500 cursor-pointer font-semibold"-->
-<!--                    :class="{'bg-gray-700' : route().current(menu.route+'.*')}"-->
-<!--                >-->
-<!--                            {{menu.label}}-->
+<!--&lt;!&ndash;                <span&ndash;&gt;-->
+<!--&lt;!&ndash;                    v-else&ndash;&gt;-->
+<!--&lt;!&ndash;                    @click="toggleDropdown(index)"&ndash;&gt;-->
+<!--&lt;!&ndash;                    class="block px-4 py-2 rounded hover:bg-gray-500 cursor-pointer font-semibold"&ndash;&gt;-->
+<!--&lt;!&ndash;                    :class="{'bg-gray-700' : route().current(menu.route+'.*')}"&ndash;&gt;-->
+<!--&lt;!&ndash;                >&ndash;&gt;-->
+<!--&lt;!&ndash;                            {{menu.label}}&ndash;&gt;-->
 
-<!--                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
-<!--                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />-->
-<!--                            </svg>-->
-<!--                        </span>-->
+<!--&lt;!&ndash;                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline float-right" fill="none" viewBox="0 0 24 24" stroke="currentColor">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />&ndash;&gt;-->
+<!--&lt;!&ndash;                            </svg>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </span>&ndash;&gt;-->
 
-<!--                <div-->
-<!--                    v-if="menu.children.length > 0"-->
-<!--                    :class="{'hidden' : openDropdown !== index}"-->
-<!--                    class="space-y-2 bg-slate-600 rounded"-->
-<!--                >-->
-<!--                  <ul>-->
-<!--                    <li>-->
-<!--                      <Link-->
-<!--                          v-for="(subMenu, index) in menu.children"-->
-<!--                          :key="index"-->
-<!--                          :href="route(subMenu.route)"-->
-<!--                          class="block pl-8 py-2 rounded hover:bg-gray-700"-->
-<!--                      >-->
-<!--                        {{subMenu.label}}-->
-<!--                      </Link>-->
-<!--                    </li>-->
-<!--                  </ul>-->
-<!--                </div>-->
-<!--              </li>-->
-<!--            </ul>-->
-<!--          </nav>-->
+<!--&lt;!&ndash;                <div&ndash;&gt;-->
+<!--&lt;!&ndash;                    v-if="menu.children.length > 0"&ndash;&gt;-->
+<!--&lt;!&ndash;                    :class="{'hidden' : openDropdown !== index}"&ndash;&gt;-->
+<!--&lt;!&ndash;                    class="space-y-2 bg-slate-600 rounded"&ndash;&gt;-->
+<!--&lt;!&ndash;                >&ndash;&gt;-->
+<!--&lt;!&ndash;                  <ul>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <li>&ndash;&gt;-->
+<!--&lt;!&ndash;                      <Link&ndash;&gt;-->
+<!--&lt;!&ndash;                          v-for="(subMenu, index) in menu.children"&ndash;&gt;-->
+<!--&lt;!&ndash;                          :key="index"&ndash;&gt;-->
+<!--&lt;!&ndash;                          :href="route(subMenu.route)"&ndash;&gt;-->
+<!--&lt;!&ndash;                          class="block pl-8 py-2 rounded hover:bg-gray-700"&ndash;&gt;-->
+<!--&lt;!&ndash;                      >&ndash;&gt;-->
+<!--&lt;!&ndash;                        {{subMenu.label}}&ndash;&gt;-->
+<!--&lt;!&ndash;                      </Link>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </li>&ndash;&gt;-->
+<!--&lt;!&ndash;                  </ul>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;              </li>&ndash;&gt;-->
+<!--&lt;!&ndash;            </ul>&ndash;&gt;-->
+<!--&lt;!&ndash;          </nav>&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+
+<!--        &lt;!&ndash; Main Content &ndash;&gt;-->
+<!--        <div class="flex-1 flex flex-col">-->
+
+<!--          &lt;!&ndash; Top Navbar &ndash;&gt;-->
+<!--          <header class="bg-white shadow-md p-2 flex justify-between items-center">-->
+<!--            &lt;!&ndash; Menu Show/Hide Button &ndash;&gt;-->
+<!--            <button @click="sidebarToggle = !sidebarToggle" id="menu-btn" class="text-gray-700 focus:outline-none md:hidden">-->
+<!--              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
+<!--                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />-->
+<!--              </svg>-->
+<!--            </button>-->
+
+<!--            &lt;!&ndash; Search Bar &ndash;&gt;-->
+<!--            <div class="relative">-->
+<!--              <input type="text" placeholder="Search..." class="bg-gray-200 rounded-full py-2 px-4 focus:outline-none">-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Profile Dropdown &ndash;&gt;-->
+<!--            <div class="relative">-->
+<!--              <v-list>-->
+<!--                <v-list-item-->
+<!--                    @click="profileMenu = !profileMenu"-->
+<!--                    :prepend-avatar="'storage/' + $page.props.auth.user.avatar"-->
+<!--                    :title="$page.props.auth.user.name"-->
+<!--                    :subtitle="$page.props.auth.user.phone"-->
+<!--                    class="rounded"-->
+<!--                />-->
+<!--              </v-list>-->
+
+<!--              <div :class="{'hidden' : profileMenu}" class="absolute z-50 right-0 mt-2 bg-white border rounded shadow-md">-->
+<!--                <Link :href="route('profile.edit')" class="block px-4 py-2 hover:bg-gray-100">Profile</Link>-->
+<!--                <Link :href="route('logout')" method="post" as="button" class="block px-4 py-2 hover:bg-gray-100">Logout</Link>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </header>-->
+
+<!--          &lt;!&ndash; Dashboard Content &ndash;&gt;-->
+<!--          <main class="flex-1 p-4 space-y-6">-->
+<!--            <slot/>-->
+<!--          </main>-->
+
 <!--        </div>-->
-
-        <!-- Main Content -->
-        <div class="flex-1 flex flex-col">
-
-          <!-- Top Navbar -->
-          <header class="bg-white shadow-md p-2 flex justify-between items-center">
-            <!-- Menu Show/Hide Button -->
-            <button @click="sidebarToggle = !sidebarToggle" id="menu-btn" class="text-gray-700 focus:outline-none md:hidden">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-              </svg>
-            </button>
-
-            <!-- Search Bar -->
-            <div class="relative">
-              <input type="text" placeholder="Search..." class="bg-gray-200 rounded-full py-2 px-4 focus:outline-none">
-            </div>
-
-            <!-- Profile Dropdown -->
-            <div class="relative">
-              <v-list>
-                <v-list-item
-                    @click="profileMenu = !profileMenu"
-                    :prepend-avatar="'storage/' + $page.props.auth.user.avatar"
-                    :title="$page.props.auth.user.name"
-                    :subtitle="$page.props.auth.user.phone"
-                    class="rounded"
-                />
-              </v-list>
-
-              <div :class="{'hidden' : profileMenu}" class="absolute z-50 right-0 mt-2 bg-white border rounded shadow-md">
-                <Link :href="route('profile.edit')" class="block px-4 py-2 hover:bg-gray-100">Profile</Link>
-                <Link :href="route('logout')" method="post" as="button" class="block px-4 py-2 hover:bg-gray-100">Logout</Link>
-              </div>
-            </div>
-          </header>
-
-          <!-- Dashboard Content -->
-          <main class="flex-1 p-4 space-y-6">
-            <slot/>
-          </main>
-
-        </div>
-      </div>
+<!--      </div>-->
     </VMain>
   </VApp>
 
