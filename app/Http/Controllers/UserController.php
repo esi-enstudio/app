@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Inertia\Inertia;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -20,16 +21,40 @@ class UserController extends Controller
      */
     public function index(Request $request): Response|ResponseFactory
     {
-        return inertia('User/Index', [
-            'users' => UserResource::collection(User::search($request->search)
-            ->latest()
-            ->paginate(5)
-            ->onEachSide(0)
-            ->withQueryString()),
+        $query = User::query();
 
-            'searchTerm' => $request->search,
-            'status' => session('msg'),
+        // Search
+        if ($request->search) {
+            $query->where('name', 'like', '%' . $request->search . '%')
+                ->orWhere('email', 'like', '%' . $request->search . '%');
+        }
+
+        // Sorting
+        if ($request->sortBy) {
+            $query->orderBy($request->sortBy, $request->sortDesc === 'true' ? 'desc' : 'asc');
+        }
+
+        // Paginate
+        $users = $query->paginate($request->itemsPerPage ?? 10);
+
+        return Inertia::render('User/Index', [
+            'users' => $users,
         ]);
+
+
+//        $query = User::query();
+//
+//        return inertia('User/Index', [
+//            'users' => $query->search($request->search)->latest()->paginate(5)->withQueryString(),
+//            'users' => UserResource::collection(User::search($request->search)
+//            ->latest()
+//            ->paginate(5)
+//            ->onEachSide(0)
+//            ->withQueryString()),
+//
+//            'searchTerm' => $request->search,
+//            'status' => session('msg'),
+//        ]);
     }
 
     /**

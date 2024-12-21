@@ -22,29 +22,55 @@ onMounted(() => {
     <Head title="Dashboard" />
 
     <AuthenticatedLayout>
-        <v-app>
-            <v-container>
+        <v-container>
+            <v-row>
+                <v-col cols="12">
+                    <v-card
+                        class="mx-auto my-8"
+                        elevation="16"
+                        max-width="344"
+                    >
+                        <v-card-item>
+                            <v-card-title>
+                                Card title
+                            </v-card-title>
 
-            </v-container>
-        </v-app>
-<!--        <template #header>-->
-<!--            <h2-->
-<!--                class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"-->
-<!--            >-->
-<!--                Dashboard-->
-<!--            </h2>-->
-<!--        </template>-->
+                            <v-card-subtitle>
+                                Card subtitle secondary text
+                            </v-card-subtitle>
+                        </v-card-item>
 
-<!--        <div class="py-12">-->
-<!--            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">-->
-<!--                <div-->
-<!--                    class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800"-->
-<!--                >-->
-<!--                    <div class="p-6 text-gray-900 dark:text-gray-100">-->
-<!--                        <p>Welcome back...</p>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
+                        <v-card-text>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        </v-card-text>
+                    </v-card>
+                </v-col>
+                <v-col cols="12">
+                    <v-card
+                        append-icon="mdi-open-in-new"
+                        class="mx-auto"
+                        href="https://github.com/vuetifyjs/vuetify/"
+                        max-width="344"
+                        prepend-icon="mdi-github"
+                        rel="noopener"
+                        subtitle="Check out the official repository"
+                        target="_blank"
+                        title="Vuetify on GitHub"
+                    ></v-card>
+                </v-col>
+
+                <v-col cols="12" md="6">
+                    <v-card
+                        append-avatar="https://cdn.vuetifyjs.com/images/john.jpg"
+                        class="mx-auto"
+                        prepend-avatar="https://cdn.vuetifyjs.com/images/logos/v-alt.svg"
+                        subtitle="prepend-avatar and append-avatar"
+                        title="Avatars"
+                    >
+                        <v-card-text>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.</v-card-text>
+                    </v-card>
+                </v-col>
+            </v-row>
+        </v-container>
     </AuthenticatedLayout>
 </template>

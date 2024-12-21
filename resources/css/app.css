@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-table, th, td {
-    border: 1px solid #31c48d;
-    padding: 3px;
-}
+/*table, th, td {*/
+/*    border: 1px solid;*/
+/*    padding: 3px;*/
+/*}*/
