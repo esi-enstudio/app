@@ -1,6 +1,5 @@
 <script setup>
 
-import {router, usePage} from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {onMounted, ref, watch} from "vue";
 import SessionMessage from "@/Components/SessionMessage.vue";
@@ -20,42 +19,12 @@ onMounted(() => {
   }
 });
 
-// const serverItems = ref([])
-// const totalItems = ref(0)
-// const loading = ref(true)
-// const itemsPerPage = ref(5)
-// const search = ref('') // Search term
-
-const { props } = usePage()
-const users = props.value.users
-const filters = ref({
-  search: props.value.filters.search || '',
-  sortBy: props.value.filters.sortBy || null,
-  sortOrder: props.value.filters.sortOrder || null,
-  itemsPerPage: props.value.filters.itemsPerPage || 5,
-})
-// Loading state
+const serverItems = ref([])
+const totalItems = ref(0)
 const loading = ref(false)
-// Handle table updates (pagination, sorting)
-const onTableOptionsChange = ({ page, itemsPerPage, sortBy }) => {
-  filters.itemsPerPage = itemsPerPage
-  filters.sortBy = sortBy.length ? sortBy[0].key : null
-  filters.sortOrder = sortBy.length ? sortBy[0].order : null
-  reloadTable(page)
-}
-// Handle search input changes
-const onSearchChange = () => {
-  reloadTable(1) // Reset to first page when searching
-}
-// Reload table by visiting the same page with new query parameters
-const reloadTable = (page) => {
-  loading.value = true
-  const params = { ...filters, page }
-  router.get(route('user.index'), params, {
-    preserveState: true,
-    onFinish: () => (loading.value = false),
-  })
-}
+const itemsPerPage = ref(5)
+const search = ref('') // Search term
+
 const headers = ref([
   { title: 'Avatar', key: 'avatar' },
   { title: 'Name', key: 'name' },
@@ -68,47 +37,47 @@ const headers = ref([
   { title: 'Created', key: 'created_at' },
   { title: 'Last Update', key: 'updated_at' },
 ])
-// console.log(users)
+
 // Fetch data from server
-// const fetchServerData = async ({ page, itemsPerPage, sortBy }) => {
-//   loading.value = true
-//   try {
-//     const sortKey = sortBy.length ? sortBy[0].key : null
-//     const sortOrder = sortBy.length ? sortBy[0].order : null
-//
-//     const response = await axios.get('/api/users', {
-//       params: {
-//         page,
-//         itemsPerPage,
-//         sortBy: sortKey,
-//         sortOrder,
-//         search: search.value, // Include search query
-//       },
-//     })
-//     serverItems.value = response.data.items
-//     totalItems.value = response.data.total
-//   } catch (error) {
-//     console.error('Failed to fetch server data:', error)
-//   } finally {
-//     loading.value = false
-//   }
-// }
+const fetchServerData = async ({ page, itemsPerPage, sortBy }) => {
+  loading.value = true
+  try {
+    const sortKey = sortBy.length ? sortBy[0].key : null
+    const sortOrder = sortBy.length ? sortBy[0].order : null
+
+    const response = await axios.get('/api/users', {
+      params: {
+        page,
+        itemsPerPage,
+        sortBy: sortKey,
+        sortOrder,
+        search: search.value, // Include search query
+      },
+    })
+    serverItems.value = response.data.items
+    totalItems.value = response.data.total
+  } catch (error) {
+    console.error('Failed to fetch server data:', error)
+  } finally {
+    loading.value = false
+  }
+}
 
 // Handle search input changes
-// const onSearchChange = debounce(() => {
-//   fetchServerData({ page: 1, itemsPerPage: itemsPerPage.value, sortBy: [] })
-// }, 500) // Delay API calls by 500ms
+const onSearchChange = debounce(() => {
+  fetchServerData({ page: 1, itemsPerPage: itemsPerPage.value, sortBy: [] })
+}, 500) // Delay API calls by 500ms
 
 // Watch the search field for changes
-// watch(search, (newValue, oldValue) => {
-//   if (newValue === '') {
-//     // Reload items when the search field is cleared
-//     fetchServerData({ page: 1, itemsPerPage: itemsPerPage.value, sortBy: [] })
-//   }
-// })
+watch(search, (newValue, oldValue) => {
+  if (newValue === '') {
+    // Reload items when the search field is cleared
+    fetchServerData({ page: 1, itemsPerPage: itemsPerPage.value, sortBy: [] })
+  }
+})
 
 // Initial data fetch
-// fetchServerData({ page: 1, itemsPerPage: itemsPerPage.value, sortBy: [] })
+fetchServerData({ page: 1, itemsPerPage: itemsPerPage.value, sortBy: [] })
 </script>
 
 <template>
@@ -119,55 +88,29 @@ const headers = ref([
         <VContainer>
           <!-- Search Input -->
           <v-text-field
-              v-model="filters.search"
-              label="Search users"
-              @input="onSearchChange"
-              :loading="loading"
+              v-model="search"
               prepend-inner-icon="mdi-magnify"
               density="compact"
               variant="outlined"
+              label="Search users"
               type="search"
+              @input="onSearchChange"
           ></v-text-field>
-
-<!--          <v-text-field-->
-<!--              v-model="search"-->
-<!--              :loading="loading"-->
-<!--              prepend-inner-icon="mdi-magnify"-->
-<!--              density="compact"-->
-<!--              variant="outlined"-->
-<!--              label="Search users"-->
-<!--              type="search"-->
-<!--              @input="onSearchChange"-->
-<!--          ></v-text-field>-->
 
           <!-- Data Table -->
           <VDataTableServer
               :headers="headers"
-              :items="users.data"
-              :items-length="users.total"
-              :items-per-page="filters.itemsPerPage"
+              :items="serverItems"
+              :items-per-page="itemsPerPage"
               :loading="loading"
-              @update:options="onTableOptionsChange"
+              :items-length="totalItems"
+              @update:options="fetchServerData"
               class="elevation-1"
           >
             <template #loading>
-              <v-progress-linear indeterminate class="ma-0"></v-progress-linear>
+<!--              <v-progress-linear indeterminate class="ma-0"></v-progress-linear>-->
             </template>
           </VDataTableServer>
-
-<!--          <VDataTableServer-->
-<!--              :headers="headers"-->
-<!--              :items="serverItems"-->
-<!--              :items-per-page="itemsPerPage"-->
-<!--              :loading="loading"-->
-<!--              :items-length="totalItems"-->
-<!--              @update:options="fetchServerData"-->
-<!--              class="elevation-1"-->
-<!--          >-->
-<!--            <template #loading>-->
-<!--              <v-progress-linear indeterminate class="ma-0"></v-progress-linear>-->
-<!--            </template>-->
-<!--          </VDataTableServer>-->
 
 <!--          <VCard>-->
 <!--            <VCardItem>-->

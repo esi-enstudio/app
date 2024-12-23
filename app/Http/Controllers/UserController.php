@@ -24,7 +24,7 @@ class UserController extends Controller
         $query = User::query();
 
         // Apply search filter
-        if ($request->has('search') && $request->input('search') !== '') {
+        if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where('name', 'LIKE', "%{$search}%")
                 ->orWhere('phone', 'LIKE', "%{$search}%")
@@ -33,14 +33,14 @@ class UserController extends Controller
         }
 
         // Sorting
-        if ($request->has('sortBy') && $request->has('sortOrder')) {
+        if ($request->filled('sortBy') && $request->filled('sortOrder')) {
             $query->orderBy($request->input('sortBy'), $request->input('sortOrder'));
         }
 
         // Pagination
         $itemsPerPage = $request->input('itemsPerPage', 5);
         $users = $query->paginate($itemsPerPage)->appends($request->all());
-dd($users);
+
         return Inertia::render('User/Index', [
             'users' => $users,
             'filters' => $request->only(['search', 'sortBy', 'sortOrder', 'itemsPerPage']),

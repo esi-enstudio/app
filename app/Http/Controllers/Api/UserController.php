@@ -12,25 +12,25 @@ class UserController extends Controller
 {
     public function fetchUsers(Request $request): JsonResponse
     {
-//        $query = User::query();
+        $query = User::query();
 
         // Apply search filter
-//        if ($request->has('search') && $request->input('search') !== '') {
-//            $search = $request->input('search');
-//            $query->where('name', 'LIKE', "%{$search}%")
-//                ->orWhere('phone', 'LIKE', "%{$search}%")
-//                ->orWhere('email', 'LIKE', "%{$search}%")
-//                ->orWhere('role', 'LIKE', "%{$search}%");
-//        }
+        if ($request->has('search') && $request->input('search') !== '') {
+            $search = $request->input('search');
+            $query->where('name', 'LIKE', "%{$search}%")
+                ->orWhere('phone', 'LIKE', "%{$search}%")
+                ->orWhere('email', 'LIKE', "%{$search}%")
+                ->orWhere('role', 'LIKE', "%{$search}%");
+        }
 
         // Sorting
-//        if ($request->has('sortBy') && $request->has('sortOrder')) {
-//            $query->orderBy($request->input('sortBy'), $request->input('sortOrder'));
-//        }
+        if ($request->has('sortBy') && $request->has('sortOrder')) {
+            $query->orderBy($request->input('sortBy'), $request->input('sortOrder'));
+        }
 
         // Pagination
-//        $itemsPerPage = $request->input('itemsPerPage', 5);
-//        $page = $request->input('page', 1);
+        $itemsPerPage = $request->input('itemsPerPage', 5);
+        $page = $request->input('page', 1);
 
         $users = $query->paginate($itemsPerPage, ['*'], 'page', $page);
 
