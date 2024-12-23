@@ -23,44 +23,16 @@ class UserController extends Controller
     {
         $query = User::query();
 
-        // Apply search filter
-        if ($request->filled('search')) {
-            $search = $request->input('search');
-            $query->where('name', 'LIKE', "%{$search}%")
-                ->orWhere('phone', 'LIKE', "%{$search}%")
-                ->orWhere('email', 'LIKE', "%{$search}%")
-                ->orWhere('role', 'LIKE', "%{$search}%");
-        }
+        return inertia('User/Index', [
+            'users' => $query->search($request->input('search'))
+            ->latest()
+            ->paginate(5)
+            ->onEachSide(0)
+            ->withQueryString(),
 
-        // Sorting
-        if ($request->filled('sortBy') && $request->filled('sortOrder')) {
-            $query->orderBy($request->input('sortBy'), $request->input('sortOrder'));
-        }
-
-        // Pagination
-        $itemsPerPage = $request->input('itemsPerPage', 5);
-        $users = $query->paginate($itemsPerPage)->appends($request->all());
-
-        return Inertia::render('User/Index', [
-            'users' => $users,
-            'filters' => $request->only(['search', 'sortBy', 'sortOrder', 'itemsPerPage']),
+            'searchTerm' => $request->input('search'),
+            'status' => session('msg'),
         ]);
-
-
-
-//        $query = User::query();
-//
-//        return inertia('User/Index', [
-//            'users' => $query->search($request->search)->latest()->paginate(5)->withQueryString(),
-//            'users' => UserResource::collection(User::search($request->search)
-//            ->latest()
-//            ->paginate(5)
-//            ->onEachSide(0)
-//            ->withQueryString()),
-//
-//            'searchTerm' => $request->search,
-//            'status' => session('msg'),
-//        ]);
     }
 
     /**
