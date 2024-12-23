@@ -1,97 +1,114 @@
 <script setup>
 
-import {router} from "@inertiajs/vue3";
+import {router, usePage} from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import Pagination from "@/Components/Pagination.vue";
-import {debounce, runInContext as $inertia} from "lodash";
 import {onMounted, ref, watch} from "vue";
-import TextInput from "@/Components/TextInput.vue";
 import SessionMessage from "@/Components/SessionMessage.vue";
-import PaginationWithoutLinks from "@/Components/PaginationWithoutLinks.vue";
 import {useTheme} from "vuetify";
-
-import { usePage } from "@inertiajs/vue3";
-
-const props = defineProps({
-    users: Object,
-    // searchTerm: String,
-    // status: String,
-})
-
-const users = ref(usePage().props.users);
-const search = ref('');
-const itemsPerPage = ref(users.value.per_page || 0);
-const page = ref(users.value.current_page || 0);
-const loading = ref(false);
-const sortBy = ref(null);
-const sortDesc = ref(false);
-
-
-const headers = [
-    { text: "ID", value: "id", sortable: true },
-    { text: "Name", value: "name", sortable: true },
-    { text: "Email", value: "email", sortable: true },
-    { text: "Actions", value: "actions", sortable: false },
-];
-
-function fetchData() {
-    loading.value = true;
-    $inertia.get(route('user.index'), {
-        search: search.value,
-        itemsPerPage: itemsPerPage.value,
-        page: page.value,
-        sortBy: sortBy.value,
-        sortDesc: sortDesc.value,
-    }, { preserveState: true })
-        .then(() => {
-            loading.value = false;
-        });
-}
-
-function handleSort({ sortBy: newSortBy, sortDesc: newSortDesc }) {
-    sortBy.value = newSortBy;
-    sortDesc.value = newSortDesc;
-    fetchData();
-}
-
-function editUser(user) {
-    console.log("Edit user:", user);
-}
-
-function deleteUser(user) {
-    console.log("Delete user:", user);
-}
-
-// Fetch data when pagination or items per page change
-watch([page, itemsPerPage], fetchData);
+import {debounce} from "lodash";
 
 const currentTheme = ref('light'); // Default theme
 const theme = useTheme(); // Access Vuetify's theme system
 
 onMounted(() => {
-    if (typeof window !== 'undefined') {
-        const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        currentTheme.value = isDarkMode ? 'dark' : 'light';
+  if (typeof window !== 'undefined') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    currentTheme.value = isDarkMode ? 'dark' : 'light';
 
-        // Set the theme directly
-        theme.global.name.value = currentTheme.value;
-    }
+    // Set the theme directly
+    theme.global.name.value = currentTheme.value;
+  }
 });
 
-// const search = ref(props.searchTerm)
-//
-// watch(search, debounce(
-//     (query) => router.get('/user', { search: query }, { preserveState:true }),
-//     500
-// ))
+// const serverItems = ref([])
+// const totalItems = ref(0)
+// const loading = ref(true)
+// const itemsPerPage = ref(5)
+// const search = ref('') // Search term
 
-// const delUser = (id, name) => {
+const { props } = usePage()
+const users = props.value.users
+const filters = ref({
+  search: props.value.filters.search || '',
+  sortBy: props.value.filters.sortBy || null,
+  sortOrder: props.value.filters.sortOrder || null,
+  itemsPerPage: props.value.filters.itemsPerPage || 5,
+})
+// Loading state
+const loading = ref(false)
+// Handle table updates (pagination, sorting)
+const onTableOptionsChange = ({ page, itemsPerPage, sortBy }) => {
+  filters.itemsPerPage = itemsPerPage
+  filters.sortBy = sortBy.length ? sortBy[0].key : null
+  filters.sortOrder = sortBy.length ? sortBy[0].order : null
+  reloadTable(page)
+}
+// Handle search input changes
+const onSearchChange = () => {
+  reloadTable(1) // Reset to first page when searching
+}
+// Reload table by visiting the same page with new query parameters
+const reloadTable = (page) => {
+  loading.value = true
+  const params = { ...filters, page }
+  router.get(route('user.index'), params, {
+    preserveState: true,
+    onFinish: () => (loading.value = false),
+  })
+}
+const headers = ref([
+  { title: 'Avatar', key: 'avatar' },
+  { title: 'Name', key: 'name' },
+  { title: 'Phone', key: 'phone' },
+  { title: 'Email', key: 'email' },
+  { title: 'Role', key: 'role' },
+  { title: 'Status', key: 'status' },
+  { title: 'Remarks', key: 'remarks' },
+  { title: 'Is Disabled', key: 'disabled_at' },
+  { title: 'Created', key: 'created_at' },
+  { title: 'Last Update', key: 'updated_at' },
+])
+// console.log(users)
+// Fetch data from server
+// const fetchServerData = async ({ page, itemsPerPage, sortBy }) => {
+//   loading.value = true
+//   try {
+//     const sortKey = sortBy.length ? sortBy[0].key : null
+//     const sortOrder = sortBy.length ? sortBy[0].order : null
 //
-//     if (confirm(`Are you sure to delete "${name}" user?`))
-//     {
-//         router.delete(route('user.destroy', id));
-//     }
+//     const response = await axios.get('/api/users', {
+//       params: {
+//         page,
+//         itemsPerPage,
+//         sortBy: sortKey,
+//         sortOrder,
+//         search: search.value, // Include search query
+//       },
+//     })
+//     serverItems.value = response.data.items
+//     totalItems.value = response.data.total
+//   } catch (error) {
+//     console.error('Failed to fetch server data:', error)
+//   } finally {
+//     loading.value = false
+//   }
 // }
+
+// Handle search input changes
+// const onSearchChange = debounce(() => {
+//   fetchServerData({ page: 1, itemsPerPage: itemsPerPage.value, sortBy: [] })
+// }, 500) // Delay API calls by 500ms
+
+// Watch the search field for changes
+// watch(search, (newValue, oldValue) => {
+//   if (newValue === '') {
+//     // Reload items when the search field is cleared
+//     fetchServerData({ page: 1, itemsPerPage: itemsPerPage.value, sortBy: [] })
+//   }
+// })
+
+// Initial data fetch
+// fetchServerData({ page: 1, itemsPerPage: itemsPerPage.value, sortBy: [] })
 </script>
 
 <template>
@@ -99,45 +116,101 @@ onMounted(() => {
 <!--    <SessionMessage :status="status"/>-->
 
     <AuthenticatedLayout>
-        <v-container>
-            <v-card>
-                <v-card-title>
-                    <v-text-field
-                        v-model="search"
-                        label="Search"
-                        variant="outlined"
-                        clearable
-                        @input="fetchData"
-                    />
-                </v-card-title>
-                {{console.log(users)}}
-                <v-data-table
-                    :headers="headers"
-                    :items="users.data"
-                    :server-items-length="users.total"
-                    :items-per-page.sync="itemsPerPage"
-                    :page.sync="page"
-                    :loading="loading"
-                    item-value="id"
-                    class="elevation-1"
-                    @update:sort="handleSort"
-                >
-                    <template #top>
-                        <v-toolbar flat>
-                            <v-toolbar-title>Users</v-toolbar-title>
-                        </v-toolbar>
-                    </template>
-                    <template #item.actions="{ item }">
-                        <v-btn icon @click="editUser(item)">
-                            <v-icon>mdi-pencil</v-icon>
-                        </v-btn>
-                        <v-btn icon @click="deleteUser(item)">
-                            <v-icon>mdi-delete</v-icon>
-                        </v-btn>
-                    </template>
-                </v-data-table>
-            </v-card>
-        </v-container>
+        <VContainer>
+          <!-- Search Input -->
+          <v-text-field
+              v-model="filters.search"
+              label="Search users"
+              @input="onSearchChange"
+              :loading="loading"
+              prepend-inner-icon="mdi-magnify"
+              density="compact"
+              variant="outlined"
+              type="search"
+          ></v-text-field>
+
+<!--          <v-text-field-->
+<!--              v-model="search"-->
+<!--              :loading="loading"-->
+<!--              prepend-inner-icon="mdi-magnify"-->
+<!--              density="compact"-->
+<!--              variant="outlined"-->
+<!--              label="Search users"-->
+<!--              type="search"-->
+<!--              @input="onSearchChange"-->
+<!--          ></v-text-field>-->
+
+          <!-- Data Table -->
+          <VDataTableServer
+              :headers="headers"
+              :items="users.data"
+              :items-length="users.total"
+              :items-per-page="filters.itemsPerPage"
+              :loading="loading"
+              @update:options="onTableOptionsChange"
+              class="elevation-1"
+          >
+            <template #loading>
+              <v-progress-linear indeterminate class="ma-0"></v-progress-linear>
+            </template>
+          </VDataTableServer>
+
+<!--          <VDataTableServer-->
+<!--              :headers="headers"-->
+<!--              :items="serverItems"-->
+<!--              :items-per-page="itemsPerPage"-->
+<!--              :loading="loading"-->
+<!--              :items-length="totalItems"-->
+<!--              @update:options="fetchServerData"-->
+<!--              class="elevation-1"-->
+<!--          >-->
+<!--            <template #loading>-->
+<!--              <v-progress-linear indeterminate class="ma-0"></v-progress-linear>-->
+<!--            </template>-->
+<!--          </VDataTableServer>-->
+
+<!--          <VCard>-->
+<!--            <VCardItem>-->
+<!--              <VCardTitle>-->
+<!--                Users-->
+<!--              </VCardTitle>-->
+
+<!--              <VCardSubtitle>-->
+<!--                Showing all user's in this application-->
+<!--              </VCardSubtitle>-->
+
+<!--              <VCardText>-->
+<!--                &lt;!&ndash; Search Input &ndash;&gt;-->
+<!--                <v-text-field-->
+<!--                    v-model="search"-->
+<!--                    :loading="loading"-->
+<!--                    prepend-inner-icon="mdi-magnify"-->
+<!--                    density="compact"-->
+<!--                    variant="outlined"-->
+<!--                    label="Search users"-->
+<!--                    clearable-->
+<!--                    @input="onSearchChange"-->
+<!--                ></v-text-field>-->
+
+<!--                <VDataTableServer-->
+<!--                    :headers="headers"-->
+<!--                    :items="serverItems"-->
+<!--                    :items-per-page="itemsPerPage"-->
+<!--                    :loading="loading"-->
+<!--                    :items-length="totalItems"-->
+<!--                    @update:options="fetchServerData"-->
+<!--                    class="elevation-1"-->
+<!--                >-->
+<!--                  <template #loading>-->
+<!--&lt;!&ndash;                                  <v-progress-linear indeterminate class="ma-0"></v-progress-linear>&ndash;&gt;-->
+<!--                  </template>-->
+<!--                </VDataTableServer>-->
+<!--              </VCardText>-->
+<!--            </VCardItem>-->
+<!--          </VCard>-->
+
+
+        </VContainer>
 
 
 <!--        <div class="py-12">-->
@@ -221,6 +294,6 @@ onMounted(() => {
     </AuthenticatedLayout>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 
 </style>

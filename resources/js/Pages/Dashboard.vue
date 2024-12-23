@@ -58,7 +58,6 @@ onMounted(() => {
                         title="Vuetify on GitHub"
                     ></v-card>
                 </v-col>
-
                 <v-col cols="12" md="6">
                     <v-card
                         append-avatar="https://cdn.vuetifyjs.com/images/john.jpg"
@@ -74,3 +73,7 @@ onMounted(() => {
         </v-container>
     </AuthenticatedLayout>
 </template>
+
+<style scoped>
+
+</style>

@@ -153,6 +153,10 @@ const drawer = ref(true)
 
         <VAppBar scroll-behavior="elevate hide">
             <VAppBarTitle>Application</VAppBarTitle>
+
+          <template v-slot:append>
+            <v-btn icon="mdi-dots-vertical"></v-btn>
+          </template>
         </VAppBar>
 
         <VMain>

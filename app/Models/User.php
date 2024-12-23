@@ -20,6 +20,7 @@ use Illuminate\Notifications\Notifiable;
   * @method static insert()
   * @method static firstWhere()
   * @method static whereIn(string $string, $supervisorId)
+  * @method static paginate(mixed $perPage)
   * @property mixed $created_at
   * @property mixed $updated_at
   * @property mixed $email_verified_at
